@@ -1,6 +1,6 @@
 {
-  "/js/app.js": "/js/app.js",
-  "/css/app.css": "/css/app.css",
-  "/css/smartadmin.css": "/css/smartadmin.css",
-  "/js/vendor/smartadmin.js": "/js/vendor/smartadmin.js"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/css/smartadmin.css": "/css/smartadmin.css",
+    "/js/vendor/smartadmin.js": "/js/vendor/smartadmin.js"
 }

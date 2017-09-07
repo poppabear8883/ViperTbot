@@ -24,6 +24,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
     .scripts([
         'resources/assets/js/vendor/smartadmin/app.config.seed.js',
-        'resources/assets/js/vendor/smartadmin/app.seed.js',
-        'resources/assets/js/vendor/smartadmin/jarvis.widget.min.js'
+        'resources/assets/js/vendor/smartadmin/jarvis.widget.min.js',
+        'resources/assets/js/vendor/smartadmin/app.seed.js'
     ], 'public/js/vendor/smartadmin.js');
