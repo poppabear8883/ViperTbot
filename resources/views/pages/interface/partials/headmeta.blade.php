@@ -1,5 +1,3 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +12,7 @@
 
     <!-- Styles -->
     <link type="text/css" href="{{ asset("css/app.css") }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/vendor/smartadmin-production-plugins.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/vendor/smartadmin-production.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/vendor/smartadmin-skins.min.css">
     {{--<link type="text/css" href="{{ asset("css/smartadmin.css") }}" rel="stylesheet">--}}
@@ -31,42 +30,3 @@
     <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
 
 </head>
-<body class="fixed-header fixed-page-footer smart-style-1 minified">
-
-<div id="app">
-
-    {{-- Header --}}
-    @include('pages.partials.header')
-
-    {{-- Main Navigation --}}
-    @include('pages.partials.nav')
-
-    {{-- Main Panel --}}
-    <div id="main" role="main">
-
-        {{-- Ribbon (Breadcrumbs) --}}
-        @include('pages.partials.ribbon')
-
-        {{-- Main Content --}}
-        <div id="content">
-            @yield('MainContent')
-        </div>
-        {{-- End Main Content --}}
-
-    </div>
-    {{-- End Main Panel --}}
-
-</div>
-
-<!--[if IE 8]>
-<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
-<![endif]-->
-
-<!-- MAIN APP JS FILE -->
-<script src="{{ asset('js/app.js') }}"></script>
-
-<!-- SmartAdmin -->
-<script src="{{ asset('js/vendor/smartadmin.js') }}"></script>
-
-</body>
-</html>

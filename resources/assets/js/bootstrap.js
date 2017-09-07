@@ -8,8 +8,10 @@ window._ = require('lodash');
  */
 
 try {
-    window.$ = window.jQuery = require('jquery');
+    //window.$ = window.jQuery = require('jquery');
+    window.$ = window.jQuery = require('./vendor/smartadmin/libs/jquery-2.1.1.min');
 
+    require('./vendor/smartadmin/libs/jquery-ui-1.10.3.min');
     require('bootstrap-sass');
 } catch (e) {}
 
@@ -51,3 +53,10 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+
+/**
+ * SmartAdmin JS
+ */
+
+//require('./vendor/smartadmin/app');
