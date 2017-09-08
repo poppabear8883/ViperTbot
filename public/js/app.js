@@ -890,13 +890,6 @@ if (token) {
 //     key: 'your-pusher-key'
 // });
 
-
-/**
- * SmartAdmin JS
- */
-
-//require('./vendor/smartadmin/app');
-
 /***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {

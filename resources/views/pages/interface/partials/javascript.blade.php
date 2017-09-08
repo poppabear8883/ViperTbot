@@ -3,11 +3,3 @@
 
 <!-- SmartAdmin -->
 <script src="{{ asset('js/vendor/smartadmin.js') }}"></script>
-
-<script type="application/javascript">
-    $(document).ready(function () {
-
-        // DO NOT REMOVE : GLOBAL FUNCTIONS!
-        pageSetUp();
-    });
-</script>

@@ -53,10 +53,3 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
-
-
-/**
- * SmartAdmin JS
- */
-
-//require('./vendor/smartadmin/app');
