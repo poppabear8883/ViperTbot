@@ -29,15 +29,15 @@
                 <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
                     <ul id="sparks" class="">
                         <li class="sparks-info">
-                            <h5> My Income <span class="txt-color-blue">$47,171</span></h5>
+                            <h5> Followers <span class="txt-color-blue">504</span></h5>
                             <div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm"><canvas width="89" height="26" style="display: inline-block; width: 89px; height: 26px; vertical-align: top;"></canvas></div>
                         </li>
                         <li class="sparks-info">
-                            <h5> Site Traffic <span class="txt-color-purple"><i class="fa fa-arrow-circle-up"></i>&nbsp;45%</span></h5>
+                            <h5> Donations <span class="txt-color-purple"><i class="fa fa-arrow-circle-up"></i> $489.87</span></h5>
                             <div class="sparkline txt-color-purple hidden-mobile hidden-md hidden-sm"><canvas width="82" height="26" style="display: inline-block; width: 82px; height: 26px; vertical-align: top;"></canvas></div>
                         </li>
                         <li class="sparks-info">
-                            <h5> Site Orders <span class="txt-color-greenDark"><i class="fa fa-shopping-cart"></i>&nbsp;2447</span></h5>
+                            <h5> Subscribers <span class="txt-color-greenDark"><i class="fa fa-shopping-cart"></i> 30</span></h5>
                             <div class="sparkline txt-color-greenDark hidden-mobile hidden-md hidden-sm"><canvas width="82" height="26" style="display: inline-block; width: 82px; height: 26px; vertical-align: top;"></canvas></div>
                         </li>
                     </ul>
