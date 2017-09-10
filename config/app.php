@@ -167,6 +167,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -225,6 +226,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'TwitchApi' => Zarlach\TwitchApi\Facades\TwitchApiServiceFacade::class,
 
     ],
 
