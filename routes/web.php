@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('pages.interface.index');
 });
+
+Route::get('/login', 'AuthController@login');

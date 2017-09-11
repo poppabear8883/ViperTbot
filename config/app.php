@@ -167,7 +167,8 @@ return [
         /*
          * Package Service Providers...
          */
-        Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
+        // Laravel\Socialite\SocialiteServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -227,7 +228,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'TwitchApi' => Zarlach\TwitchApi\Facades\TwitchApiServiceFacade::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
