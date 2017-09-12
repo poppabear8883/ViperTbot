@@ -3,7 +3,7 @@
 
 @include('layouts.interface.partials.headmeta')
 
-<body class="fixed-header fixed-page-footer smart-style-1 minified">
+<body class="fixed-header fixed-page-footer smart-style-1">
 
 <div id="app">
 

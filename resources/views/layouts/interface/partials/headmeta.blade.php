@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <title>SmartyBot</title>
+    <title>ViperTwitchBot</title>
 
     <!-- Styles -->
     <link type="text/css" href="{{ asset("css/app.css") }}" rel="stylesheet">

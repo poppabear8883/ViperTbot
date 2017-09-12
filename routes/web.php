@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages.interface.index');
-});
+Route::get('/', 'AuthController@index')->middleware('auth');
 
-Route::get('/login', 'AuthController@login');
+Route::get('login', ['uses' => 'AuthController@login', 'as' => 'login']);
+
+Route::get('authenticate', ['uses' => 'AuthController@authenticate']);
