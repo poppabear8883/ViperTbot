@@ -169,6 +169,7 @@ return [
          */
         // Laravel\Socialite\SocialiteServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
+        Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,6 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'TwitchApi' => Zarlach\TwitchApi\Facades\TwitchApiServiceFacade::class,
 
     ],
 

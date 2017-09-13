@@ -42,7 +42,9 @@ class AuthenticateUser
      */
     public function getAuthorizationFirst()
     {
-        return $this->socialite->driver('twitch')->redirect();
+        return $this->socialite->driver('twitch')
+            ->scopes(config('twitch-api.scopes'))
+            ->redirect();
     }
 
     /**

@@ -7,8 +7,6 @@ class InterfaceController extends Controller
 
     public function index()
     {
-        return view('pages.interface.index', [
-            'username' => Auth::user()->username
-        ]);
+        return view('pages.interface.index');
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b22e6e0b9482bf52518851ebf0b8c89",
+    "content-hash": "0bdddf7d4c57b33bb464c8bfb4ec8591",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -2587,6 +2587,47 @@
                 "environment"
             ],
             "time": "2016-09-01T10:05:43+00:00"
+        },
+        {
+            "name": "zarlach/laravel-twitch-api",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PetterKraabol/laravel-twitch-api.git",
+                "reference": "fe14c5fc68c326ce48bfc9057190b3625e9f1256"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PetterKraabol/laravel-twitch-api/zipball/fe14c5fc68c326ce48bfc9057190b3625e9f1256",
+                "reference": "fe14c5fc68c326ce48bfc9057190b3625e9f1256",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.1",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "laravel/laravel": "5.*",
+                "phpunit/phpunit": "5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zarlach\\TwitchApi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Petter Kraabøl",
+                    "email": "petter.zarlach@gmail.com"
+                }
+            ],
+            "description": "Laravel Twitch RESTful API",
+            "time": "2017-08-12T11:52:31+00:00"
         }
     ],
     "packages-dev": [
