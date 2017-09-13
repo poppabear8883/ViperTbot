@@ -1,25 +1,29 @@
 <?php namespace App\Http\Controllers;
 
+use App\Authentication\AuthenticateUser;
+use App\Contracts\AuthenticateUserListener;
 use Illuminate\Http\Request;
-use Laravel\Socialite\Facades\Socialite;
 
-class AuthController extends Controller {
+class AuthController extends Controller implements AuthenticateUserListener
+{
 
-    public function index() {
+    public function index()
+    {
         return view('pages.interface.index');
     }
 
-    public function login() {
+    public function login()
+    {
         return view('pages.interface.auth');
     }
 
-    public function authenticate(Request $request) {
-        if(!$request->has('code'))
-            return Socialite::driver('twitch')->redirect();
-
-        $user = Socialite::driver('twitch')->user();
-
-        dd($user);
+    public function authenticate(AuthenticateUser $auth, Request $request)
+    {
+        return $auth->execute($request->has('code'), $this);
     }
 
+    public function userHasLoggedIn()
+    {
+        return redirect('/');
+    }
 }

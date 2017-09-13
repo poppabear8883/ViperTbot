@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'AuthController@index')->middleware('auth');
+Route::get('/', 'InterfaceController@index')->middleware('auth');
 
 Route::get('login', ['uses' => 'AuthController@login', 'as' => 'login']);
 
