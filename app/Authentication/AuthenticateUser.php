@@ -4,6 +4,7 @@ use App\Contracts\AuthenticateUserListener;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;
+use Zarlach\TwitchApi\Facades\TwitchApiServiceFacade as TwitchApi;
 
 class AuthenticateUser
 {
@@ -30,9 +31,13 @@ class AuthenticateUser
 
         if (!$hasCode) return $this->getAuthorizationFirst();
 
+        //dd($this->getTwitchUser());
+
         $user = $this->user->findByUsernameOrCreate($this->getTwitchUser());
 
         Auth::login($user, true);
+
+        TwitchApi::setToken($user->access_token);
 
         return $listener->userHasLoggedIn();
     }
@@ -53,5 +58,10 @@ class AuthenticateUser
     public function getTwitchUser()
     {
         return $this->socialite->driver('twitch')->user();
+    }
+
+    public function getTwitchUserToken()
+    {
+        return $this->socialite->driver('twitch')->user()->token;
     }
 }

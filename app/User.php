@@ -15,10 +15,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'channel_id',
         'username',
         'display_name',
         'email',
-        'avatar'
+        'avatar',
+        'access_token'
     ];
 
     /**

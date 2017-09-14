@@ -3,18 +3,30 @@
 @section('content')
     <div class="row">
         <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-            <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>&gt; My Dashboard</span></h1>
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa-fw fa fa-home"></i>
+                Dashboard <span>&gt; My Dashboard</span>
+            </h1>
         </div>
         <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
             <ul id="sparks" class="">
                 <li class="sparks-info">
-                    <h5> Donations <span class="txt-color-purple">$489.87</span></h5>
+                    <h5> Followers
+                        <span class="txt-color-blue">
+                            {{ $followers['_total'] }}
+                        </span>
+                    </h5>
                 </li>
                 <li class="sparks-info">
-                    <h5> Followers <span class="txt-color-blue"><i class="fa fa-arrow-circle-up"></i> 504</span></h5>
-                </li>
-                <li class="sparks-info">
-                    <h5> Subscribers <span class="txt-color-greenDark"><i class="fa fa-arrow-circle-down"></i> 30</span></h5>
+                    <h5> Subscribers
+                        <span class="txt-color-greenDark">
+                            @if(isset($subscribers->error))
+                                0
+                            @else
+                                {{ $subscribers['_total'] }}
+                            @endif
+                        </span>
+                    </h5>
                 </li>
             </ul>
         </div>
