@@ -11,7 +11,6 @@ class InterfaceController extends Controller
 
     public function __construct(TwitchApiRepository $twitch)
     {
-
         $this->twitch = $twitch;
     }
 

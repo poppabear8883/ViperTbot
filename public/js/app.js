@@ -806,8 +806,9 @@ module.exports = __webpack_require__(42);
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -824,7 +825,8 @@ window.Vue = __webpack_require__(37);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', __webpack_require__(38));
+Vue.component('TwitchChatWidget', __webpack_require__(60));
+Vue.component('MediaPlayerWidget', __webpack_require__(75));
 
 var app = new Vue({
   el: '#app'
@@ -37020,46 +37022,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(39)(
-  /* script */
-  __webpack_require__(40),
-  /* template */
-  __webpack_require__(41),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/Example.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1fdb59e4", Component.options)
-  } else {
-    hotAPI.reload("data-v-1fdb59e4", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
+/* 38 */,
 /* 39 */
 /***/ (function(module, exports) {
 
@@ -37157,11 +37120,474 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 40 */
+/* 40 */,
+/* 41 */,
+/* 42 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 43 */,
+/* 44 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(61)
+}
+var Component = __webpack_require__(39)(
+  /* script */
+  __webpack_require__(65),
+  /* template */
+  __webpack_require__(71),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] TwitchChatWidget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7da577db", Component.options)
+  } else {
+    hotAPI.reload("data-v-7da577db", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(62);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(63)("030438d2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(44)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(64)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -37179,46 +37605,1373 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
+    props: {
+        username: {
+            required: true
+        }
+    },
+    components: {
+        Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
+    },
+    methods: {},
+    computed: {
+        /**
+         * @return {string}
+         */
+        TwitchURL: function TwitchURL() {
+            if (this.username !== null) {
+                return 'http://www.twitch.tv/' + this.username + '/chat';
+            }
+
+            return null;
+        }
     }
 });
 
 /***/ }),
-/* 41 */
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(39)(
+  /* script */
+  __webpack_require__(67),
+  /* template */
+  __webpack_require__(70),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-31683ea0", Component.options)
+  } else {
+    hotAPI.reload("data-v-31683ea0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        widId: {
+            required: true
+        },
+        colorpicker: {
+            default: true
+        },
+        collapse: {
+            default: true
+        },
+        fullscreen: {
+            default: false
+        },
+        deletebtn: {
+            default: false
+        }
+
+    },
+
+    data: function data() {
+        return {};
+    },
+    components: {
+        ColorPicker: __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue___default.a
+    },
+    methods: {}
+});
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(72)
+}
+var Component = __webpack_require__(39)(
+  /* script */
+  null,
+  /* template */
+  __webpack_require__(69),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ToolbarColorPicker.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f4596d12", Component.options)
+  } else {
+    hotAPI.reload("data-v-f4596d12", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _vm._m(0)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "container"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-8 col-md-offset-2"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_vm._v("Example Component")]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_vm._v("\n                    I'm an example component!\n                ")])])])])])
+    staticClass: "toolbar-colorpicker"
+  }, [_c('a', {
+    staticClass: "dropdown-toggle color-box selector",
+    attrs: {
+      "data-toggle": "dropdown",
+      "href": "javascript:void(0);"
+    }
+  }), _vm._v(" "), _c('ul', {
+    staticClass: "dropdown-menu arrow-box-up-right color-select pull-right"
+  }, [_c('li', [_c('span', {
+    staticClass: "bg-color-green",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-green",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Green Grass"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-greenDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-greenDark",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Dark Green"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-greenLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-greenLight",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Light Green"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-purple",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-purple",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Purple"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-magenta",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-magenta",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Magenta"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-pink",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-pink",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Pink"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-pinkDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-pinkDark",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Fade Pink"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blueLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blueLight",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Light Blue"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-teal",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-teal",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Teal"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blue",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blue",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Ocean Blue"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blueDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blueDark",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Night Sky"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-darken",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-darken",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Night"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-yellow",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-yellow",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Day Light"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-orange",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-orange",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Orange"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-orangeDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-orangeDark",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Dark Orange"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-red",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-red",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Red Rose"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-redLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-redLight",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Light Red"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-white",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-white",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Purity"
+    }
+  })]), _vm._v(" "), _c('li', [_c('a', {
+    staticClass: "jarviswidget-remove-colors",
+    attrs: {
+      "href": "javascript:void(0);",
+      "data-widget-setstyle": "",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Reset widget color to default"
+    }
+  }, [_vm._v("Remove")])])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1fdb59e4", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-f4596d12", module.exports)
   }
 }
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports) {
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// removed by extract-text-webpack-plugin
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "jarviswidget jarviswidget-color-blueDark jarviswidget-sortable",
+    attrs: {
+      "id": _vm.widId,
+      "data-widget-editbutton": "false",
+      "role": "widget"
+    }
+  }, [_c('header', {
+    attrs: {
+      "role": "heading"
+    }
+  }, [_c('div', {
+    staticClass: "jarviswidget-ctrls",
+    attrs: {
+      "role": "menu"
+    }
+  }, [(_vm.collapse) ? _c('a', {
+    staticClass: "button-icon jarviswidget-toggle-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Collapse"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-minus "
+  })]) : _vm._e(), _vm._v(" "), (_vm.fullscreen) ? _c('a', {
+    staticClass: "button-icon jarviswidget-fullscreen-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Fullscreen"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-expand "
+  })]) : _vm._e(), _vm._v(" "), (_vm.deletebtn) ? _c('a', {
+    staticClass: "button-icon jarviswidget-delete-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Delete"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-times"
+  })]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [(_vm.colorpicker) ? _c('color-picker') : _vm._e()], 1), _vm._v(" "), _vm._t("toolbars"), _vm._v(" "), _c('span', {
+    staticClass: "widget-icon"
+  }, [_vm._t("icon")], 2), _vm._v(" "), _c('h2', [_vm._t("title")], 2), _vm._v(" "), _vm._m(0)], 2), _vm._v(" "), _c('div', {
+    attrs: {
+      "role": "content"
+    }
+  }, [_c('div', {
+    staticClass: "widget-body widget-hide-overflow no-padding"
+  }, [_vm._t("body", [_vm._t("footer")])], 2)])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "jarviswidget-loader"
+  }, [_c('i', {
+    staticClass: "fa fa-refresh fa-spin"
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-31683ea0", module.exports)
+  }
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "58974",
+      "fullscreen": true
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("Twitch Chat")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }), _vm._v(" "), _c('div', {
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [(_vm.TwitchURL) ? _c('iframe', {
+    attrs: {
+      "frameborder": "0",
+      "scrolling": "no",
+      "id": "chat_embed",
+      "src": _vm.TwitchURL,
+      "height": "410",
+      "width": "100%"
+    }
+  }) : _vm._e()])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-7da577db", module.exports)
+  }
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(73);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(63)("8fbcb4ae", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f4596d12\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ToolbarColorPicker.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f4596d12\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ToolbarColorPicker.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(44)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.toolbar-colorpicker {\n    padding-top: 5px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * Vue YouTube Embed version 2.1.2
+  * under MIT License copyright 2017 kaorun343
+  */
+(function (global, factory) {
+	 true ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.VueYouTubeEmbed = global.VueYouTubeEmbed || {})));
+}(this, (function (exports) { 'use strict';
+
+// fork from https://github.com/brandly/angular-youtube-embed
+if (!String.prototype.includes) {
+  String.prototype.includes = function () {
+    'use strict';
+    return String.prototype.indexOf.apply(this, arguments) !== -1
+  };
+}
+
+var youtubeRegexp = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
+var timeRegexp = /t=(\d+)[ms]?(\d+)?s?/;
+
+/**
+ * get id from url
+ * @param  {string} url url
+ * @return {string}     id
+ */
+function getIdFromURL (url) {
+  var id = url.replace(youtubeRegexp, '$1');
+
+  if (id.includes(';')) {
+    var pieces = id.split(';');
+
+    if (pieces[1].includes('%')) {
+      var uriComponent = decodeURIComponent(pieces[1]);
+      id = ("http://youtube.com" + uriComponent).replace(youtubeRegexp, '$1');
+    } else {
+      id = pieces[0];
+    }
+  } else if (id.includes('#')) {
+    id = id.split('#')[0];
+  }
+
+  return id
+}
+
+/**
+ * get time from url
+ * @param  {string} url url
+ * @return {number}     time
+ */
+function getTimeFromURL (url) {
+  if ( url === void 0 ) url = '';
+
+  var times = url.match(timeRegexp);
+
+  if (!times) {
+    return 0
+  }
+
+  var full = times[0];
+  var minutes = times[1];
+  var seconds = times[2];
+
+  if (typeof seconds !== 'undefined') {
+    seconds = parseInt(seconds, 10);
+    minutes = parseInt(minutes, 10);
+  } else if (full.includes('m')) {
+    minutes = parseInt(minutes, 10);
+    seconds = 0;
+  } else {
+    seconds = parseInt(minutes, 10);
+    minutes = 0;
+  }
+
+  return seconds + (minutes * 60)
+}
+
+var container = {
+  scripts: [],
+  events: {},
+
+  run: function run () {
+    var this$1 = this;
+
+    this.scripts.forEach(function (callback) {
+      callback(this$1.YT);
+    });
+    this.scripts = [];
+  },
+
+  register: function register (callback) {
+    var this$1 = this;
+
+    if (this.YT) {
+      this.Vue.nextTick(function () {
+        callback(this$1.YT);
+      });
+    } else {
+      this.scripts.push(callback);
+    }
+  }
+};
+
+var pid = 0;
+
+var YouTubePlayer = {
+  props: {
+    playerHeight: {
+      type: [String, Number],
+      default: '390'
+    },
+    playerWidth: {
+      type: [String, Number],
+      default: '640'
+    },
+    playerVars: {
+      type: Object,
+      default: function () { return ({ autoplay: 0, time: 0 }); }
+    },
+    videoId: {
+      type: String
+    },
+    mute: {
+      type: Boolean,
+      default: false
+    }
+  },
+  render: function render (h) {
+    return h('div', [
+      h('div', { attrs: { id: this.elementId }})
+    ])
+  },
+  template: '<div><div :id="elementId"></div></div>',
+  watch: {
+    playerWidth: 'setSize',
+    playerHeight: 'setSize',
+    videoId: 'update',
+    mute: 'setMute'
+  },
+  data: function data () {
+    pid += 1;
+    return {
+      elementId: ("youtube-player-" + pid),
+      player: {}
+    }
+  },
+  methods: {
+    setSize: function setSize () {
+      this.player.setSize(this.playerWidth, this.playerHeight);
+    },
+    setMute: function setMute (value) {
+      if (value) {
+        this.player.mute();
+      } else {
+        this.player.unMute();
+      }
+    },
+    update: function update (videoId) {
+      var name = (this.playerVars.autoplay ? 'load' : 'cue') + "VideoById";
+      if (this.player.hasOwnProperty(name)) {
+        this.player[name](videoId);
+      } else {
+        setTimeout(function () {
+          this.update(videoId);
+        }.bind(this), 100);
+      }
+    }
+  },
+  mounted: function mounted () {
+    var this$1 = this;
+
+    container.register(function (YouTube) {
+      var ref = this$1;
+      var playerHeight = ref.playerHeight;
+      var playerWidth = ref.playerWidth;
+      var playerVars = ref.playerVars;
+      var videoId = ref.videoId;
+
+      this$1.player = new YouTube.Player(this$1.elementId, {
+        height: playerHeight,
+        width: playerWidth,
+        playerVars: playerVars,
+        videoId: videoId,
+        events: {
+          onReady: function (event) {
+            this$1.setMute(this$1.mute);
+            this$1.$emit('ready', event.target);
+          },
+          onStateChange: function (event) {
+            if (event.data !== -1) {
+              this$1.$emit(container.events[event.data], event.target);
+            }
+          },
+          onError: function (event) {
+            this$1.$emit('error', event.target);
+          }
+        }
+      });
+    });
+  },
+  beforeDestroy: function beforeDestroy () {
+    if (this.player !== null && this.player.destroy) {
+      this.player.destroy();
+    }
+    delete this.player;
+  }
+};
+
+function install (Vue, options) {
+  if ( options === void 0 ) options = { global: true };
+
+  container.Vue = Vue;
+  YouTubePlayer.ready = YouTubePlayer.mounted;
+  if (options.global) {
+    Vue.component('youtube', YouTubePlayer);
+  }
+  Vue.prototype.$youtube = { getIdFromURL: getIdFromURL, getTimeFromURL: getTimeFromURL };
+
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/player_api';
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  window.onYouTubeIframeAPIReady = function () {
+    container.YT = YT;
+    var PlayerState = YT.PlayerState;
+
+    container.events[PlayerState.ENDED] = 'ended';
+    container.events[PlayerState.PLAYING] = 'playing';
+    container.events[PlayerState.PAUSED] = 'paused';
+    container.events[PlayerState.BUFFERING] = 'buffering';
+    container.events[PlayerState.CUED] = 'cued';
+
+    Vue.nextTick(function () {
+      container.run();
+    });
+  };
+}
+
+exports.YouTubePlayer = YouTubePlayer;
+exports.getIdFromURL = getIdFromURL;
+exports.getTimeFromURL = getTimeFromURL;
+exports['default'] = install;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(76)
+}
+var Component = __webpack_require__(39)(
+  /* script */
+  __webpack_require__(78),
+  /* template */
+  __webpack_require__(79),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] MediaPlayerWidget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0069064d", Component.options)
+  } else {
+    hotAPI.reload("data-v-0069064d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(77);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(63)("591a1e2a", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0069064d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MediaPlayerWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0069064d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MediaPlayerWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(44)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Widget_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            listEmpty: false,
+            listReady: false,
+            listItem: null,
+            listCopy: [],
+            isReq: false,
+            title: '',
+            videoId: '',
+            progress: 0,
+            width: 368,
+            height: 207,
+            firstLoad: true,
+            player: null
+        };
+    },
+
+    watch: {
+        playlist: function playlist(_playlist) {
+            this.listCopy = [];
+            _(_playlist).forEach(function (item) {
+                this.listCopy.push(item);
+            }.bind(this));
+
+            if (this.listEmpty) {
+                this.listEmpty = false;
+                this.listReady = true;
+                var item = this.getRandomItem();
+                this.updateVideo(item);
+            } else if (_playlist.length <= 0) {
+                this.listEmpty = true;
+                this.listReady = false;
+            }
+        }
+    },
+    components: {
+        Widget: __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default.a
+    },
+    methods: {
+        ready: function ready(player) {
+            this.player = player;
+            this.initialize();
+        },
+        initialize: function initialize() {
+            this.updatePlaylist();
+
+            if (this.firstLoad) {
+                this.player.stopVideo();
+                this.updateTimerDisplay();
+                this.updateProgressBar();
+                this.firstLoad = false;
+            }
+
+            clearInterval(time_update_interval);
+
+            var time_update_interval = setInterval(function () {
+                this.updateTimerDisplay();
+                this.updateProgressBar();
+            }.bind(this), 1000);
+        },
+        playing: function playing(player) {
+            //console.log('playing')
+            this.updatePlaylist();
+        },
+        paused: function paused(player) {
+            //console.log('paused')
+        },
+        buffering: function buffering(player) {
+            //console.log('buffering')
+        },
+        queued: function queued(player) {
+            //console.log('queued')
+        },
+        ended: function ended(player) {
+            if (this.isReq) {
+                this.removeReq();
+            }
+
+            setTimeout(function () {
+                this.next(true);
+            }.bind(this), 300);
+        },
+        play: function play() {
+            this.player.playVideo();
+        },
+        next: function next() {
+            var ended = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+            var item = void 0;
+
+            if (this.isReq && !ended) {
+                this.removeReq();
+            }
+
+            if (this.reqplaylist.length <= 0) {
+                item = this.getRandomItem();
+                this.updateVideo(item);
+            } else {
+                item = this.getReqItem();
+                this.updateVideo(item);
+            }
+        },
+        stop: function stop() {
+            this.player.stopVideo();
+            this.progress = 0;
+        },
+        pause: function pause() {
+            this.player.pauseVideo();
+        },
+        removeReq: function removeReq() {
+            var item = this.listItem;
+
+            /*this.$http.delete(window.location.origin + '/api/reqplaylists/' + item.id + '/delete/').then(function (response) {
+                console.log('Removed Title:' + this.title);
+                this.deleteFromReqPlaylist(item.id)
+            }.bind(this)).catch(function (response) {
+                AlertError(response.data.error, response.statusText, response.status)
+            });*/
+        },
+        updateTimerDisplay: function updateTimerDisplay() {
+            // Update current time text display.
+            this.formatTime(this.player.getCurrentTime());
+            this.formatTime(this.player.getDuration());
+        },
+        formatTime: function formatTime(time) {
+            time = Math.round(time);
+
+            var minutes = Math.floor(time / 60),
+                seconds = time - minutes * 60;
+
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return minutes + ":" + seconds;
+        },
+        updateProgressBar: function updateProgressBar() {
+            this.progress = this.player.getCurrentTime() / this.player.getDuration() * 100;
+        },
+        getReqItem: function getReqItem() {
+            console.log('Is Request');
+            this.isReq = true;
+            this.listItem = this.reqplaylist[0];
+            return this.listItem;
+        },
+        getRandomItem: function getRandomItem() {
+            this.isReq = false;
+
+            if (this.listCopy.length <= 0) {
+                _(this.playlist).forEach(function (item) {
+                    this.listCopy.push(item);
+                }.bind(this));
+            }
+
+            this.listItem = _.sample(_.shuffle(this.listCopy));
+
+            _.remove(this.listCopy, function (Obj) {
+                return Obj === this.listItem;
+            }.bind(this));
+
+            return this.listItem;
+        },
+        updateVideo: function updateVideo(item) {
+            this.videoId = '';
+            this.videoId = item.video_id;
+        },
+        updatePlaylist: function updatePlaylist() {
+            var item = this.listItem;
+
+            if (item.title === "") {
+                this.title = this.player.getVideoData().title;
+                var url = void 0;
+
+                var data = {
+                    title: this.title
+                };
+
+                if (!this.isReq) {
+                    url = window.location.origin + '/api/playlists/' + item.id + '/edit/';
+                } else {
+                    url = window.location.origin + '/api/reqplaylists/' + item.id + '/edit/';
+                }
+
+                /*this.$http.patch(url, data).then(function (response) {
+                    console.log('Updated Title:' + this.title);
+                    if (!this.isReq) {
+                        this.updatePlaylistTitle(item.id, this.title)
+                    } else {
+                        this.updateReqPlaylistTitle(item.id, this.title)
+                    }
+                }.bind(this)).catch(function (response) {
+                    AlertError(response.data.error, response.statusText, response.status)
+                });*/
+            } else {
+                this.title = item.title;
+            }
+        }
+    },
+    created: function created() {
+        //let socket = new WebSocket("ws://162.243.241.68:8000/songrequest/");
+
+        /*socket.onmessage = function (e) {
+            this.lines.push(e.data);
+            this.$nextTick(function () {
+                if (this.autoScroll) {
+                    this.container.scrollTop = this.container.scrollHeight;
+                }
+            });
+        }.bind(this);*/
+    },
+    ready: function ready() {
+        setTimeout(function () {
+            if (this.playlist) {
+                if (this.playlist.length > 0) {
+                    this.listReady = true;
+                    var item = this.getRandomItem();
+                    this.updateVideo(item);
+                } else {
+                    this.listEmpty = true;
+                }
+            } else {
+                //AlertError('Playlist timed out ...')
+            }
+        }.bind(this), 1000);
+    }
+});
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "65846",
+      "fullscreen": false
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("\n        Media Player\n    ")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }, [_c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('div', {
+    staticClass: "progress progress-striped active"
+  }, [_c('div', {
+    staticClass: "progress-bar bg-color-darken",
+    style: ({
+      width: _vm.progress + '%'
+    }),
+    attrs: {
+      "role": "progressbar"
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.play()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-play"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.next()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-forward"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.pause()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-pause"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.stop()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-stop"
+  })])])])]), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "background-color": "#000000",
+      "padding-bottom": "35px"
+    },
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "alert alert-info no-margin fade in"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "data-dismiss": "alert"
+    }
+  }, [_vm._v("\n                ×\n            ")]), _vm._v(" "), _c('i', {
+    staticClass: "fa-fw fa fa-info"
+  }), _vm._v("\n            Media Player Widget v1.0 Beta\n        ")]), _vm._v(" "), (_vm.player) ? _c('div', {
+    staticClass: "alert alert-default no-margin fade in text-center"
+  }, [_c('i', {
+    staticClass: "fa-fw fa fa-music"
+  }), _vm._v("\n            Current Song: " + _vm._s(_vm.title) + "\n        ")]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "text-center"
+  }, [(_vm.listReady) ? _c('youtube', {
+    attrs: {
+      "video-id": _vm.videoId,
+      "player-width": _vm.width,
+      "player-height": _vm.height,
+      "player-vars": {
+        autoplay: 1,
+        controls: 0,
+        showinfo: 0,
+        rel: 0
+      }
+    },
+    on: {
+      "ready": _vm.ready,
+      "playing": _vm.playing,
+      "ended": _vm.ended,
+      "buffering": _vm.buffering,
+      "paused": _vm.paused,
+      "queued": _vm.queued
+    }
+  }) : _vm._e()], 1), _vm._v(" "), (_vm.listEmpty) ? _c('div', {
+    staticClass: "text-center"
+  }, [_c('h1', [_vm._v("Playlist is empty")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-labeled btn-success",
+    attrs: {
+      "data-toggle": "modal",
+      "data-target": "#AddSongModal"
+    }
+  }, [_c('span', {
+    staticClass: "btn-label"
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  })]), _vm._v("\n                Add First Song\n            ")])]) : _vm._e()])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-0069064d", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

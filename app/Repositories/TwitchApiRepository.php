@@ -16,5 +16,4 @@ class TwitchApiRepository
         $token = Auth::user()->access_token;
         return TwitchApi::subscribers(Auth::user()->channel_id, $options, $token);
     }
-
 }

@@ -14,7 +14,8 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('TwitchChatWidget', require('./components/widgets/TwitchChatWidget.vue'));
+Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidget.vue'));
 
 const app = new Vue({
     el: '#app'
