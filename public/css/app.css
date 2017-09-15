@@ -11403,3 +11403,7 @@ button.close {
   clip: auto;
 }
 
+.modal-content {
+  border-radius: 0;
+}
+

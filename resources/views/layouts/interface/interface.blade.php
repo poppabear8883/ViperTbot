@@ -30,6 +30,10 @@
 
     @include('layouts.interface.partials.footer')
     @include('layouts.interface.partials.shortcuts')
+
+    {{-- MODALS --}}
+    <add-song-modal :show.sync="showAddSongModal"></add-song-modal>
+    {{--<add-command-modal></add-command-modal>--}}
 </div>
 {{-- END #APP --}}
 

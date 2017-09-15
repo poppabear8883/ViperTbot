@@ -112,7 +112,7 @@
                         <a href="#">Requests</a>
                     </li>
                     <li>
-                        <a href="#" data-toggle="modal" data-target="#AddSongModal">Add Song</a>
+                        <a href="#" @click="showAddSongModal = true">Add Song</a>
                     </li>
                 </ul>
             </li>

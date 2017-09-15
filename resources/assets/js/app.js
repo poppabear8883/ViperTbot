@@ -17,6 +17,14 @@ window.Vue = require('vue');
 Vue.component('TwitchChatWidget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidget.vue'));
 
+Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
+//Vue.component('add-command-modal', require('./components/modals/AddCommandModal.vue'));
+
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data() {
+        return {
+            showAddSongModal: false
+        }
+    }
 });
