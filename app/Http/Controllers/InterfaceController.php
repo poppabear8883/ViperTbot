@@ -16,6 +16,7 @@ class InterfaceController extends Controller
 
     public function index()
     {
+        //dd(\Auth::user()->playlists);
         return view('pages.interface.index', [
             'followers' => $this->twitch->followers(),
             'subscribers' => $this->twitch->subscribers()

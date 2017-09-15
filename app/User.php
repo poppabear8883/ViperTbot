@@ -31,4 +31,14 @@ class User extends Authenticatable
     protected $hidden = [
         'remember_token'
     ];
+
+    public function playlist()
+    {
+        return $this->hasMany(Playlist::class);
+    }
+
+    public function reqplaylist()
+    {
+        return $this->hasMany(ReqPlaylist::class);
+    }
 }

@@ -76,6 +76,14 @@
     import Widget from './Widget.vue'
 
     export default{
+        props: {
+            playlist: {
+                required: true
+            },
+            reqplaylist: {
+                required: true
+            }
+        },
         data() {
             return {
                 listEmpty: false,
@@ -280,8 +288,7 @@
                     }
                 });
             }.bind(this);*/
-        },
-        ready() {
+
             setTimeout(function () {
                 if (this.playlist) {
                     if (this.playlist.length > 0) {

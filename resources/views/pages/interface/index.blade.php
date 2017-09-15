@@ -13,7 +13,11 @@
                 <li class="sparks-info">
                     <h5> Followers
                         <span class="txt-color-blue">
-                            {{ $followers['_total'] }}
+                            @if(isset($followers->error))
+                                0
+                            @else
+                                {{ $followers['_total'] }}
+                            @endif
                         </span>
                     </h5>
                 </li>
@@ -42,7 +46,10 @@
 
                 <twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>
 
-                <media-player-widget></media-player-widget>
+                <media-player-widget
+                        :playlist="{{Auth::user()->playlist}}"
+                        :reqplaylist="{{Auth::user()->reqplaylist}}"
+                ></media-player-widget>
 
                 <div class="jarviswidget" id="wid-id-3">
 
