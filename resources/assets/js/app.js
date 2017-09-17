@@ -18,13 +18,14 @@ Vue.component('TwitchChatWidget', require('./components/widgets/TwitchChatWidget
 Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
-//Vue.component('add-command-modal', require('./components/modals/AddCommandModal.vue'));
+Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
 
 const app = new Vue({
     el: '#app',
     data() {
         return {
-            showAddSongModal: false
+            showAddSongModal: false,
+            showPlaylistModal: false
         }
     }
 });

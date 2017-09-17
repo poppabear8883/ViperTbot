@@ -106,13 +106,13 @@
                 <a href="#"><i class="fa fa-lg fa-fw fa-music"></i> <span class="menu-item-parent">Songs</span></a>
                 <ul>
                     <li>
-                        <a href="#">Playlist</a>
+                        <a href="#" @click.prevent="showPlaylistModal = true">Playlist</a>
                     </li>
                     <li>
                         <a href="#">Requests</a>
                     </li>
                     <li>
-                        <a href="#" @click="showAddSongModal = true">Add Song</a>
+                        <a href="#" @click.prevent="showAddSongModal = true">Add Song</a>
                     </li>
                 </ul>
             </li>

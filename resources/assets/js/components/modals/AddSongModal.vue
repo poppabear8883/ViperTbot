@@ -1,9 +1,14 @@
 <template>
-    <modal title="Add A Song To Playlist" effect="fade/zoom"
+    <modal effect="fade"
            :value="show"
-           @ok="addNew"
-           @cancel="cancelNew"
-    >
+           @closed="$emit('closed')">
+        <!-- custom header -->
+        <div slot="modal-header" class="modal-header">
+            <h4 class="modal-title">
+                <i>Add Song To A Playlist</i>
+            </h4>
+        </div>
+
         <form>
             <!-- row -->
             <div class="row">
@@ -20,34 +25,41 @@
                 </div>
             </div>
         </form>
+
+        <!-- custom buttons -->
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default" @click="cancelNew">Cancel</button>
+            <button type="button" class="btn btn-primary" @click="addNew">Add Song</button>
+        </div>
     </modal>
 </template>
+
 <style>
 
 </style>
+
 <script>
     import Modal from './Modal.vue'
 
-    /*import {
-        AlertSuccess,
-        AlertError
-    } from '../../modules/alerts'*/
-
     export default {
 
-        data: function () {
+        props: ['show'],
+
+        data() {
             return {
-                show: false,
                 formModel: {
-                    title: "",
+                    title: '',
                     video_id: ''
                 }
             }
         },
+
         components: {
             Modal
         },
+
         methods: {
+
             addNew(e) {
                 if (e) e.preventDefault();
                 let parse = this.youtubeParser(this.formModel.video_id);
@@ -56,54 +68,54 @@
                     this.formModel.video_id = parse
                 }
 
-                this.setVideoTitle(this.formModel.video_id);
+                axios.post('/api/playlist', {
+                    'action': 'create',
+                    'params': {
+                        'video_id': this.formModel.video_id,
+                    }
+                }).then((response) => {
 
-                /*setTimeout(function () {
-                    console.log(this.formModel.title);
-                    this.$http.post(window.location.origin + '/api/playlists/create/', this.formModel).then(function (response) {
-                        this.addToPlaylist(response.data)
-                        AlertSuccess("Song Added!")
-                        this.clearFields()
-                    }.bind(this)).catch(function (response) {
-                        AlertError(response.data.error, response.statusText, response.status)
+                    $.smallBox({
+                        title: 'Success',
+                        content: 'You have successfully added a new song to playlist!',
+                        color: '#739E73',
+                        iconSmall: 'fa fa-thumbs-up bounce animated',
+                        timeout: 4000
                     });
-                }.bind(this), 500);*/
 
-                this.show = false;
+                    this.clearFields();
+                }, (response) => {
+                    console.log('-- ERROR -- ' + response);
+
+                    $.bigBox({
+                        title: '!ERROR!',
+                        content: response,
+                        color: 'danger',
+                        icon: 'fa fa-warning shake animated',
+                        number: 1,
+                        timeout: 6000
+                    });
+
+                    this.clearFields();
+                });
             },
+
             youtubeParser(url) {
                 let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
                 let match = url.match(regExp);
                 return (match && match[7].length === 11) ? match[7] : false;
             },
-            setVideoTitle(id) {
-                // https://www.googleapis.com/youtube/v3/videos
-                let data = {
-                    key: 'AIzaSyBmYWnFeDuz9cnbUsIbd2pSfMwQTEjXcdU',
-                    fields: 'items(snippet(title))',
-                    part: 'snippet',
-                    id: id
-                };
 
-                /*this.$http.get('https://www.googleapis.com/youtube/v3/videos', {params: data}).then(function (response) {
-                    var data = $.parseJSON(response.data)
-                    this.formModel.title = data.items[0].snippet.title
-                }.bind(this)).catch(function (response) {
-                    AlertError(response.data.error, response.statusText, response.status)
-                });*/
-            },
             cancelNew(e) {
                 this.clearFields();
-                this.show = false;
+                this.$emit('closed', this.show)
             },
+
             clearFields() {
                 for (let item in this.formModel) {
                     this.formModel[item] = ''
                 }
             }
-        },
-        created() {
-
         }
     }
 </script>

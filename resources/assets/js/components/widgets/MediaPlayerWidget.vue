@@ -19,9 +19,9 @@
             <div class="widget-toolbar" role="menu">
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs" @click="play()"><i class="fa fa-play"></i></button>
-                    <button class="btn btn-default btn-xs" @click="next()"><i class="fa fa-forward"></i></button>
                     <button class="btn btn-default btn-xs" @click="pause()"><i class="fa fa-pause"></i></button>
                     <button class="btn btn-default btn-xs" @click="stop()"><i class="fa fa-stop"></i></button>
+                    <button class="btn btn-default btn-xs" @click="next()"><i class="fa fa-forward"></i></button>
                 </div>
             </div>
         </div>
@@ -193,11 +193,24 @@
             removeReq() {
                 let item = this.listItem;
 
-                /*this.$http.delete(window.location.origin + '/api/reqplaylists/' + item.id + '/delete/').then(function (response) {
+                /*axios.delete(window.location.origin + '/api/reqplaylist', {
+                    'action': 'remove',
+                    'params': {
+                        'video_id': this.videoId
+                    }
+                }).then(function (response) {
                     console.log('Removed Title:' + this.title);
-                    this.deleteFromReqPlaylist(item.id)
+
+                    //this.deleteFromReqPlaylist(item.id)
                 }.bind(this)).catch(function (response) {
-                    AlertError(response.data.error, response.statusText, response.status)
+                    $.bigBox({
+                        title: '!ERROR!',
+                        content: response,
+                        color: 'danger',
+                        icon: 'fa fa-warning shake animated',
+                        number: 1,
+                        timeout: 6000
+                    });
                 });*/
             },
             updateTimerDisplay() {
@@ -250,28 +263,43 @@
 
                 if (item.title === "") {
                     this.title = this.player.getVideoData().title;
+
                     let url;
 
-                    let data = {
-                        title: this.title
-                    };
-
                     if (!this.isReq) {
-                        url = window.location.origin + '/api/playlists/' + item.id + '/edit/'
+                        url = window.location.origin + '/api/playlist'
                     } else {
-                        url = window.location.origin + '/api/reqplaylists/' + item.id + '/edit/'
+                        url = window.location.origin + '/api/reqplaylist'
                     }
 
-                    /*this.$http.patch(url, data).then(function (response) {
+                    let params = {
+                        'video_id': this.videoId,
+                        'title': this.title
+                    };
+
+                    axios.patch(url, {
+                        'action': 'updateTitle',
+                        'params': params
+                    }).then(function (response) {
                         console.log('Updated Title:' + this.title);
-                        if (!this.isReq) {
+
+                        /*if (!this.isReq) {
                             this.updatePlaylistTitle(item.id, this.title)
                         } else {
                             this.updateReqPlaylistTitle(item.id, this.title)
-                        }
+                        }*/
                     }.bind(this)).catch(function (response) {
-                        AlertError(response.data.error, response.statusText, response.status)
-                    });*/
+                        $.bigBox({
+                            title: '!ERROR!',
+                            content: response,
+                            color: 'danger',
+                            icon: 'fa fa-warning shake animated',
+                            number: 1,
+                            timeout: 6000
+                        });
+                    });
+
+
                 } else {
                     this.title = item.title
                 }

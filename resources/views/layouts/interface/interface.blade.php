@@ -32,8 +32,17 @@
     @include('layouts.interface.partials.shortcuts')
 
     {{-- MODALS --}}
-    <add-song-modal :show.sync="showAddSongModal"></add-song-modal>
-    {{--<add-command-modal></add-command-modal>--}}
+    <add-song-modal
+            :show.sync="showAddSongModal"
+            @closed="showAddSongModal = false"
+    ></add-song-modal>
+
+    <playlist-modal
+            :show.sync="showPlaylistModal"
+            @closed="showPlaylistModal = false"
+            :playlist="{{ Auth::user()->playlist }}"
+    ></playlist-modal>
+    {{-- END MODALS --}}
 </div>
 {{-- END #APP --}}
 
