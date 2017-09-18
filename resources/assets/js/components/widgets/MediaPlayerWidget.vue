@@ -76,14 +76,6 @@
     import Widget from './Widget.vue'
 
     export default{
-        props: {
-            playlist: {
-                required: true
-            },
-            reqplaylist: {
-                required: true
-            }
-        },
         data() {
             return {
                 listEmpty: false,
@@ -98,6 +90,14 @@
                 height: 207,
                 firstLoad: true,
                 player: null
+            }
+        },
+        computed: {
+            playlist() {
+                return this.$store.getters.getSongs;
+            },
+            reqplaylist() {
+                return [];
             }
         },
         watch: {
@@ -281,6 +281,7 @@
                         'action': 'updateTitle',
                         'params': params
                     }).then(function (response) {
+                        item.title = this.title;
                         console.log('Updated Title:' + this.title);
 
                         /*if (!this.isReq) {

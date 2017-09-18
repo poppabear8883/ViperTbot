@@ -16,14 +16,14 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Title</th>
                         <th>Video ID</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr v-for="song in playlist">
+                    <tr v-for="song in songs">
                         <td>{{ song.id }}</td>
                         <td>{{ song.title }}</td>
                         <td>{{ song.video_id }}</td>
@@ -52,20 +52,17 @@
         props: {
             show: {
                 default: false,
-            },
-            playlist: {
-                required: true
-            }
-        },
-
-        data() {
-            return {
-
             }
         },
 
         components: {
             Modal
+        },
+
+        computed: {
+            songs() {
+                return this.$store.getters.getSongs;
+            }
         },
 
         methods: {

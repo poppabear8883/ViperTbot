@@ -83,6 +83,9 @@
                         timeout: 4000
                     });
 
+                    this.$store.commit('ADD_SONG', response.data);
+
+                    this.$emit('closed', this.show);
                     this.clearFields();
                 }, (response) => {
                     console.log('-- ERROR -- ' + response);
@@ -96,6 +99,7 @@
                         timeout: 6000
                     });
 
+                    this.$emit('closed', this.show);
                     this.clearFields();
                 });
             },

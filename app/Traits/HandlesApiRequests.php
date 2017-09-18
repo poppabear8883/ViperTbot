@@ -32,23 +32,33 @@ trait HandlesApiRequests {
     {
         $method = strtoupper($request->method());
 
-        if (in_array($method, $this->request_methods)) {
-            $this->validate($request, [
-                'action' => 'required',
-                'params' => 'array'
-            ]);
-
-            $func = $request->input('action');
-
-            if (!$this->valid_function($func, $method))
-                return false;
-
-        } else {
+        if (!$this->valid_method($method)) {
             array_push($this->errors, 'Method not allowed. Refer to the Api documentation for a list of available request methods');
             return false;
         }
 
+        if ($method !== 'GET') {
+            $this->validate($request, [
+                'action' => 'required',
+                'params' => 'array'
+            ]);
+        } else {
+            $this->validate($request, [
+                'action' => 'required'
+            ]);
+        }
+
+        $func = $request->input('action');
+
+        if (!$this->valid_function($func, $method))
+            return false;
+
         return true;
+    }
+
+    protected function valid_method($method)
+    {
+        return in_array($method, $this->request_methods);
     }
 
     protected function valid_function($func, $type)

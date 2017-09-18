@@ -1,4 +1,3 @@
-{% load staticfiles %}
 <!-- Left panel : Navigation area -->
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
 <aside id="left-panel" xmlns:v-on="http://www.w3.org/1999/xhtml">

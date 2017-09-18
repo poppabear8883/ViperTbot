@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "vue-multiselect": "^2.0.2",
-    "vue-youtube-embed": "^2.1.2"
+    "vue-youtube-embed": "^2.1.2",
+    "vuex": "^2.4.0"
   }
 }

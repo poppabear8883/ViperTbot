@@ -1,6 +1,6 @@
 <?php
 
-use App\Playlist;
+use App\Song;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach($ids as $id) {
-            Playlist::create([
+            Song::create([
                 'user_id' => 1,
                 'video_id' => $id
             ]);

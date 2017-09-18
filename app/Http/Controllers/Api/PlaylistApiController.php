@@ -1,7 +1,8 @@
 <?php namespace App\Http\Controllers\Api;
 
+use App\Events\SongAdded;
 use App\Http\Controllers\Controller;
-use App\Playlist;
+use App\Song;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -38,18 +39,18 @@ class PlaylistApiController extends Controller
     /**
      * The Playlist instance
      *
-     * @var Playlist
+     * @var Song
      */
-    private $playlist;
+    private $song;
 
     /**
      * Injects Playlist dependency.
      *
-     * @param Playlist $playlist
+     * @param Song $playlist
      */
-    public function __construct(Playlist $playlist)
+    public function __construct(Song $song)
     {
-        $this->playlist = $playlist;
+        $this->song = $song;
     }
 
 
@@ -60,7 +61,7 @@ class PlaylistApiController extends Controller
      */
     protected function all()
     {
-        return response($this->playlist->all(), 200);
+        return response($this->song->all(), 200);
     }
 
     /**
@@ -79,12 +80,14 @@ class PlaylistApiController extends Controller
             ], 422);
         }
 
-        $this->playlist->create([
+        $song = $this->song->create([
             'video_id' => $params['video_id'],
             'user_id' => Auth::user()->id
         ]);
 
-        return response($this->getSongByVideoId($params['video_id'])->first(), 200);
+        // event(new SongAdded($song));
+
+        return response($song, 200);
     }
 
     /**
@@ -127,18 +130,18 @@ class PlaylistApiController extends Controller
      */
     private function songExists($video_id)
     {
-        return !$this->playlist->where('video_id', $video_id)->get()->isEmpty();
+        return !$this->song->where('video_id', $video_id)->get()->isEmpty();
     }
 
     /**
      * Get the Playlist object by video_id
      *
      * @param $video_id
-     * @return Playlist
+     * @return Song
      */
     private function getSongByVideoId($video_id)
     {
-        return $this->playlist->where('video_id', $video_id);
+        return $this->song->where('video_id', $video_id);
     }
 
     /**

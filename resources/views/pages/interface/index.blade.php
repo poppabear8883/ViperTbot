@@ -46,10 +46,7 @@
 
                 <twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>
 
-                <media-player-widget
-                        :playlist="{{Auth::user()->playlist}}"
-                        :reqplaylist="{{Auth::user()->reqplaylist}}"
-                ></media-player-widget>
+                <media-player-widget></media-player-widget>
 
                 <div class="jarviswidget" id="wid-id-3">
 
