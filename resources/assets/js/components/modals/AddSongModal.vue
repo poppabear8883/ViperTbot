@@ -40,6 +40,7 @@
 
 <script>
     import Modal from './Modal.vue'
+    import * as alerts from '../../utils/alerts'
 
     export default {
 
@@ -87,17 +88,11 @@
 
                     this.$emit('closed', this.show);
                     this.clearFields();
-                }, (response) => {
-                    console.log('-- ERROR -- ' + response);
 
-                    $.bigBox({
-                        title: '!ERROR!',
-                        content: response,
-                        color: 'danger',
-                        icon: 'fa fa-warning shake animated',
-                        number: 1,
-                        timeout: 6000
-                    });
+                }, (response) => {
+                    console.error('-- ERROR -- ');
+                    console.log(response);
+                    alerts.error(response);
 
                     this.$emit('closed', this.show);
                     this.clearFields();

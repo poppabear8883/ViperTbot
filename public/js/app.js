@@ -39151,6 +39151,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(96);
 //
 //
 //
@@ -39191,6 +39192,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -39243,16 +39245,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.$emit('closed', _this.show);
                 _this.clearFields();
             }, function (response) {
-                console.log('-- ERROR -- ' + response);
-
-                $.bigBox({
-                    title: '!ERROR!',
-                    content: response,
-                    color: 'danger',
-                    icon: 'fa fa-warning shake animated',
-                    number: 1,
-                    timeout: 6000
-                });
+                console.error('-- ERROR -- ');
+                console.log(response);
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
 
                 _this.$emit('closed', _this.show);
                 _this.clearFields();
@@ -39881,7 +39876,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -39894,6 +39889,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(96);
 //
 //
 //
@@ -39940,6 +39936,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -39961,7 +39962,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
 
-    methods: {}
+    methods: {
+        confirmDelete: function confirmDelete(song) {
+            $.SmartMessageBox({
+                title: "Warning!",
+                content: 'Are you sure you wish to remove ' + song.title + ' ?',
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                var _this = this;
+
+                if (ButtonPressed === "Yes") {
+
+                    axios.delete('/api/playlist', {
+                        data: {
+                            'action': 'remove',
+                            'params': {
+                                'video_id': song.video_id
+                            }
+                        }
+                    }).then(function (response) {
+
+                        _this.$store.commit('DELETE_SONG', song.video_id);
+
+                        //this.$parent.alertShow('Success', `Successfully removed ${this.item.name} module`);
+                        $.smallBox({
+                            title: "Success",
+                            content: 'You successfully removed the song ' + song.title,
+                            color: "#659265",
+                            iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                            timeout: 4000
+                        });
+                    }, function (response) {
+                        console.error('!Error!');
+                        console.log(response);
+                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+                    });
+                }
+                if (ButtonPressed === "No") {
+                    __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["a" /* canceled */]();
+                }
+            }.bind(this));
+        }
+    }
 });
 
 /***/ }),
@@ -39989,8 +40031,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "table-responsive"
   }, [_c('table', {
     staticClass: "table table-bordered table-striped"
-  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Title")]), _vm._v(" "), _c('th', [_vm._v("Video ID")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.songs), function(song) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(song.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.title))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.video_id))])])
+  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Title")]), _vm._v(" "), _c('th', [_vm._v("Video ID")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.songs), function(song) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(song.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.title))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.video_id))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_c('button', {
+      staticClass: "btn btn-danger btn-sm",
+      on: {
+        "click": function($event) {
+          _vm.confirmDelete(song)
+        }
+      }
+    }, [_vm._v("X")])])])
   }))])]), _vm._v(" "), _c('div', {
     staticClass: "modal-footer",
     slot: "modal-footer"
@@ -40957,22 +41008,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     actions: __WEBPACK_IMPORTED_MODULE_2__actions__,
 
-    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["c" /* SET_SONGS */], function (state, data) {
-        state.songs = data;
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["a" /* ADD_SONG */], function (state, data) {
-        state.songs.push(data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["d" /* UPDATE_SONG */], function (state, data) {
-        if (data) {
+    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["c" /* SET_SONGS */], function (state, song) {
+        state.songs = song;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["a" /* ADD_SONG */], function (state, song) {
+        state.songs.push(song);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["d" /* UPDATE_SONG */], function (state, song) {
+        if (song) {
             for (var i in state.songs) {
-                if (state.songs[i].id === data.id) {
-                    state.songs.splice(i, 1, data);
+                if (state.songs[i].video_id === song.video_id) {
+                    state.songs.splice(i, 1, song);
                     break;
                 }
             }
         }
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["b" /* DELETE_SONG */], function (state, id) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["b" /* DELETE_SONG */], function (state, video_id) {
         for (var i in state.songs) {
-            if (state.songs[i].id === id) {
+            if (state.songs[i].video_id === video_id) {
                 state.songs.splice(i, 1);
                 break;
             }
@@ -41037,6 +41088,47 @@ function deleteSong(context, id) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = canceled;
+/* harmony export (immutable) */ __webpack_exports__["b"] = error;
+function canceled() {
+    $.smallBox({
+        title: "Canceled",
+        content: " Your action has been canceled. No changes were made!",
+        color: "#C46A69",
+        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+        timeout: 4000
+    });
+}
+
+function error(msg) {
+    $.bigBox({
+        title: '!ERROR!',
+        content: msg,
+        color: '#C46A69',
+        icon: 'fa fa-warning shake animated',
+        number: 1,
+        timeout: 6000
+    });
+}
 
 /***/ })
 /******/ ]);

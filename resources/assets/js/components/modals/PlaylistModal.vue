@@ -19,6 +19,7 @@
                         <th>#</th>
                         <th>Title</th>
                         <th>Video ID</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -27,6 +28,9 @@
                         <td>{{ song.id }}</td>
                         <td>{{ song.title }}</td>
                         <td>{{ song.video_id }}</td>
+                        <td class="text-center">
+                            <button @click="confirmDelete(song)" class="btn btn-danger btn-sm">X</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -45,7 +49,8 @@
 </style>
 
 <script>
-    import Modal from './Modal.vue'
+    import Modal from './Modal.vue';
+    import * as alerts from '../../utils/alerts';
 
     export default {
 
@@ -66,7 +71,46 @@
         },
 
         methods: {
+            confirmDelete(song) {
+                $.SmartMessageBox({
+                    title : "Warning!",
+                    content : `Are you sure you wish to remove ${song.title} ?`,
+                    buttons : '[No][Yes]'
+                }, function(ButtonPressed) {
+                    if (ButtonPressed === "Yes") {
 
+                        axios.delete('/api/playlist', {
+                            data: {
+                                'action': 'remove',
+                                'params': {
+                                    'video_id': song.video_id,
+                                }
+                            }
+                        }).then((response) => {
+
+                            this.$store.commit('DELETE_SONG', song.video_id);
+
+                            //this.$parent.alertShow('Success', `Successfully removed ${this.item.name} module`);
+                            $.smallBox({
+                                title : "Success",
+                                content : `You successfully removed the song ${song.title}`,
+                                color : "#659265",
+                                iconSmall : "fa fa-check fa-2x fadeInRight animated",
+                                timeout : 4000
+                            });
+
+                        }, (response) => {
+                            console.error('!Error!');
+                            console.log(response);
+                            alerts.error(response)
+                        });
+                    }
+                    if (ButtonPressed === "No") {
+                        alerts.canceled();
+                    }
+
+                }.bind(this));
+            }
         }
     }
 </script>
