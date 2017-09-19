@@ -1,5 +1,7 @@
 <template>
-    <widget wid-id="58974" :fullscreen="true">
+    <widget wid-id="58974"
+            color="purple"
+            :fullscreen="true">
         <div slot="title">Twitch Chat</div>
         <div slot="icon">
             <!-- add a icon example: <i class="fa fa-comments txt-color-white"></i> -->

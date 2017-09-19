@@ -46,8 +46,6 @@
 
                 <twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>
 
-                <media-player-widget></media-player-widget>
-
                 <div class="jarviswidget" id="wid-id-3">
 
                     <header>
@@ -75,28 +73,7 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <div class="jarviswidget" id="wid-id-4">
-
-                    <header>
-                        <h2>Widget Title</h2>
-                    </header><!-- widget div-->
-
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                            <input class="form-control" type="text">
-                        </div><!-- end widget edit box -->
-
-                        <!-- widget content -->
-                        <div class="widget-body">
-
-                            [PLACE WIDGET CONTENTS HERE]
-
-                        </div><!-- end widget content -->
-                    </div><!-- end widget div -->
-                </div><!-- end widget -->
-
+                <media-player-widget></media-player-widget>
 
                 <div class="jarviswidget" id="wid-id-5">
 

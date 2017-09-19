@@ -1,6 +1,6 @@
 <template>
     <!-- todo: lock this widget to non-sortable! -->
-    <widget wid-id="65846" :fullscreen="false">
+    <widget wid-id="65846" :fullscreen="false" color="red" :sortable="false">
         <div slot="title">
             Media Player
         </div>

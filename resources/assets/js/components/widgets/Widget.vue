@@ -15,7 +15,7 @@
         -->
 
     <!-- Widget ID (each widget will need unique ID)-->
-    <div class="jarviswidget jarviswidget-color-blueDark jarviswidget-sortable"
+    <div :class="['jarviswidget', titleColor, {'jarviswidget-sortable': sortable}]"
          :id="widId"
          data-widget-editbutton="false"
          role="widget"
@@ -91,18 +91,31 @@
     export default {
         props: {
             widId: {
+                type: String,
                 required: true
             },
             colorpicker: {
+                type: Boolean,
+                default: true
+            },
+            color: {
+                type: String,
+                default: 'blueDark'
+            },
+            sortable: {
+                type: Boolean,
                 default: true
             },
             collapse: {
+                type: Boolean,
                 default: true
             },
             fullscreen: {
+                type: Boolean,
                 default: false
             },
             deletebtn: {
+                type: Boolean,
                 default: false
             }
 
@@ -116,6 +129,13 @@
         components:{
             ColorPicker
         },
+
+        computed: {
+            titleColor() {
+                return `jarviswidget-color-${this.color}`;
+            }
+        },
+
         methods: {
 
         }
