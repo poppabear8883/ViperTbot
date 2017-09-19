@@ -42,6 +42,11 @@
                 :show.sync="showPlaylistModal"
                 @closed="showPlaylistModal = false"
         ></playlist-modal>
+
+        <reqplaylist-modal
+                :show.sync="showReqPlaylistModal"
+                @closed="showReqPlaylistModal = false"
+        ></reqplaylist-modal>
     @endif
     {{-- END MODALS --}}
 </div>

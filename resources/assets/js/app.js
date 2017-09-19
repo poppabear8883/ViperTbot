@@ -19,6 +19,7 @@ Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidg
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
+Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
 
 import store from './vuex/store'
 
@@ -28,7 +29,8 @@ const app = new Vue({
     data() {
         return {
             showAddSongModal: false,
-            showPlaylistModal: false
+            showPlaylistModal: false,
+            showReqPlaylistModal: false
         }
     },
     methods: {
@@ -42,10 +44,23 @@ const app = new Vue({
             }, (response) => {
                 console.log('-- Error --' + response);
             });
+        },
+
+        getReqSongs() {
+            axios.get('/api/reqplaylist', {
+                'params': {
+                    'action': 'all'
+                }
+            }).then((response) => {
+                this.$store.commit('SET_REQSONGS', response.data);
+            }, (response) => {
+                console.log('-- Error --' + response);
+            });
         }
     },
 
     mounted() {
         this.getSongs();
+        this.getReqSongs();
     }
 });

@@ -16,10 +16,11 @@ class InterfaceController extends Controller
 
     public function index()
     {
-        //dd(\Auth::user()->playlists);
+        //dd($this->twitch->liveChannels()['streams']);
         return view('pages.interface.index', [
             'followers' => $this->twitch->followers(),
-            'subscribers' => $this->twitch->subscribers()
+            'subscribers' => $this->twitch->subscribers(),
+            'live_channels' => $this->twitch->liveChannels()
         ]);
     }
 }

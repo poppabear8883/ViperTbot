@@ -13,3 +13,11 @@
 .modal-content {
   border-radius: 0;
 }
+
+.ajax-dropdown {
+  width: 400px !important;
+}
+
+.ajax-dropdown>:first-child {
+  padding: 10px !important;
+}

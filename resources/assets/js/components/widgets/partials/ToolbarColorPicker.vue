@@ -48,6 +48,6 @@
 
 <style>
     .toolbar-colorpicker {
-        padding-top: 5px;
+        padding-top: 5px !important;
     }
 </style>

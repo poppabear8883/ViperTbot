@@ -1,17 +1,18 @@
 <?php namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Song;
+use App\RequestedSong;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class PlaylistApiController extends Controller
+class ReqPlaylistApiController extends Controller
 {
     use HandlesApiRequests;
 
     protected $rules = [
         'video_id' => 'required|string',
+        'requested_by' => 'string|required',
         'title' => 'string'
     ];
 
@@ -47,7 +48,7 @@ class PlaylistApiController extends Controller
      *
      * @param Song $playlist
      */
-    public function __construct(Song $song)
+    public function __construct(RequestedSong $song)
     {
         $this->song = $song;
     }
@@ -80,7 +81,8 @@ class PlaylistApiController extends Controller
 
         $song = $this->song->create([
             'video_id' => $params['video_id'],
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'requested_by' => $params['requested_by']
         ]);
 
         return response($song, 200);

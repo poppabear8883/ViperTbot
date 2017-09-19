@@ -1,5 +1,6 @@
 <?php
 
+use App\RequestedSong;
 use App\Song;
 use Illuminate\Database\Seeder;
 
@@ -27,6 +28,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // $this->call(UsersTableSeeder::class);
+        RequestedSong::create([
+            'user_id' => 1,
+            'video_id' => 'WaSy8yy-mr8',
+            'requested_by' => 'xI Poppabear Ix'
+        ]);
+
     }
 }

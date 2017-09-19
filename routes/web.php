@@ -32,8 +32,8 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
             Route::any('', 'PlaylistApiController@api');
         });
 
-        /*Route::prefix('reqplaylist')->group(function() {
+        Route::prefix('reqplaylist')->group(function() {
             Route::any('', 'ReqPlaylistApiController@api');
-        });*/
+        });
 
 });

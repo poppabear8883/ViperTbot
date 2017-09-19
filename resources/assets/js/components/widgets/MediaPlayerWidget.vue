@@ -74,6 +74,7 @@
     Vue.use(VueYoutubeEmbed);
 
     import Widget from './Widget.vue'
+    import * as alerts from '../../utils/alerts'
 
     export default{
         data() {
@@ -97,7 +98,7 @@
                 return this.$store.getters.getSongs;
             },
             reqplaylist() {
-                return [];
+                return this.$store.getters.getReqSongs;
             }
         },
         watch: {
@@ -177,11 +178,11 @@
 
                 if (this.reqplaylist.length <= 0) {
                     item = this.getRandomItem();
-                    this.updateVideo(item)
                 } else {
                     item = this.getReqItem();
-                    this.updateVideo(item)
                 }
+
+                this.updateVideo(item);
             },
             stop() {
                 this.player.stopVideo();
@@ -191,27 +192,18 @@
                 this.player.pauseVideo()
             },
             removeReq() {
-                let item = this.listItem;
-
-                /*axios.delete(window.location.origin + '/api/reqplaylist', {
-                    'action': 'remove',
-                    'params': {
-                        'video_id': this.videoId
+                axios.delete('/api/reqplaylist', {
+                    data: {
+                        'action': 'remove',
+                        'params': {
+                            'video_id': this.videoId
+                        }
                     }
                 }).then(function (response) {
-                    console.log('Removed Title:' + this.title);
-
-                    //this.deleteFromReqPlaylist(item.id)
+                    this.$store.commit('DELETE_REQSONG', this.videoId);
                 }.bind(this)).catch(function (response) {
-                    $.bigBox({
-                        title: '!ERROR!',
-                        content: response,
-                        color: 'danger',
-                        icon: 'fa fa-warning shake animated',
-                        number: 1,
-                        timeout: 6000
-                    });
-                });*/
+                    alerts.error(response)
+                });
             },
             updateTimerDisplay() {
                 // Update current time text display.

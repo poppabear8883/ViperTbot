@@ -108,7 +108,7 @@
                         <a href="#" @click.prevent="showPlaylistModal = true">Playlist</a>
                     </li>
                     <li>
-                        <a href="#">Requests</a>
+                        <a href="#" @click.prevent="showReqPlaylistModal = true">Requests</a>
                     </li>
                     <li>
                         <a href="#" @click.prevent="showAddSongModal = true">Add Song</a>

@@ -7,7 +7,7 @@
         <!-- custom header -->
         <div slot="modal-header" class="modal-header">
             <h4 class="modal-title">
-                <i>Playlist</i>
+                <i>Requested Playlist</i>
             </h4>
         </div>
 
@@ -18,6 +18,7 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
+                        <th>By</th>
                         <th>Video ID</th>
                         <th>Actions</th>
                     </tr>
@@ -32,6 +33,7 @@
                         <td v-else>
                             <i class="text-danger">The song title will be updated shortly ...</i>
                         </td>
+                        <td>{{ song.requested_by }}</td>
                         <td>{{ song.video_id }}</td>
                         <td class="text-center">
                             <button @click="confirmDelete(song)" class="btn btn-danger btn-sm">X</button>
@@ -72,7 +74,7 @@
 
         computed: {
             songs() {
-                return this.$store.getters.getSongs;
+                return this.$store.getters.getReqSongs;
             }
         },
 
@@ -85,7 +87,7 @@
                 }, function(ButtonPressed) {
                     if (ButtonPressed === "Yes") {
 
-                        axios.delete('/api/playlist', {
+                        axios.delete('/api/reqplaylist', {
                             data: {
                                 'action': 'remove',
                                 'params': {
@@ -94,7 +96,7 @@
                             }
                         }).then((response) => {
 
-                            this.$store.commit('DELETE_SONG', song.video_id);
+                            this.$store.commit('DELETE_REQSONG', song.video_id);
 
                             //this.$parent.alertShow('Success', `Successfully removed ${this.item.name} module`);
                             $.smallBox({
