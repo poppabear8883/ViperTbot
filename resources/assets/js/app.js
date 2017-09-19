@@ -30,7 +30,8 @@ const app = new Vue({
         return {
             showAddSongModal: false,
             showPlaylistModal: false,
-            showReqPlaylistModal: false
+            showReqPlaylistModal: false,
+            //ws: new WebSocket('wss://pubsub-edge.twitch.tv')
         }
     },
     methods: {
@@ -56,11 +57,34 @@ const app = new Vue({
             }, (response) => {
                 console.log('-- Error --' + response);
             });
-        }
+        },
+
+        // heartbeat() {
+        //     let message = {
+        //         type: 'PING'
+        //     };
+        //     console.log('SENT: ' + JSON.stringify(message));
+        //     this.ws.send(JSON.stringify(message));
+        // }
     },
 
     mounted() {
         this.getSongs();
         this.getReqSongs();
+
+        console.log('Mounted');
+
+        // this.ws.onerror = function(error) {
+        //     console.log('ERR:  ' + JSON.stringify(error));
+        // };
+        //
+        // this.ws.onopen = (event) => {
+        //     console.log('INFO: Socket Opened');
+        //     this.heartbeat();
+        // };
+        //
+        // this.ws.onmessage = (e) => {
+        //     console.log(e.data);
+        // };
     }
 });

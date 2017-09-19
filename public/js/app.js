@@ -11451,6 +11451,7 @@ var app = new Vue({
             showAddSongModal: false,
             showPlaylistModal: false,
             showReqPlaylistModal: false
+            //ws: new WebSocket('wss://pubsub-edge.twitch.tv')
         };
     },
 
@@ -11486,6 +11487,21 @@ var app = new Vue({
     mounted: function mounted() {
         this.getSongs();
         this.getReqSongs();
+
+        console.log('Mounted');
+
+        // this.ws.onerror = function(error) {
+        //     console.log('ERR:  ' + JSON.stringify(error));
+        // };
+        //
+        // this.ws.onopen = (event) => {
+        //     console.log('INFO: Socket Opened');
+        //     this.heartbeat();
+        // };
+        //
+        // this.ws.onmessage = (e) => {
+        //     console.log(e.data);
+        // };
     }
 });
 

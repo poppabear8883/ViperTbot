@@ -44,7 +44,7 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>
+                {{--<twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>--}}
 
                 <div class="jarviswidget" id="wid-id-3">
 
