@@ -42,7 +42,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'public/js/vendor/smartadmin/plugin/fastclick/fastclick.min.js',
 
         // Main SmartAdmin JS
-        'public/js/vendor/smartadmin/app.min.js',
+        'public/js/vendor/smartadmin/app.js',
 
         // Add-ons
         'public/js/vendor/smartadmin/speech/voicecommand.min.js',
