@@ -15,7 +15,7 @@
         <div slot="body">
             <!-- MAIN CONTAINER -->
             <div class="row">
-                <textarea class="ws-output" rows="20" style="font-family:Courier,serif;width:100%"></textarea>
+                <textarea class="ws-output" rows="20" readonly></textarea>
             </div>
         </div>
         <!-- end body -->
@@ -23,7 +23,12 @@
 </template>
 <style>
     .ws-output {
-        overflow: auto;
+        font-family:Courier,serif;
+        margin-left: 15px;
+        padding: 5px;
+        width: 95%;
+        background-color: #000000;
+        color: #FFFFFF;
     }
 </style>
 <script>
@@ -109,7 +114,7 @@
 
                     if (data.type === 'MESSAGE') {
                         console.log(JSON.parse(data.data.message).data_object);
-                        $('.ws-output').append(`RECV: ${this.getWhisper(data).message}`);
+                        $('.ws-output').append(`RECV: ${this.getWhisper(data).message} \n`);
                     }
 
                 }.bind(this);

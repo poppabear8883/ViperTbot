@@ -6,55 +6,8 @@
         <span id="logo" style="color: #FFFFFF;"> ViperTwitchBot v1.0 Beta </span>
         <!-- END LOGO PLACEHOLDER -->
 
-        <!-- Note: The activity badge color changes when clicked and resets the number to 0
-             Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-        <span id="activity" class="activity-dropdown">
-            <i class="fa fa-user"></i>
-            <b class="badge"> {{ $live_channels['_total'] }} </b>
-        </span>
-
-        <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
-        <div class="ajax-dropdown">
-
-            <!-- notification content -->
-            <div class="ajax-notifications custom-scroll">
-                <div class="row">
-                    @foreach($live_channels['streams'] as $stream)
-                        <div class="col-md-12">
-                            <div class="thumbnail">
-                                <a href="{{ $stream['channel']['url'] }}" target="_blank">
-                                    <img src="{{ $stream['preview']['medium'] }}" alt="No Thumbnail ...">
-                                </a>
-
-                                <div class="caption">
-                                    <h3>
-                                        {{ $stream['channel']['display_name'] }}
-                                        <small><i>{{ $stream['channel']['game'] }}</i></small>
-                                    </h3>
-                                    <p>
-                                        {{ $stream['channel']['description'] }}
-                                    </p>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    @endforeach
-                </div>
-
-            </div>
-            <!-- end notification content -->
-
-            <!-- footer: refresh area -->
-            <span> Last updated on: 12/12/2013 9:43AM
-						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..."
-                                class="btn btn-xs btn-default pull-right">
-							<i class="fa fa-refresh"></i>
-						</button> </span>
-            <!-- end footer -->
-
-        </div>
-        <!-- END AJAX-DROPDOWN -->
+        {{--  LiveChannels Component --}}
+        <live-channels></live-channels>
     </div>
 
     <!-- #PROJECTS: projects dropdown -->

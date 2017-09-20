@@ -116,4 +116,21 @@ trait HandlesApiRequests {
 
         return true;
     }
+
+    /**
+     * Checks the validation rules for the request
+     *
+     * @param array $params
+     * @return Response|bool
+     */
+    protected function isValid($params)
+    {
+        $validator = Validator::make($params, $this->rules);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->failed()], 422);
+        }
+
+        return true;
+    }
 }

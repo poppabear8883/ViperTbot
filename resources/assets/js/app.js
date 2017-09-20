@@ -13,16 +13,18 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 
-Vue.component('TwitchChatWidget', require('./components/widgets/TwitchChatWidget.vue'));
-Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidget.vue'));
-Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
+Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
+// Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
 Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
 
 import store from './vuex/store'
+import { TwitchListener } from './webhooks/TwitchListener'
 
 const app = new Vue({
     el: '#app',
@@ -32,10 +34,11 @@ const app = new Vue({
             showAddSongModal: false,
             showPlaylistModal: false,
             showReqPlaylistModal: false,
-            //ws: new WebSocket('wss://pubsub-edge.twitch.tv')
+            user: {}
         }
     },
     methods: {
+        // todo: possibly be able to get a user object from the playlist object ? or vise versa ??
         getSongs() {
             axios.get('/api/playlist', {
                 'params': {
@@ -59,33 +62,34 @@ const app = new Vue({
                 console.log('-- Error --' + response);
             });
         },
-
-        // heartbeat() {
-        //     let message = {
-        //         type: 'PING'
-        //     };
-        //     console.log('SENT: ' + JSON.stringify(message));
-        //     this.ws.send(JSON.stringify(message));
-        // }
+        getUser() {
+            axios.get('/api/users', {
+                'params': {
+                    'action': 'getAuthUser'
+                }
+            }).then((response) => {
+                this.user = response.data;
+            }, (response) => {
+                console.log('-- Error --' + response);
+                return null
+            });
+        }
     },
 
     mounted() {
         this.getSongs();
         this.getReqSongs();
 
-        console.log('Mounted');
+        if(this.getUser() !== null) {
 
-        // this.ws.onerror = function(error) {
-        //     console.log('ERR:  ' + JSON.stringify(error));
-        // };
-        //
-        // this.ws.onopen = (event) => {
-        //     console.log('INFO: Socket Opened');
-        //     this.heartbeat();
-        // };
-        //
-        // this.ws.onmessage = (e) => {
-        //     console.log(e.data);
-        // };
+            let tl = new TwitchListener(
+                'whispers',
+                this.user.channel_id,
+                this.user.access_token
+            );
+
+            tl.connect();
+        }
+
     }
 });

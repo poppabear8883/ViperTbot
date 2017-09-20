@@ -28,12 +28,20 @@ Route::get('logout', function() {
 
 Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () {
 
-        Route::prefix('playlist')->group(function() {
-            Route::any('', 'PlaylistApiController@api');
-        });
+    Route::prefix('users')->group(function() {
+        Route::any('', 'UsersApiController@api');
+    });
 
-        Route::prefix('reqplaylist')->group(function() {
-            Route::any('', 'ReqPlaylistApiController@api');
-        });
+    Route::prefix('playlist')->group(function() {
+        Route::any('', 'PlaylistApiController@api');
+    });
+
+    Route::prefix('reqplaylist')->group(function() {
+        Route::any('', 'ReqPlaylistApiController@api');
+    });
+
+    Route::prefix('livechannels')->group(function() {
+        Route::any('', 'TwitchChannelsApiController@api');
+    });
 
 });

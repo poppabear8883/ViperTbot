@@ -918,7 +918,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -962,7 +962,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/Modal.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/Modal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -11418,6 +11418,7 @@ module.exports = __webpack_require__(97);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(117);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -11433,14 +11434,16 @@ window.Vue = __webpack_require__(15);
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('live-channels', __webpack_require__(111));
 
-Vue.component('TwitchChatWidget', __webpack_require__(44));
-Vue.component('MediaPlayerWidget', __webpack_require__(56));
-Vue.component('twitch-events-widget', __webpack_require__(62));
+Vue.component('twitch-chat-widget', __webpack_require__(44));
+Vue.component('media-player-widget', __webpack_require__(56));
+// Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', __webpack_require__(67));
 Vue.component('playlist-modal', __webpack_require__(77));
 Vue.component('reqplaylist-modal', __webpack_require__(82));
+
 
 
 
@@ -11451,12 +11454,13 @@ var app = new Vue({
         return {
             showAddSongModal: false,
             showPlaylistModal: false,
-            showReqPlaylistModal: false
-            //ws: new WebSocket('wss://pubsub-edge.twitch.tv')
+            showReqPlaylistModal: false,
+            user: {}
         };
     },
 
     methods: {
+        // todo: possibly be able to get a user object from the playlist object ? or vise versa ??
         getSongs: function getSongs() {
             var _this = this;
 
@@ -11482,6 +11486,20 @@ var app = new Vue({
             }, function (response) {
                 console.log('-- Error --' + response);
             });
+        },
+        getUser: function getUser() {
+            var _this3 = this;
+
+            axios.get('/api/users', {
+                'params': {
+                    'action': 'getAuthUser'
+                }
+            }).then(function (response) {
+                _this3.user = response.data;
+            }, function (response) {
+                console.log('-- Error --' + response);
+                return null;
+            });
         }
     },
 
@@ -11489,20 +11507,12 @@ var app = new Vue({
         this.getSongs();
         this.getReqSongs();
 
-        console.log('Mounted');
+        if (this.getUser() !== null) {
 
-        // this.ws.onerror = function(error) {
-        //     console.log('ERR:  ' + JSON.stringify(error));
-        // };
-        //
-        // this.ws.onopen = (event) => {
-        //     console.log('INFO: Socket Opened');
-        //     this.heartbeat();
-        // };
-        //
-        // this.ws.onmessage = (e) => {
-        //     console.log(e.data);
-        // };
+            var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__["a" /* TwitchListener */]('whispers', this.user.channel_id, this.user.access_token);
+
+            tl.connect();
+        }
     }
 });
 
@@ -37621,7 +37631,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] TwitchChatWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -37955,7 +37965,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ToolbarColorPicker.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -38346,7 +38356,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MediaPlayerWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -39142,269 +39152,11 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(63)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(65),
-  /* template */
-  __webpack_require__(66),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/TwitchEventsWidget.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] TwitchEventsWidget.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-02cefac8", Component.options)
-  } else {
-    hotAPI.reload("data-v-02cefac8", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(64);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("9eca4daa", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-02cefac8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchEventsWidget.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-02cefac8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchEventsWidget.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.ws-output {\n    overflow: auto;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        token: { type: String, required: true },
-        channelId: { type: String, required: true }
-    },
-
-    data: function data() {
-        return {
-            ws: null
-        };
-    },
-
-
-    components: {
-        Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
-    },
-
-    methods: {
-        getWhisper: function getWhisper(data) {
-            return {
-                message: JSON.parse(data.data.message).data_object.body
-            };
-        },
-        nonce: function nonce(length) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < length; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        },
-        heartbeat: function heartbeat() {
-            var message = {
-                type: 'PING'
-            };
-            $('.ws-output').append('SENT: ' + JSON.stringify(message) + '\n');
-            this.ws.send(JSON.stringify(message));
-        },
-        listen: function listen(topic) {
-            var message = {
-                type: 'LISTEN',
-                nonce: this.nonce(15),
-                data: {
-                    topics: [topic],
-                    auth_token: this.token
-                }
-            };
-            $('.ws-output').append('SENT: ' + JSON.stringify(message) + '\n');
-            this.ws.send(JSON.stringify(message));
-        },
-        connect: function connect() {
-            var heartbeatInterval = 1000 * 60; //ms between PING's
-            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
-            var heartbeatHandle = void 0;
-
-            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
-
-            this.ws.onopen = function (event) {
-                $('.ws-output').append('INFO: Socket Opened\n');
-
-                this.listen("whispers." + this.channelId);
-
-                this.heartbeat();
-
-                heartbeatHandle = setInterval(this.heartbeat(), heartbeatInterval);
-            }.bind(this);
-
-            this.ws.onerror = function (error) {
-                $('.ws-output').append('ERR:  ' + JSON.stringify(error) + '\n');
-            };
-
-            this.ws.onmessage = function (event) {
-                var data = JSON.parse(event.data);
-
-                if (data.type === 'RECONNECT') {
-                    $('.ws-output').append('INFO: Reconnecting...\n');
-                    setTimeout(this.connect(), reconnectInterval);
-                }
-
-                if (data.type === 'MESSAGE') {
-                    console.log(JSON.parse(data.data.message).data_object);
-                    $('.ws-output').append("RECV: " + this.getWhisper(data).message);
-                }
-            }.bind(this);
-
-            this.ws.onclose = function () {
-                $('.ws-output').append('INFO: Socket Closed\n');
-                clearInterval(heartbeatHandle);
-
-                $('.ws-output').append('INFO: Reconnecting...\n');
-                setTimeout(this.connect(), reconnectInterval);
-            }.bind(this);
-        }
-    },
-
-    created: function created() {
-        this.connect();
-    }
-});
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('widget', {
-    attrs: {
-      "wid-id": "58375",
-      "color": "purple",
-      "fullscreen": true
-    }
-  }, [_c('div', {
-    slot: "title"
-  }, [_vm._v("Twitch Events")]), _vm._v(" "), _c('div', {
-    slot: "icon"
-  }), _vm._v(" "), _c('div', {
-    slot: "toolbars"
-  }), _vm._v(" "), _c('div', {
-    slot: "body"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('textarea', {
-    staticClass: "ws-output",
-    staticStyle: {
-      "font-family": "Courier,serif",
-      "width": "100%"
-    },
-    attrs: {
-      "rows": "20"
-    }
-  })])])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-02cefac8", module.exports)
-  }
-}
-
-/***/ }),
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39425,7 +39177,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/AddSongModal.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/AddSongModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AddSongModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -40163,7 +39915,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/PlaylistModal.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/PlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] PlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -40439,7 +40191,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/ReqPlaylistModal.vue"
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/ReqPlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ReqPlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -41823,6 +41575,365 @@ function deleteReqSong(context, id) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(112)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(114),
+  /* template */
+  __webpack_require__(115),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/header/LiveChannels.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] LiveChannels.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-77882b02", Component.options)
+  } else {
+    hotAPI.reload("data-v-77882b02", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(113);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("a5fe3806", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 114 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            total: 0,
+            streams: [],
+            updated_time: ''
+        };
+    },
+
+    methods: {
+        getLiveChannels: function getLiveChannels() {
+            var _this = this;
+
+            axios.get('/api/livechannels', {
+                'params': {
+                    'action': 'all'
+                }
+            }).then(function (response) {
+                _this.total = response.data._total;
+                _this.streams = response.data.streams;
+                _this.updated_time = new Date().toLocaleTimeString();
+            }, function (response) {
+                console.log('-- Error --' + response);
+            });
+        }
+    },
+    created: function created() {
+        var _this2 = this;
+
+        this.getLiveChannels();
+
+        setInterval(function (e) {
+            _this2.getLiveChannels();
+        }, 60000);
+    }
+});
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    attrs: {
+      "id": "livechannels"
+    }
+  }, [_c('span', {
+    staticClass: "activity-dropdown",
+    attrs: {
+      "id": "activity"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-user"
+  }), _vm._v(" "), _c('b', {
+    class: ['badge', {
+      'bg-color-red': _vm.total > 0
+    }]
+  }, [_vm._v(" " + _vm._s(_vm.total) + " ")])]), _vm._v(" "), _c('div', {
+    staticClass: "ajax-dropdown"
+  }, [_c('div', {
+    staticClass: "ajax-notifications custom-scroll"
+  }, [_c('div', {
+    staticClass: "row"
+  }, _vm._l((_vm.streams), function(stream) {
+    return _c('div', {
+      staticClass: "col-md-12"
+    }, [_c('div', {
+      staticClass: "thumbnail"
+    }, [_c('a', {
+      attrs: {
+        "href": stream['channel']['url'],
+        "target": "_blank"
+      }
+    }, [_c('img', {
+      attrs: {
+        "src": stream['preview']['medium'],
+        "alt": "No Thumbnail ..."
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "caption"
+    }, [_c('h3', [_vm._v("\n                                    " + _vm._s(stream['channel']['display_name']) + "\n                                    "), _c('small', [_c('i', [_vm._v(_vm._s(stream['channel']['game']))])])]), _vm._v(" "), _c('p', [_vm._v("\n                                    " + _vm._s(stream['channel']['description']) + "\n                                ")])])])])
+  }))]), _vm._v(" "), _c('span', [_vm._v(" Last updated: " + _vm._s(_vm.updated_time) + "\n\t\t\t\t\t\t"), _c('button', {
+    staticClass: "btn btn-xs btn-default pull-right",
+    attrs: {
+      "type": "button",
+      "data-loading-text": "<i class='fa fa-refresh fa-spin'></i> Loading..."
+    },
+    on: {
+      "click": function($event) {
+        _vm.getLiveChannels()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-refresh"
+  })])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-77882b02", module.exports)
+  }
+}
+
+/***/ }),
+/* 116 */,
+/* 117 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchListener; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TwitchListener = function () {
+    function TwitchListener(topic, channel_id, access_token) {
+        _classCallCheck(this, TwitchListener);
+
+        this.topic = topic;
+        this.channel_id = channel_id;
+        this.access_token = access_token;
+        this.ws = null;
+    }
+
+    _createClass(TwitchListener, [{
+        key: "nonce",
+        value: function nonce(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        }
+    }, {
+        key: "heartbeat",
+        value: function heartbeat() {
+            var message = {
+                type: 'PING'
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "listen",
+        value: function listen(topic) {
+            var message = {
+                type: 'LISTEN',
+                nonce: this.nonce(15),
+                data: {
+                    topics: [topic],
+                    auth_token: this.access_token
+                }
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "connect",
+        value: function connect() {
+            var _this = this;
+
+            var heartbeatInterval = 1000 * 60; //ms between PING's
+            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
+            var heartbeatHandle = void 0;
+
+            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
+
+            this.ws.onopen = function (event) {
+                _this.listen(_this.topic + "." + _this.channel_id);
+                _this.heartbeat();
+                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
+                //console.log(`Listening to ${this.topic} with channel id ${this.channel_id}`);
+            };
+
+            this.ws.onerror = function (error) {
+                console.error(error);
+            };
+
+            this.ws.onmessage = function (event) {
+                var data = JSON.parse(event.data);
+
+                if (data.type === 'RECONNECT') {
+                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
+                    setTimeout(_this.connect(), reconnectInterval);
+                }
+            };
+
+            this.ws.onclose = function () {
+                //console.log(`Closed connection to ${this.topic} with channel id ${this.channel_id}`);
+                clearInterval(heartbeatHandle);
+                setTimeout(_this.connect(), reconnectInterval);
+            };
+        }
+    }]);
+
+    return TwitchListener;
+}();
 
 /***/ })
 /******/ ]);
