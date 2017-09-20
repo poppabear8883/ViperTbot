@@ -16,6 +16,7 @@ window.Vue = require('vue');
 
 Vue.component('TwitchChatWidget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('MediaPlayerWidget', require('./components/widgets/MediaPlayerWidget.vue'));
+Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));

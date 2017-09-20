@@ -46,27 +46,10 @@
 
                 {{--<twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>--}}
 
-                <div class="jarviswidget" id="wid-id-3">
-
-                    <header>
-                        <h2>Widget Title</h2>
-                    </header><!-- widget div-->
-
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                            <input class="form-control" type="text">
-                        </div><!-- end widget edit box -->
-
-                        <!-- widget content -->
-                        <div class="widget-body">
-
-                            [PLACE WIDGET CONTENTS HERE]
-
-                        </div><!-- end widget content -->
-                    </div><!-- end widget div -->
-                </div><!-- end widget -->
+                <twitch-events-widget
+                        token="{{Auth::user()->access_token}}"
+                        channel-id="{{Auth::user()->channel_id}}"
+                ></twitch-events-widget>
 
             </article><!-- END GRID -->
 
