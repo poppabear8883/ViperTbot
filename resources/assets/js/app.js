@@ -17,7 +17,7 @@ Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 
 Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
-// Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
