@@ -38,30 +38,6 @@ const app = new Vue({
         }
     },
     methods: {
-        // todo: possibly be able to get a user object from the playlist object ? or vise versa ??
-        getSongs() {
-            axios.get('/api/playlist', {
-                'params': {
-                    'action': 'all'
-                }
-            }).then((response) => {
-                this.$store.commit('SET_SONGS', response.data);
-            }, (response) => {
-                console.log('-- Error --' + response);
-            });
-        },
-
-        getReqSongs() {
-            axios.get('/api/reqplaylist', {
-                'params': {
-                    'action': 'all'
-                }
-            }).then((response) => {
-                this.$store.commit('SET_REQSONGS', response.data);
-            }, (response) => {
-                console.log('-- Error --' + response);
-            });
-        },
         getUser() {
             axios.get('/api/users', {
                 'params': {
@@ -69,6 +45,10 @@ const app = new Vue({
                 }
             }).then((response) => {
                 this.user = response.data;
+
+                this.$store.commit('SET_SONGS', response.data.songs);
+                this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
+
             }, (response) => {
                 console.log('-- Error --' + response);
                 return null
@@ -77,9 +57,6 @@ const app = new Vue({
     },
 
     mounted() {
-        this.getSongs();
-        this.getReqSongs();
-
         if(this.getUser() !== null) {
 
             let tl = new TwitchListener(

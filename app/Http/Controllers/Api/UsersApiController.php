@@ -58,7 +58,12 @@ class UsersApiController extends Controller
      */
     protected function getAuthUser()
     {
-        return response(Auth::user(), 200);
+        $relationships = [
+            'songs',
+            'requestedsongs'
+        ];
+
+        return response(Auth::user()->with($relationships)->first(), 200);
     }
 
 

@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(10);
+var bind = __webpack_require__(9);
 var isBuffer = __webpack_require__(26);
 
 /*global toString:true*/
@@ -825,10 +825,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(10);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(11);
+    adapter = __webpack_require__(10);
   }
   return adapter;
 }
@@ -906,46 +906,6 @@ module.exports = defaults;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(49),
-  /* template */
-  __webpack_require__(54),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-31683ea0", Component.options)
-  } else {
-    hotAPI.reload("data-v-31683ea0", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(71)
@@ -962,7 +922,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/Modal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/Modal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -986,7 +946,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1013,7 +973,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -1041,7 +1001,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1059,7 +1019,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1070,7 +1030,7 @@ var settle = __webpack_require__(30);
 var buildURL = __webpack_require__(32);
 var parseHeaders = __webpack_require__(33);
 var isURLSameOrigin = __webpack_require__(34);
-var createError = __webpack_require__(12);
+var createError = __webpack_require__(11);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(35);
 
 module.exports = function xhrAdapter(config) {
@@ -1246,7 +1206,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1271,7 +1231,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1283,7 +1243,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1309,7 +1269,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11401,14 +11361,54 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(54),
+  /* template */
+  __webpack_require__(59),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-31683ea0", Component.options)
+  } else {
+    hotAPI.reload("data-v-31683ea0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(97);
+module.exports = __webpack_require__(98);
 
 
 /***/ }),
@@ -11418,7 +11418,7 @@ module.exports = __webpack_require__(97);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(117);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(97);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -11427,17 +11427,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 __webpack_require__(18);
 
-window.Vue = __webpack_require__(15);
+window.Vue = __webpack_require__(14);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('live-channels', __webpack_require__(111));
+Vue.component('live-channels', __webpack_require__(44));
 
-Vue.component('twitch-chat-widget', __webpack_require__(44));
-Vue.component('media-player-widget', __webpack_require__(56));
+Vue.component('twitch-chat-widget', __webpack_require__(50));
+Vue.component('media-player-widget', __webpack_require__(61));
 // Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', __webpack_require__(67));
@@ -11460,42 +11460,18 @@ var app = new Vue({
     },
 
     methods: {
-        // todo: possibly be able to get a user object from the playlist object ? or vise versa ??
-        getSongs: function getSongs() {
-            var _this = this;
-
-            axios.get('/api/playlist', {
-                'params': {
-                    'action': 'all'
-                }
-            }).then(function (response) {
-                _this.$store.commit('SET_SONGS', response.data);
-            }, function (response) {
-                console.log('-- Error --' + response);
-            });
-        },
-        getReqSongs: function getReqSongs() {
-            var _this2 = this;
-
-            axios.get('/api/reqplaylist', {
-                'params': {
-                    'action': 'all'
-                }
-            }).then(function (response) {
-                _this2.$store.commit('SET_REQSONGS', response.data);
-            }, function (response) {
-                console.log('-- Error --' + response);
-            });
-        },
         getUser: function getUser() {
-            var _this3 = this;
+            var _this = this;
 
             axios.get('/api/users', {
                 'params': {
                     'action': 'getAuthUser'
                 }
             }).then(function (response) {
-                _this3.user = response.data;
+                _this.user = response.data;
+
+                _this.$store.commit('SET_SONGS', response.data.songs);
+                _this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
             }, function (response) {
                 console.log('-- Error --' + response);
                 return null;
@@ -11504,9 +11480,6 @@ var app = new Vue({
     },
 
     mounted: function mounted() {
-        this.getSongs();
-        this.getReqSongs();
-
         if (this.getUser() !== null) {
 
             var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__["a" /* TwitchListener */]('whispers', this.user.channel_id, this.user.access_token);
@@ -28666,7 +28639,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
 
 /***/ }),
 /* 20 */
@@ -30883,7 +30856,7 @@ if (token) {
     return a.$ === n && (a.$ = Mc), b && a.jQuery === n && (a.jQuery = Lc), n;
   }, (typeof b === "undefined" ? "undefined" : _typeof(b)) === U && (a.jQuery = a.$ = n), n;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)(module)))
 
 /***/ }),
 /* 21 */
@@ -36560,7 +36533,7 @@ module.exports = __webpack_require__(25);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(10);
+var bind = __webpack_require__(9);
 var Axios = __webpack_require__(27);
 var defaults = __webpack_require__(5);
 
@@ -36595,9 +36568,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(14);
+axios.Cancel = __webpack_require__(13);
 axios.CancelToken = __webpack_require__(42);
-axios.isCancel = __webpack_require__(13);
+axios.isCancel = __webpack_require__(12);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -36947,7 +36920,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(12);
+var createError = __webpack_require__(11);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -37366,7 +37339,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(39);
-var isCancel = __webpack_require__(13);
+var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(5);
 
 /**
@@ -37519,7 +37492,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(14);
+var Cancel = __webpack_require__(13);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -37623,7 +37596,7 @@ var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(48),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(49),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -37631,9 +37604,9 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/header/LiveChannels.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] TwitchChatWidget.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] LiveChannels.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -37642,9 +37615,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7da577db", Component.options)
+    hotAPI.createRecord("data-v-77882b02", Component.options)
   } else {
-    hotAPI.reload("data-v-7da577db", Component.options)
+    hotAPI.reload("data-v-77882b02", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -37665,13 +37638,13 @@ var content = __webpack_require__(46);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("030438d2", content, false);
+var update = __webpack_require__(3)("a5fe3806", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -37689,7 +37662,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -37733,7 +37706,257 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            total: 0,
+            streams: [],
+            updated_time: ''
+        };
+    },
+
+    methods: {
+        getLiveChannels: function getLiveChannels() {
+            var _this = this;
+
+            axios.get('/api/livechannels', {
+                'params': {
+                    'action': 'all'
+                }
+            }).then(function (response) {
+                _this.total = response.data._total;
+                _this.streams = response.data.streams;
+                _this.updated_time = new Date().toLocaleTimeString();
+            }, function (response) {
+                console.log('-- Error --' + response);
+            });
+        }
+    },
+    created: function created() {
+        var _this2 = this;
+
+        this.getLiveChannels();
+
+        setInterval(function (e) {
+            _this2.getLiveChannels();
+        }, 60000);
+    }
+});
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    attrs: {
+      "id": "livechannels"
+    }
+  }, [_c('span', {
+    staticClass: "activity-dropdown",
+    attrs: {
+      "id": "activity"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-user"
+  }), _vm._v(" "), _c('b', {
+    class: ['badge', {
+      'bg-color-red': _vm.total > 0
+    }]
+  }, [_vm._v(" " + _vm._s(_vm.total) + " ")])]), _vm._v(" "), _c('div', {
+    staticClass: "ajax-dropdown"
+  }, [_c('div', {
+    staticClass: "ajax-notifications custom-scroll"
+  }, [_c('div', {
+    staticClass: "row"
+  }, _vm._l((_vm.streams), function(stream) {
+    return _c('div', {
+      staticClass: "col-md-12"
+    }, [_c('div', {
+      staticClass: "thumbnail"
+    }, [_c('a', {
+      attrs: {
+        "href": stream['channel']['url'],
+        "target": "_blank"
+      }
+    }, [_c('img', {
+      attrs: {
+        "src": stream['preview']['medium'],
+        "alt": "No Thumbnail ..."
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "caption"
+    }, [_c('h3', [_vm._v("\n                                    " + _vm._s(stream['channel']['display_name']) + "\n                                    "), _c('small', [_c('i', [_vm._v(_vm._s(stream['channel']['game']))])])]), _vm._v(" "), _c('p', [_vm._v("\n                                    " + _vm._s(stream['channel']['description']) + "\n                                ")])])])])
+  }))]), _vm._v(" "), _c('span', [_vm._v(" Last updated: " + _vm._s(_vm.updated_time) + "\n\t\t\t\t\t\t"), _c('button', {
+    staticClass: "btn btn-xs btn-default pull-right",
+    attrs: {
+      "type": "button",
+      "data-loading-text": "<i class='fa fa-refresh fa-spin'></i> Loading..."
+    },
+    on: {
+      "click": function($event) {
+        _vm.getLiveChannels()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-refresh"
+  })])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-77882b02", module.exports)
+  }
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(51)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(53),
+  /* template */
+  __webpack_require__(60),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] TwitchChatWidget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7da577db", Component.options)
+  } else {
+    hotAPI.reload("data-v-7da577db", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(52);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("030438d2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7da577db\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchChatWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 //
 //
@@ -37798,12 +38021,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 49 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__partials_ToolbarColorPicker_vue__);
 //
 //
@@ -37945,19 +38168,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 50 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(51)
+  __webpack_require__(56)
 }
 var Component = __webpack_require__(1)(
   /* script */
   null,
   /* template */
-  __webpack_require__(53),
+  __webpack_require__(58),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -37965,7 +38188,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ToolbarColorPicker.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -37989,13 +38212,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(52);
+var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -38015,7 +38238,7 @@ if(false) {
 }
 
 /***/ }),
-/* 52 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -38029,7 +38252,7 @@ exports.push([module.i, "\n.toolbar-colorpicker {\n    padding-top: 5px !importa
 
 
 /***/ }),
-/* 53 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38209,7 +38432,7 @@ if (false) {
 }
 
 /***/ }),
-/* 54 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38294,7 +38517,7 @@ if (false) {
 }
 
 /***/ }),
-/* 55 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -38336,19 +38559,19 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(57)
+  __webpack_require__(62)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(64),
   /* template */
-  __webpack_require__(61),
+  __webpack_require__(66),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -38356,7 +38579,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MediaPlayerWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -38380,13 +38603,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 57 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(58);
+var content = __webpack_require__(63);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -38406,7 +38629,7 @@ if(false) {
 }
 
 /***/ }),
-/* 58 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -38420,14 +38643,14 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 59 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_alerts__ = __webpack_require__(4);
 //
@@ -38760,7 +38983,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
 });
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -39013,7 +39236,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -39152,11 +39375,6 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39177,7 +39395,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/AddSongModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/AddSongModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AddSongModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -39246,7 +39464,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
 //
@@ -39915,7 +40133,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/PlaylistModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/PlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] PlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -39984,7 +40202,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
 //
@@ -40191,7 +40409,7 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/modals/ReqPlaylistModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/ReqPlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ReqPlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -40260,7 +40478,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
 //
@@ -40453,7 +40671,7 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(89);
@@ -41572,276 +41790,6 @@ function deleteReqSong(context, id) {
 
 /***/ }),
 /* 97 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(112)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(114),
-  /* template */
-  __webpack_require__(115),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/home/tech/projects/www/vtb/resources/assets/js/components/header/LiveChannels.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] LiveChannels.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-77882b02", Component.options)
-  } else {
-    hotAPI.reload("data-v-77882b02", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 112 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(113);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("a5fe3806", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-77882b02\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./LiveChannels.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 113 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            total: 0,
-            streams: [],
-            updated_time: ''
-        };
-    },
-
-    methods: {
-        getLiveChannels: function getLiveChannels() {
-            var _this = this;
-
-            axios.get('/api/livechannels', {
-                'params': {
-                    'action': 'all'
-                }
-            }).then(function (response) {
-                _this.total = response.data._total;
-                _this.streams = response.data.streams;
-                _this.updated_time = new Date().toLocaleTimeString();
-            }, function (response) {
-                console.log('-- Error --' + response);
-            });
-        }
-    },
-    created: function created() {
-        var _this2 = this;
-
-        this.getLiveChannels();
-
-        setInterval(function (e) {
-            _this2.getLiveChannels();
-        }, 60000);
-    }
-});
-
-/***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    attrs: {
-      "id": "livechannels"
-    }
-  }, [_c('span', {
-    staticClass: "activity-dropdown",
-    attrs: {
-      "id": "activity"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-user"
-  }), _vm._v(" "), _c('b', {
-    class: ['badge', {
-      'bg-color-red': _vm.total > 0
-    }]
-  }, [_vm._v(" " + _vm._s(_vm.total) + " ")])]), _vm._v(" "), _c('div', {
-    staticClass: "ajax-dropdown"
-  }, [_c('div', {
-    staticClass: "ajax-notifications custom-scroll"
-  }, [_c('div', {
-    staticClass: "row"
-  }, _vm._l((_vm.streams), function(stream) {
-    return _c('div', {
-      staticClass: "col-md-12"
-    }, [_c('div', {
-      staticClass: "thumbnail"
-    }, [_c('a', {
-      attrs: {
-        "href": stream['channel']['url'],
-        "target": "_blank"
-      }
-    }, [_c('img', {
-      attrs: {
-        "src": stream['preview']['medium'],
-        "alt": "No Thumbnail ..."
-      }
-    })]), _vm._v(" "), _c('div', {
-      staticClass: "caption"
-    }, [_c('h3', [_vm._v("\n                                    " + _vm._s(stream['channel']['display_name']) + "\n                                    "), _c('small', [_c('i', [_vm._v(_vm._s(stream['channel']['game']))])])]), _vm._v(" "), _c('p', [_vm._v("\n                                    " + _vm._s(stream['channel']['description']) + "\n                                ")])])])])
-  }))]), _vm._v(" "), _c('span', [_vm._v(" Last updated: " + _vm._s(_vm.updated_time) + "\n\t\t\t\t\t\t"), _c('button', {
-    staticClass: "btn btn-xs btn-default pull-right",
-    attrs: {
-      "type": "button",
-      "data-loading-text": "<i class='fa fa-refresh fa-spin'></i> Loading..."
-    },
-    on: {
-      "click": function($event) {
-        _vm.getLiveChannels()
-      }
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-refresh"
-  })])])])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-77882b02", module.exports)
-  }
-}
-
-/***/ }),
-/* 116 */,
-/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41934,6 +41882,12 @@ var TwitchListener = function () {
 
     return TwitchListener;
 }();
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
