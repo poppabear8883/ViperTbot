@@ -44,14 +44,14 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>
+                {{--<twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>--}}
 
                 {{--<twitch-events-widget--}}
                         {{--token="{{Auth::user()->access_token}}"--}}
                         {{--channel-id="{{Auth::user()->channel_id}}"--}}
                 {{--></twitch-events-widget>--}}
 
-                <stream-setup-widget></stream-setup-widget>
+                <stream-setup-widget client-id="{{env('TWITCH_KEY')}}"></stream-setup-widget>
 
             </article><!-- END GRID -->
 

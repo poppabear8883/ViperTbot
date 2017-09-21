@@ -41,4 +41,9 @@ return [
         'redirect' => env('TWITCH_REDIRECT_URI'),
     ],
 
+    'igdb' => [
+        'key' => env('IGDB_KEY'),
+        'url' => 'https://api-2445582011268.apicast.io'
+    ]
+
 ];

@@ -25,23 +25,29 @@
                 <fieldset>
                     <section>
                         <label class="input">
-                            <i class="icon-append fa fa-user"></i>
-                            <input type="text" v-model="frmData.title" placeholder="Username">
-                            <b class="tooltip tooltip-bottom-right">Enter the title of your stream.</b>
+                            <i class="icon-append fa fa-comment"></i>
+                            <input type="text" v-model="title" placeholder="Title">
+                            <b class="tooltip tooltip-bottom-right">
+                                Enter the title of your stream.
+                            </b>
                         </label>
                     </section>
 
                     <section>
-                        <label class="input"> <i class="icon-append fa fa-user"></i>
-                            <multiselect v-model="frmData.game"
-                                         :options="games"
-                                         :close-on-select="true"
-                                         :clear-on-select="false"
-                                         placeholder="Select one"
-                                         label="name"
-                                         track-by="name"
-                            ></multiselect>
-                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                        <label>Search for your game</label>
+                        <multiselect v-model="game"
+                                     open-direction="bottom"
+                                     :searchable="true"
+                                     :max-height="300"
+                                     @search-change="asyncFind"
+                                     :options="games"
+                                     :loading="isLoading"
+                                     :internal-search="false"
+                                     :close-on-select="true"
+                                     placeholder="Start Typing ..."
+                                     label="name"
+                                     track-by="name"
+                        ></multiselect>
                     </section>
 
                 </fieldset>
@@ -63,25 +69,22 @@
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-<style>
-
-</style>
-
 <script>
     import Widget from './Widget.vue'
     import Multiselect from 'vue-multiselect'
 
     export default{
         props: {
-            
+            clientId: {
+                required: true
+            }
         },
         data() {
             return {
-                games: ['list', 'of', 'options'],
-                frmData: {
-                    title: '',
-                    game: ''
-                }
+                isLoading: false,
+                games: [],
+                game: '',
+                title: ''
             }
         },
         components:{
@@ -89,12 +92,30 @@
             Multiselect
         },
         methods: {
-            updateStream() {
+            asyncFind(query) {
+                if(query !== '') {
+                    this.isLoading = true;
+                    axios.get('https://api.twitch.tv/kraken/search/games', {
+                        params: {
+                            'client_id': this.clientId,
+                            'q': query,
+                            'type': 'suggest'
+                        }
+                    }).then((response) => {
+                        this.games = response.data.games;
+                    }).catch((error) => {
+                        console.error(error);
+                    });
 
+                    this.isLoading = false;
+                }
             }
         },
         computed: {
             
+        },
+        created() {
+
         }
     }
 </script>

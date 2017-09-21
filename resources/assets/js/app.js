@@ -29,13 +29,13 @@ import { TwitchListener } from './webhooks/TwitchListener'
 const app = new Vue({
     el: '#app',
     store,
-    data() {
-        return {
-            showAddSongModal: false,
-            showPlaylistModal: false,
-            showReqPlaylistModal: false,
-            user: {}
-        }
+    data: {
+
+        showAddSongModal: false,
+        showPlaylistModal: false,
+        showReqPlaylistModal: false,
+        user: {}
+
     },
     methods: {
         getUser() {
