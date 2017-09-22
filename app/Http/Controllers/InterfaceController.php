@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\IGDB\IGDB;
 use App\Repositories\TwitchApiRepository;
 
 class InterfaceController extends Controller
@@ -10,20 +9,15 @@ class InterfaceController extends Controller
      */
     private $twitch;
 
-    /**
-     * @var IGDB
-     */
-    private $igdb;
 
-    public function __construct(TwitchApiRepository $twitch, IGDB $igdb)
+    public function __construct(TwitchApiRepository $twitch)
     {
         $this->twitch = $twitch;
-        $this->igdb = $igdb;
     }
 
     public function index()
     {
-        //dd($this->igdb->getGames());
+        //dd($this->twitch->myChannel());
         //dd(config('services.igdb.key'));
         return view('pages.interface.index', [
             'followers' => $this->twitch->followers(),

@@ -30,43 +30,59 @@ const app = new Vue({
     el: '#app',
     store,
     data: {
-
         showAddSongModal: false,
         showPlaylistModal: false,
         showReqPlaylistModal: false,
-        user: {}
-
     },
     methods: {
-        getUser() {
-            axios.get('/api/users', {
-                'params': {
-                    'action': 'getAuthUser'
+        getChannelData() {
+            axios.get('/api/twitch', {
+                params: {
+                    action: 'myChannel'
                 }
             }).then((response) => {
-                this.user = response.data;
-
+                this.$store.commit('SET_CHANNEL', response.data);
+            }).catch((response) => {
+                console.log('-- Error --' + response);
+                return null
+            });
+        },
+        getUser() {
+            axios.get('/api/users', {
+                params: {
+                    action: 'getAuthUser'
+                }
+            }).then((response) => {
+                this.$store.commit('SET_USER', response.data);
                 this.$store.commit('SET_SONGS', response.data.songs);
                 this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
-
-            }, (response) => {
+            }).catch((response) => {
                 console.log('-- Error --' + response);
                 return null
             });
         }
     },
 
-    mounted() {
-        if(this.getUser() !== null) {
-
-            let tl = new TwitchListener(
-                'whispers',
-                this.user.channel_id,
-                this.user.access_token
-            );
-
-            tl.connect();
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
         }
+    },
 
+    mounted() {
+        $(document).ready(() => {
+            if(this.getUser() !== null) {
+
+                let tl = new TwitchListener(
+                    'whispers',
+                    this.user.channel_id,
+                    this.user.access_token
+                );
+
+                tl.connect();
+
+                this.getChannelData();
+            }
+        });
     }
 });

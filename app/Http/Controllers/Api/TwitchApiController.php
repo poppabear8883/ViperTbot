@@ -3,9 +3,8 @@
 use App\Http\Controllers\Controller;
 use App\Repositories\TwitchApiRepository;
 use App\Traits\HandlesApiRequests;
-use Validator;
 
-class TwitchChannelsApiController extends Controller
+class TwitchApiController extends Controller
 {
     use HandlesApiRequests;
 
@@ -14,7 +13,8 @@ class TwitchChannelsApiController extends Controller
     ];
 
     protected $get_methods = [
-        'all'
+        'all',
+        'myChannel'
     ];
 
     protected $post_methods = [
@@ -26,7 +26,7 @@ class TwitchChannelsApiController extends Controller
     ];
 
     protected $put_methods = [
-
+        'updateChannel'
     ];
 
     protected $delete_methods = [
@@ -59,6 +59,17 @@ class TwitchChannelsApiController extends Controller
     {
         return response($this->repo->liveChannels(), 200);
     }
+
+    protected function myChannel()
+    {
+        return response($this->repo->myChannel(), 200);
+    }
+
+    protected function updateChannel($params = [])
+    {
+        return response($this->repo->updateChannel($params), 200);
+    }
+
 
 
 

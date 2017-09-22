@@ -179,7 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\IGDB\IGDBServiceProvider::class,
+        //App\IGDB\IGDBServiceProvider::class,
 
     ],
 

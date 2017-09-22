@@ -1,3 +1,14 @@
+export function success(msg)
+{
+    $.smallBox({
+        title : "Success",
+        content : msg,
+        color : "#659265",
+        iconSmall : "fa fa-check fa-2x fadeInRight animated",
+        timeout : 4000
+    });
+}
+
 export function canceled()
 {
     $.smallBox({

@@ -97,13 +97,7 @@
                             this.$store.commit('DELETE_SONG', song.video_id);
 
                             //this.$parent.alertShow('Success', `Successfully removed ${this.item.name} module`);
-                            $.smallBox({
-                                title : "Success",
-                                content : `You successfully removed the song ${song.title}`,
-                                color : "#659265",
-                                iconSmall : "fa fa-check fa-2x fadeInRight animated",
-                                timeout : 4000
-                            });
+                            alerts.success(`You successfully removed the song ${song.title}`);
 
                         }, (response) => {
                             console.error('!Error!');
