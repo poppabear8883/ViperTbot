@@ -13,11 +13,14 @@
                 <li class="sparks-info">
                     <h5> Followers
                         <span class="txt-color-blue">
-                            @if(isset($followers->error))
-                                0
-                            @else
-                                {{ $followers['_total'] }}
-                            @endif
+                            @{{ channel.followers }}
+                        </span>
+                    </h5>
+                </li>
+                <li class="sparks-info">
+                    <h5> Views
+                        <span class="txt-color-magenta">
+                            @{{ channel.views }}
                         </span>
                     </h5>
                 </li>
@@ -44,16 +47,12 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                {{--<twitch-chat-widget username="{{Auth::user()->username}}"></twitch-chat-widget>--}}
-
-                {{--<twitch-events-widget--}}
-                        {{--token="{{Auth::user()->access_token}}"--}}
-                        {{--channel-id="{{Auth::user()->channel_id}}"--}}
-                {{--></twitch-events-widget>--}}
-
                 <stream-setup-widget
                         client-id="{{env('TWITCH_KEY')}}"
                 ></stream-setup-widget>
+
+                <twitch-chat-widget></twitch-chat-widget>
+
 
             </article><!-- END GRID -->
 
@@ -62,49 +61,10 @@
 
                 <media-player-widget></media-player-widget>
 
-                <div class="jarviswidget" id="wid-id-5">
-
-                    <header>
-                        <h2>Widget Title</h2>
-                    </header><!-- widget div-->
-
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                            <input class="form-control" type="text">
-                        </div><!-- end widget edit box -->
-
-                        <!-- widget content -->
-                        <div class="widget-body">
-
-                            [PLACE WIDGET CONTENTS HERE]
-
-                        </div><!-- end widget content -->
-                    </div><!-- end widget div -->
-                </div><!-- end widget -->
-
-                <div class="jarviswidget" id="wid-id-6">
-
-                    <header>
-                        <h2>Widget Title</h2>
-                    </header><!-- widget div-->
-
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                            <input class="form-control" type="text">
-                        </div><!-- end widget edit box -->
-
-                        <!-- widget content -->
-                        <div class="widget-body">
-
-                            [PLACE WIDGET CONTENTS HERE]
-
-                        </div><!-- end widget content -->
-                    </div><!-- end widget div -->
-                </div><!-- end widget -->
+                {{--<twitch-events-widget
+                    token="{{$access_token}}"
+                    channel-id="{{$channel_id}}"
+                ></twitch-events-widget>--}}
 
             </article><!-- END GRID -->
 

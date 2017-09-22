@@ -27,8 +27,21 @@ export function error(msg)
         content: msg,
         color: '#C46A69',
         icon: 'fa fa-warning shake animated',
-        number: 1,
+        number: Math.floor(Math.random()*(15-1+1)+1),
         timeout: 6000
+    });
+
+}
+
+export function whisper(msg)
+{
+    $.bigBox({
+        title: '!ERROR!',
+        content: msg,
+        color: '#C46A69',
+        icon: 'fa fa-comment shake animated',
+        number: Math.floor(Math.random()*(15-1+1)+1),
+        timeout: 10000
     });
 
 }

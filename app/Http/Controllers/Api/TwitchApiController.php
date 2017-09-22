@@ -1,8 +1,10 @@
-<?php namespace App\Http\Controllers\Api;
+<?php
+
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\TwitchApiRepository;
 use App\Traits\HandlesApiRequests;
+use App\Twitch\TwitchApi;
 
 class TwitchApiController extends Controller
 {
@@ -34,20 +36,20 @@ class TwitchApiController extends Controller
     ];
 
     /**
-     * The TwitchApiRepository instance
+     * The Api instance
      *
-     * @var TwitchApiRepository
+     * @var TwitchApi
      */
-    private $repo;
+    private $api;
 
     /**
-     * Injects TwitchApiRepository dependency.
+     * Injects Api dependency.
      *
-     * @param TwitchApiRepository $repo
+     * @param TwitchApi $api
      */
-    public function __construct(TwitchApiRepository $repo)
+    public function __construct(TwitchApi $api)
     {
-        $this->repo = $repo;
+        $this->api = $api;
     }
 
     /**
@@ -57,20 +59,22 @@ class TwitchApiController extends Controller
      */
     protected function all()
     {
-        return response($this->repo->liveChannels(), 200);
+        return response($this->api->liveChannels($this->token()), 200);
     }
 
     protected function myChannel()
     {
-        return response($this->repo->myChannel(), 200);
+        return response($this->api->authChannel($this->token()), 200);
     }
 
     protected function updateChannel($params = [])
     {
-        return response($this->repo->updateChannel($params), 200);
+        return response(
+            $this->api->updateChannel(
+                $this->channel_id(),
+                $params,
+                $this->token()
+            ), 200);
     }
-
-
-
 
 }

@@ -169,7 +169,7 @@ return [
          */
         // Laravel\Socialite\SocialiteServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
-        Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
+        //Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -180,6 +180,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //App\IGDB\IGDBServiceProvider::class,
+        App\Twitch\Providers\ApiServiceProvider::class
 
     ],
 

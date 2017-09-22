@@ -18,6 +18,7 @@ Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
 Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
+//Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
@@ -56,8 +57,9 @@ const app = new Vue({
                 this.$store.commit('SET_USER', response.data);
                 this.$store.commit('SET_SONGS', response.data.songs);
                 this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
-            }).catch((response) => {
-                console.log('-- Error --' + response);
+
+            }).catch((error) => {
+                console.log(error);
                 return null
             });
         }
@@ -66,23 +68,25 @@ const app = new Vue({
     computed: {
         user() {
             return this.$store.getters.getUser;
+        },
+        channel() {
+            return this.$store.getters.getChannel;
         }
     },
 
     mounted() {
-        $(document).ready(() => {
-            if(this.getUser() !== null) {
+        let user = this.user;
 
-                let tl = new TwitchListener(
-                    'whispers',
-                    this.user.channel_id,
-                    this.user.access_token
-                );
+        setTimeout(() => {
+            if (user !== null) {
+                console.log(user);
+
+                let tl = new TwitchListener('whispers', user.channel_id, user.access_token);
 
                 tl.connect();
 
                 this.getChannelData();
             }
-        });
+        }, 5000);
     }
 });

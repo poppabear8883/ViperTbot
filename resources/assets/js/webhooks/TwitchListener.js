@@ -1,4 +1,4 @@
-
+import * as alerts from '../utils/alerts'
 
 export class TwitchListener {
 
@@ -50,19 +50,28 @@ export class TwitchListener {
             this.listen(`${this.topic}.${this.channel_id}`);
             this.heartbeat();
             heartbeatHandle = setInterval(this.heartbeat(), heartbeatInterval);
-            //console.log(`Listening to ${this.topic} with channel id ${this.channel_id}`);
+            console.log(`Listening to ${this.topic} with channel id ${this.channel_id}`);
+
+            alerts.success('Connected to wss://pubsub-edge.twitch.tv')
         };
 
         this.ws.onerror = (error) => {
             console.error(error);
+            alerts.error(error)
         };
 
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
 
+            console.log(data);
+
             if (data.type === 'RECONNECT') {
                 console.log(`Reconnecting to ${this.topic} with channel id ${this.channel_id}`);
                 setTimeout(this.connect(), reconnectInterval);
+            }
+
+            if (data.type === 'MESSAGE') {
+                alerts.whisper(this.getWhisper(data).message);
             }
         };
 
@@ -72,6 +81,12 @@ export class TwitchListener {
             setTimeout(this.connect(), reconnectInterval);
         };
 
+    }
+
+    getWhisper(data) {
+        return {
+            message: JSON.parse(data.data.message).data_object.body
+        }
     }
 }
 

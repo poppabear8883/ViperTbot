@@ -38,9 +38,7 @@
 
     export default{
         props: {
-            username: {
-                required: true
-            }
+
         },
         components:{
             Widget
@@ -49,12 +47,17 @@
 
         },
         computed: {
+            user() {
+                return this.$store.getters.getUser;
+            },
+
             /**
              * @return {string}
              */
             TwitchURL: function() {
-                if(this.username !== null) {
-                    return 'http://www.twitch.tv/'+this.username+'/chat'
+
+                if(this.user.username !== null) {
+                    return `http://www.twitch.tv/${this.user.username}/chat`
                 }
 
                 return null

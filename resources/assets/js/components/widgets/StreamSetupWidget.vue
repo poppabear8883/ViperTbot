@@ -90,7 +90,9 @@
                 isLoading: false,
                 games: [],
                 game: null,
-                title: null
+                title: null,
+                delay: 0,
+                feed_enabled: false,
             }
         },
         components:{
@@ -125,7 +127,8 @@
                         params: {
                             status: this.title,
                             game: this.game.name,
-                            delay: 0
+                            delay: this.delay,
+                            channel_feed_enabled: this.feed_enabled
                         }
                     }).then((response) => {
                         this.$store.commit('SET_CHANNEL', response.data);
