@@ -1,9 +1,9 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -18,13 +18,14 @@ Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
 Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
-Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+//Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
 Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
 
 import store from './vuex/store'
+import {TwitchListener} from "./webhooks/TwitchListener";
 
 const app = new Vue({
     el: '#app',
@@ -75,5 +76,10 @@ const app = new Vue({
     mounted() {
         this.getUser();
         this.getChannelData();
+
+        setTimeout(() => {
+            let tl = new TwitchListener('whispers', this.user.channel_id, this.user.access_token);
+            tl.connect();
+        }, 5000);
     }
 });

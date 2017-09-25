@@ -6,7 +6,10 @@ export class TwitchListener {
         this.topic = topic;
         this.channel_id = channel_id;
         this.access_token = access_token;
+
         this.ws = null;
+        this.data = null;
+
     }
 
     nonce(length) {
@@ -61,16 +64,25 @@ export class TwitchListener {
         };
 
         this.ws.onmessage = (event) => {
-            let data = JSON.parse(event.data);
+            this.data = JSON.parse(event.data);
 
-            if (data.type === 'RECONNECT') {
+            if (this.data.type === 'RECONNECT') {
                 console.log(`Reconnecting to ${this.topic} with channel id ${this.channel_id}`);
                 setTimeout(this.connect(), reconnectInterval);
             }
 
-            if (data.type === 'MESSAGE') {
-                console.log(JSON.parse(data.data.message).data_object);
-                alerts.whisper(this.getRecipient(data), this.getWhisper(data));
+            if (this.data.type === 'MESSAGE') {
+                //console.log(this.data);
+                console.log(this.data);
+
+                let msg = this.getDataObj().body;
+                let from_id = this.getDataObj().from_id;
+                let from = this.getDataObj().tags.display_name;
+
+                if (from_id != this.channel_id)
+                {
+                    alerts.whisper(from, msg);
+                }
             }
         };
 
@@ -82,12 +94,16 @@ export class TwitchListener {
 
     }
 
-    getWhisper(data) {
-        return JSON.parse(data.data.message).data_object.body;
+    getDataObj() {
+        return JSON.parse(this.data.data.message).data_object;
     }
 
-    getRecipient(data) {
-        return JSON.parse(data.data.message).data_object.recipient.display_name;
+    getWhisper() {
+        return this.getDataObj().body;
+    }
+
+    getRecipient() {
+        return this.getDataObj().recipient.display_name;
     }
 }
 
