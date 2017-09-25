@@ -813,14 +813,14 @@ function error(msg) {
     });
 }
 
-function whisper(msg) {
+function whisper(from, msg) {
     $.bigBox({
-        title: '!ERROR!',
+        title: from + " has sent you a whisper :)",
         content: msg,
-        color: '#C46A69',
+        color: '#007B7F',
         icon: 'fa fa-comment shake animated',
-        number: Math.floor(Math.random() * (15 - 1 + 1) + 1),
-        timeout: 10000
+        number: Math.floor(Math.random() * (15 - 1 + 1) + 1)
+        //timeout: 10000
     });
 }
 
@@ -829,25 +829,19 @@ function whisper(msg) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(54)
-/* template */
-var __vue_template__ = __webpack_require__(59)
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(54),
+  /* template */
+  __webpack_require__(59),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/widgets/Widget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/Widget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -977,27 +971,21 @@ module.exports = defaults;
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(84)
+  __webpack_require__(85)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(86)
-/* template */
-var __vue_template__ = __webpack_require__(88)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(87),
+  /* template */
+  __webpack_require__(89),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/modals/Modal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/Modal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Modal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1349,7 +1337,7 @@ module.exports = Cancel;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/*!
- * Vue.js v2.4.4
+ * Vue.js v2.4.2
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -1514,9 +1502,12 @@ var capitalize = cached(function (str) {
 /**
  * Hyphenate a camelCase string.
  */
-var hyphenateRE = /\B([A-Z])/g;
+var hyphenateRE = /([^-])([A-Z])/g;
 var hyphenate = cached(function (str) {
-  return str.replace(hyphenateRE, '-$1').toLowerCase()
+  return str
+    .replace(hyphenateRE, '$1-$2')
+    .replace(hyphenateRE, '$1-$2')
+    .toLowerCase()
 });
 
 /**
@@ -1935,7 +1926,7 @@ var isAndroid = UA && UA.indexOf('android') > 0;
 var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
 var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 
-// Firefox has a "watch" function on Object.prototype...
+// Firefix has a "watch" function on Object.prototype...
 var nativeWatch = ({}).watch;
 
 var supportsPassive = false;
@@ -2017,13 +2008,13 @@ var nextTick = (function () {
       // "force" the microtask queue to be flushed by adding an empty timer.
       if (isIOS) { setTimeout(noop); }
     };
-  } else if (!isIE && typeof MutationObserver !== 'undefined' && (
+  } else if (typeof MutationObserver !== 'undefined' && (
     isNative(MutationObserver) ||
     // PhantomJS and iOS 7.x
     MutationObserver.toString() === '[object MutationObserverConstructor]'
   )) {
     // use MutationObserver where native Promise is not available,
-    // e.g. PhantomJS, iOS7, Android 4.4
+    // e.g. PhantomJS IE11, iOS7, Android 4.4
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(String(counter));
@@ -2323,9 +2314,9 @@ function defineReactive$$1 (
         dep.depend();
         if (childOb) {
           childOb.dep.depend();
-          if (Array.isArray(value)) {
-            dependArray(value);
-          }
+        }
+        if (Array.isArray(value)) {
+          dependArray(value);
         }
       }
       return value
@@ -2502,7 +2493,7 @@ function mergeDataOrFn (
         : childVal;
       var defaultData = typeof parentVal === 'function'
         ? parentVal.call(vm)
-        : parentVal;
+        : undefined;
       if (instanceData) {
         return mergeData(instanceData, defaultData)
       } else {
@@ -2905,12 +2896,7 @@ function assertType (value, type) {
   var valid;
   var expectedType = getType(type);
   if (simpleCheckRE.test(expectedType)) {
-    var t = typeof value;
-    valid = t === expectedType.toLowerCase();
-    // for primitive wrapper objects
-    if (!valid && t === 'object') {
-      valid = value instanceof type;
-    }
+    valid = typeof value === expectedType.toLowerCase();
   } else if (expectedType === 'Object') {
     valid = isPlainObject(value);
   } else if (expectedType === 'Array') {
@@ -3108,7 +3094,7 @@ function createTextVNode (val) {
 // used for static nodes and slot nodes because they may be reused across
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
-function cloneVNode (vnode, deep) {
+function cloneVNode (vnode) {
   var cloned = new VNode(
     vnode.tag,
     vnode.data,
@@ -3124,17 +3110,14 @@ function cloneVNode (vnode, deep) {
   cloned.key = vnode.key;
   cloned.isComment = vnode.isComment;
   cloned.isCloned = true;
-  if (deep && vnode.children) {
-    cloned.children = cloneVNodes(vnode.children);
-  }
   return cloned
 }
 
-function cloneVNodes (vnodes, deep) {
+function cloneVNodes (vnodes) {
   var len = vnodes.length;
   var res = new Array(len);
   for (var i = 0; i < len; i++) {
-    res[i] = cloneVNode(vnodes[i], deep);
+    res[i] = cloneVNode(vnodes[i]);
   }
   return res
 }
@@ -3148,10 +3131,8 @@ var normalizeEvent = cached(function (name) {
   name = once$$1 ? name.slice(1) : name;
   var capture = name.charAt(0) === '!';
   name = capture ? name.slice(1) : name;
-  var plain = !(passive || once$$1 || capture);
   return {
     name: name,
-    plain: plain,
     once: once$$1,
     capture: capture,
     passive: passive
@@ -3177,11 +3158,6 @@ function createFnInvoker (fns) {
   return invoker
 }
 
-// #6552
-function prioritizePlainEvents (a, b) {
-  return a.plain ? -1 : b.plain ? 1 : 0
-}
-
 function updateListeners (
   on,
   oldOn,
@@ -3190,13 +3166,10 @@ function updateListeners (
   vm
 ) {
   var name, cur, old, event;
-  var toAdd = [];
-  var hasModifier = false;
   for (name in on) {
     cur = on[name];
     old = oldOn[name];
     event = normalizeEvent(name);
-    if (!event.plain) { hasModifier = true; }
     if (isUndef(cur)) {
       "development" !== 'production' && warn(
         "Invalid handler for event \"" + (event.name) + "\": got " + String(cur),
@@ -3206,18 +3179,10 @@ function updateListeners (
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur);
       }
-      event.handler = cur;
-      toAdd.push(event);
+      add(event.name, cur, event.once, event.capture, event.passive);
     } else if (cur !== old) {
       old.fns = cur;
       on[name] = old;
-    }
-  }
-  if (toAdd.length) {
-    if (hasModifier) { toAdd.sort(prioritizePlainEvents); }
-    for (var i = 0; i < toAdd.length; i++) {
-      var event$1 = toAdd[i];
-      add(event$1.name, event$1.handler, event$1.once, event$1.capture, event$1.passive);
     }
   }
   for (name in oldOn) {
@@ -3534,17 +3499,11 @@ function resolveAsyncComponent (
 
 /*  */
 
-function isAsyncPlaceholder (node) {
-  return node.isComment && node.asyncFactory
-}
-
-/*  */
-
 function getFirstComponentChild (children) {
   if (Array.isArray(children)) {
     for (var i = 0; i < children.length; i++) {
       var c = children[i];
-      if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
+      if (isDef(c) && isDef(c.componentOptions)) {
         return c
       }
     }
@@ -3631,8 +3590,8 @@ function eventsMixin (Vue) {
     }
     // array of events
     if (Array.isArray(event)) {
-      for (var i = 0, l = event.length; i < l; i++) {
-        this$1.$off(event[i], fn);
+      for (var i$1 = 0, l = event.length; i$1 < l; i$1++) {
+        this$1.$off(event[i$1], fn);
       }
       return vm
     }
@@ -3645,16 +3604,14 @@ function eventsMixin (Vue) {
       vm._events[event] = null;
       return vm
     }
-    if (fn) {
-      // specific handler
-      var cb;
-      var i$1 = cbs.length;
-      while (i$1--) {
-        cb = cbs[i$1];
-        if (cb === fn || cb.fn === fn) {
-          cbs.splice(i$1, 1);
-          break
-        }
+    // specific handler
+    var cb;
+    var i = cbs.length;
+    while (i--) {
+      cb = cbs[i];
+      if (cb === fn || cb.fn === fn) {
+        cbs.splice(i, 1);
+        break
       }
     }
     return vm
@@ -3706,15 +3663,10 @@ function resolveSlots (
   var defaultSlot = [];
   for (var i = 0, l = children.length; i < l; i++) {
     var child = children[i];
-    var data = child.data;
-    // remove slot attribute if the node is resolved as a Vue slot node
-    if (data && data.attrs && data.attrs.slot) {
-      delete data.attrs.slot;
-    }
     // named slots should only be respected if the vnode was rendered in the
     // same context.
     if ((child.context === context || child.functionalContext === context) &&
-      data && data.slot != null
+      child.data && child.data.slot != null
     ) {
       var name = child.data.slot;
       var slot = (slots[name] || (slots[name] = []));
@@ -3967,11 +3919,11 @@ function updateChildComponent (
   }
   vm.$options._renderChildren = renderChildren;
 
-  // update $attrs and $listeners hash
+  // update $attrs and $listensers hash
   // these are also reactive so they may trigger child update if the child
   // used them during render
-  vm.$attrs = (parentVnode.data && parentVnode.data.attrs) || emptyObject;
-  vm.$listeners = listeners || emptyObject;
+  vm.$attrs = parentVnode.data && parentVnode.data.attrs;
+  vm.$listeners = listeners;
 
   // update props
   if (propsData && vm.$options.props) {
@@ -4558,7 +4510,7 @@ function initData (vm) {
     if (true) {
       if (methods && hasOwn(methods, key)) {
         warn(
-          ("Method \"" + key + "\" has already been defined as a data property."),
+          ("method \"" + key + "\" has already been defined as a data property."),
           vm
         );
       }
@@ -4591,8 +4543,6 @@ var computedWatcherOptions = { lazy: true };
 function initComputed (vm, computed) {
   "development" !== 'production' && checkOptionType(vm, 'computed');
   var watchers = vm._computedWatchers = Object.create(null);
-  // computed properties are just getters during SSR
-  var isSSR = isServerRendering();
 
   for (var key in computed) {
     var userDef = computed[key];
@@ -4603,16 +4553,8 @@ function initComputed (vm, computed) {
         vm
       );
     }
-
-    if (!isSSR) {
-      // create internal watcher for the computed property.
-      watchers[key] = new Watcher(
-        vm,
-        getter || noop,
-        noop,
-        computedWatcherOptions
-      );
-    }
+    // create internal watcher for the computed property.
+    watchers[key] = new Watcher(vm, getter || noop, noop, computedWatcherOptions);
 
     // component-defined computed properties are already defined on the
     // component prototype. We only need to define computed properties defined
@@ -4629,20 +4571,13 @@ function initComputed (vm, computed) {
   }
 }
 
-function defineComputed (
-  target,
-  key,
-  userDef
-) {
-  var shouldCache = !isServerRendering();
+function defineComputed (target, key, userDef) {
   if (typeof userDef === 'function') {
-    sharedPropertyDefinition.get = shouldCache
-      ? createComputedGetter(key)
-      : userDef;
+    sharedPropertyDefinition.get = createComputedGetter(key);
     sharedPropertyDefinition.set = noop;
   } else {
     sharedPropertyDefinition.get = userDef.get
-      ? shouldCache && userDef.cache !== false
+      ? userDef.cache !== false
         ? createComputedGetter(key)
         : userDef.get
       : noop;
@@ -4681,28 +4616,22 @@ function initMethods (vm, methods) {
   "development" !== 'production' && checkOptionType(vm, 'methods');
   var props = vm.$options.props;
   for (var key in methods) {
+    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
     if (true) {
       if (methods[key] == null) {
         warn(
-          "Method \"" + key + "\" has an undefined value in the component definition. " +
+          "method \"" + key + "\" has an undefined value in the component definition. " +
           "Did you reference the function correctly?",
           vm
         );
       }
       if (props && hasOwn(props, key)) {
         warn(
-          ("Method \"" + key + "\" has already been defined as a prop."),
+          ("method \"" + key + "\" has already been defined as a prop."),
           vm
         );
       }
-      if ((key in vm) && isReserved(key)) {
-        warn(
-          "Method \"" + key + "\" conflicts with an existing Vue instance method. " +
-          "Avoid defining component methods that start with _ or $."
-        );
-      }
     }
-    vm[key] = methods[key] == null ? noop : bind(methods[key], vm);
   }
 }
 
@@ -4822,10 +4751,7 @@ function resolveInject (inject, vm) {
     // inject is :any because flow is not smart enough to figure out cached
     var result = Object.create(null);
     var keys = hasSymbol
-        ? Reflect.ownKeys(inject).filter(function (key) {
-          /* istanbul ignore next */
-          return Object.getOwnPropertyDescriptor(inject, key).enumerable
-        })
+        ? Reflect.ownKeys(inject)
         : Object.keys(inject);
 
     for (var i = 0; i < keys.length; i++) {
@@ -4860,7 +4786,7 @@ function createFunctionalComponent (
   var propOptions = Ctor.options.props;
   if (isDef(propOptions)) {
     for (var key in propOptions) {
-      props[key] = validateProp(key, propOptions, propsData || emptyObject);
+      props[key] = validateProp(key, propOptions, propsData || {});
     }
   } else {
     if (isDef(data.attrs)) { mergeProps(props, data.attrs); }
@@ -4875,7 +4801,7 @@ function createFunctionalComponent (
     props: props,
     children: children,
     parent: context,
-    listeners: data.on || emptyObject,
+    listeners: data.on || {},
     injections: resolveInject(Ctor.options.inject, context),
     slots: function () { return resolveSlots(children, context); }
   });
@@ -5199,7 +5125,7 @@ function _createElement (
   var vnode, ns;
   if (typeof tag === 'string') {
     var Ctor;
-    ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag);
+    ns = config.getTagNamespace(tag);
     if (config.isReservedTag(tag)) {
       // platform built-in elements
       vnode = new VNode(
@@ -5495,18 +5421,17 @@ function initRender (vm) {
   // $attrs & $listeners are exposed for easier HOC creation.
   // they need to be reactive so that HOCs using them are always updated
   var parentData = parentVnode && parentVnode.data;
-
   /* istanbul ignore else */
   if (true) {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, function () {
+    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs, function () {
       !isUpdatingChildComponent && warn("$attrs is readonly.", vm);
     }, true);
-    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners || emptyObject, function () {
+    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners, function () {
       !isUpdatingChildComponent && warn("$listeners is readonly.", vm);
     }, true);
   } else {
-    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true);
-    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners || emptyObject, null, true);
+    defineReactive$$1(vm, '$attrs', parentData && parentData.attrs, null, true);
+    defineReactive$$1(vm, '$listeners', vm.$options._parentListeners, null, true);
   }
 }
 
@@ -5523,13 +5448,9 @@ function renderMixin (Vue) {
     var _parentVnode = ref._parentVnode;
 
     if (vm._isMounted) {
-      // if the parent didn't update, the slot nodes will be the ones from
-      // last render. They need to be cloned to ensure "freshness" for this render.
+      // clone slot nodes on re-renders
       for (var key in vm.$slots) {
-        var slot = vm.$slots[key];
-        if (slot._rendered) {
-          vm.$slots[key] = cloneVNodes(slot, true /* deep */);
-        }
+        vm.$slots[key] = cloneVNodes(vm.$slots[key]);
       }
     }
 
@@ -6074,7 +5995,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.4.4';
+Vue$3.version = '2.4.2';
 
 /*  */
 
@@ -6083,7 +6004,7 @@ Vue$3.version = '2.4.4';
 var isReservedAttr = makeMap('style,class');
 
 // attributes that should be using props for binding
-var acceptValue = makeMap('input,textarea,option,select,progress');
+var acceptValue = makeMap('input,textarea,option,select');
 var mustUseProp = function (tag, type, attr) {
   return (
     (attr === 'value' && acceptValue(tag)) && type !== 'button' ||
@@ -6272,8 +6193,6 @@ function isUnknownElement (tag) {
   }
 }
 
-var isTextInputType = makeMap('text,number,password,search,email,tel,url');
-
 /*  */
 
 /**
@@ -6420,6 +6339,8 @@ function registerRef (vnode, isRemoval) {
  *
  * modified by Evan You (@yyx990803)
  *
+
+/*
  * Not type-checking this because this file is perf-critical and the cost
  * of making flow understand it is not worth it.
  */
@@ -6445,12 +6366,14 @@ function sameVnode (a, b) {
   )
 }
 
+// Some browsers do not support dynamically changing type for <input>
+// so they need to be treated as different nodes
 function sameInputType (a, b) {
   if (a.tag !== 'input') { return true }
   var i;
   var typeA = isDef(i = a.data) && isDef(i = i.attrs) && i.type;
   var typeB = isDef(i = b.data) && isDef(i = i.attrs) && i.type;
-  return typeA === typeB || isTextInputType(typeA) && isTextInputType(typeB)
+  return typeA === typeB
 }
 
 function createKeyToOldIdx (children, beginIdx, endIdx) {
@@ -6782,11 +6705,10 @@ function createPatchFunction (backend) {
         newStartVnode = newCh[++newStartIdx];
       } else {
         if (isUndef(oldKeyToIdx)) { oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx); }
-        idxInOld = isDef(newStartVnode.key)
-          ? oldKeyToIdx[newStartVnode.key]
-          : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx);
+        idxInOld = isDef(newStartVnode.key) ? oldKeyToIdx[newStartVnode.key] : null;
         if (isUndef(idxInOld)) { // New element
           createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
+          newStartVnode = newCh[++newStartIdx];
         } else {
           elmToMove = oldCh[idxInOld];
           /* istanbul ignore if */
@@ -6800,12 +6722,13 @@ function createPatchFunction (backend) {
             patchVnode(elmToMove, newStartVnode, insertedVnodeQueue);
             oldCh[idxInOld] = undefined;
             canMove && nodeOps.insertBefore(parentElm, elmToMove.elm, oldStartVnode.elm);
+            newStartVnode = newCh[++newStartIdx];
           } else {
             // same key but different element. treat as new element
             createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm);
+            newStartVnode = newCh[++newStartIdx];
           }
         }
-        newStartVnode = newCh[++newStartIdx];
       }
     }
     if (oldStartIdx > oldEndIdx) {
@@ -6813,13 +6736,6 @@ function createPatchFunction (backend) {
       addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
     } else if (newStartIdx > newEndIdx) {
       removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
-    }
-  }
-
-  function findIdxInOld (node, oldCh, start, end) {
-    for (var i = start; i < end; i++) {
-      var c = oldCh[i];
-      if (isDef(c) && sameVnode(node, c)) { return i }
     }
   }
 
@@ -6930,46 +6846,27 @@ function createPatchFunction (backend) {
         if (!elm.hasChildNodes()) {
           createChildren(vnode, children, insertedVnodeQueue);
         } else {
-          // v-html and domProps: innerHTML
-          if (isDef(i = data) && isDef(i = i.domProps) && isDef(i = i.innerHTML)) {
-            if (i !== elm.innerHTML) {
-              /* istanbul ignore if */
-              if ("development" !== 'production' &&
-                typeof console !== 'undefined' &&
-                !bailed
-              ) {
-                bailed = true;
-                console.warn('Parent: ', elm);
-                console.warn('server innerHTML: ', i);
-                console.warn('client innerHTML: ', elm.innerHTML);
-              }
-              return false
+          var childrenMatch = true;
+          var childNode = elm.firstChild;
+          for (var i$1 = 0; i$1 < children.length; i$1++) {
+            if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
+              childrenMatch = false;
+              break
             }
-          } else {
-            // iterate and compare children lists
-            var childrenMatch = true;
-            var childNode = elm.firstChild;
-            for (var i$1 = 0; i$1 < children.length; i$1++) {
-              if (!childNode || !hydrate(childNode, children[i$1], insertedVnodeQueue)) {
-                childrenMatch = false;
-                break
-              }
-              childNode = childNode.nextSibling;
+            childNode = childNode.nextSibling;
+          }
+          // if childNode is not null, it means the actual childNodes list is
+          // longer than the virtual children list.
+          if (!childrenMatch || childNode) {
+            if ("development" !== 'production' &&
+              typeof console !== 'undefined' &&
+              !bailed
+            ) {
+              bailed = true;
+              console.warn('Parent: ', elm);
+              console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
             }
-            // if childNode is not null, it means the actual childNodes list is
-            // longer than the virtual children list.
-            if (!childrenMatch || childNode) {
-              /* istanbul ignore if */
-              if ("development" !== 'production' &&
-                typeof console !== 'undefined' &&
-                !bailed
-              ) {
-                bailed = true;
-                console.warn('Parent: ', elm);
-                console.warn('Mismatching childNodes vs. VNodes: ', elm.childNodes, children);
-              }
-              return false
-            }
+            return false
           }
         }
       }
@@ -7060,28 +6957,14 @@ function createPatchFunction (backend) {
           // component root element replaced.
           // update parent placeholder node element, recursively
           var ancestor = vnode.parent;
-          var patchable = isPatchable(vnode);
           while (ancestor) {
-            for (var i = 0; i < cbs.destroy.length; ++i) {
-              cbs.destroy[i](ancestor);
-            }
             ancestor.elm = vnode.elm;
-            if (patchable) {
-              for (var i$1 = 0; i$1 < cbs.create.length; ++i$1) {
-                cbs.create[i$1](emptyNode, ancestor);
-              }
-              // #6513
-              // invoke insert hooks that may have been merged by create hooks.
-              // e.g. for directives that uses the "inserted" hook.
-              var insert = ancestor.data.hook.insert;
-              if (insert.merged) {
-                // start at index 1 to avoid re-invoking component mounted hook
-                for (var i$2 = 1; i$2 < insert.fns.length; i$2++) {
-                  insert.fns[i$2]();
-                }
-              }
-            }
             ancestor = ancestor.parent;
+          }
+          if (isPatchable(vnode)) {
+            for (var i = 0; i < cbs.create.length; ++i) {
+              cbs.create[i](emptyNode, vnode.parent);
+            }
           }
         }
 
@@ -7265,12 +7148,7 @@ function setAttr (el, key, value) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
     } else {
-      // technically allowfullscreen is a boolean attribute for <iframe>,
-      // but Flash expects a value of "true" when used on <embed> tag
-      value = key === 'allowfullscreen' && el.tagName === 'EMBED'
-        ? 'true'
-        : key;
-      el.setAttribute(key, value);
+      el.setAttribute(key, key);
     }
   } else if (isEnumeratedAttr(key)) {
     el.setAttribute(key, isFalsyAttrValue(value) || value === 'false' ? 'false' : 'true');
@@ -7777,7 +7655,7 @@ function genCheckboxModel (
     'if(Array.isArray($$a)){' +
       "var $$v=" + (number ? '_n(' + valueBinding + ')' : valueBinding) + "," +
           '$$i=_i($$a,$$v);' +
-      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat([$$v]))}" +
+      "if($$el.checked){$$i<0&&(" + value + "=$$a.concat($$v))}" +
       "else{$$i>-1&&(" + value + "=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}" +
     "}else{" + (genAssignmentCode(value, '$$c')) + "}",
     null, true
@@ -8146,7 +8024,7 @@ function updateStyle (oldVnode, vnode) {
   var style = normalizeStyleBinding(vnode.data.style) || {};
 
   // store normalized style under a different key for next diff
-  // make sure to clone it if it's reactive, since the user likely wants
+  // make sure to clone it if it's reactive, since the user likley wants
   // to mutate it.
   vnode.data.normalizedStyle = isDef(style.__ob__)
     ? extend({}, style)
@@ -8751,6 +8629,8 @@ var patch = createPatchFunction({ nodeOps: nodeOps, modules: modules });
  * properties to Elements.
  */
 
+var isTextInputType = makeMap('text,number,password,search,email,tel,url');
+
 /* istanbul ignore if */
 if (isIE9) {
   // http://www.matts411.com/post/internet-explorer-9-oninput/
@@ -8765,7 +8645,14 @@ if (isIE9) {
 var model$1 = {
   inserted: function inserted (el, binding, vnode) {
     if (vnode.tag === 'select') {
-      setSelected(el, binding, vnode.context);
+      var cb = function () {
+        setSelected(el, binding, vnode.context);
+      };
+      cb();
+      /* istanbul ignore if */
+      if (isIE || isEdge) {
+        setTimeout(cb, 0);
+      }
       el._vOptions = [].map.call(el.options, getValue);
     } else if (vnode.tag === 'textarea' || isTextInputType(el.type)) {
       el._vModifiers = binding.modifiers;
@@ -8796,30 +8683,13 @@ var model$1 = {
       var prevOptions = el._vOptions;
       var curOptions = el._vOptions = [].map.call(el.options, getValue);
       if (curOptions.some(function (o, i) { return !looseEqual(o, prevOptions[i]); })) {
-        // trigger change event if
-        // no matching option found for at least one value
-        var needReset = el.multiple
-          ? binding.value.some(function (v) { return hasNoMatchingOption(v, curOptions); })
-          : binding.value !== binding.oldValue && hasNoMatchingOption(binding.value, curOptions);
-        if (needReset) {
-          trigger(el, 'change');
-        }
+        trigger(el, 'change');
       }
     }
   }
 };
 
 function setSelected (el, binding, vm) {
-  actuallySetSelected(el, binding, vm);
-  /* istanbul ignore if */
-  if (isIE || isEdge) {
-    setTimeout(function () {
-      actuallySetSelected(el, binding, vm);
-    }, 0);
-  }
-}
-
-function actuallySetSelected (el, binding, vm) {
   var value = binding.value;
   var isMultiple = el.multiple;
   if (isMultiple && !Array.isArray(value)) {
@@ -8850,10 +8720,6 @@ function actuallySetSelected (el, binding, vm) {
   if (!isMultiple) {
     el.selectedIndex = -1;
   }
-}
-
-function hasNoMatchingOption (value, options) {
-  return options.every(function (o) { return !looseEqual(o, value); })
 }
 
 function getValue (option) {
@@ -9016,6 +8882,10 @@ function hasParentTransition (vnode) {
 
 function isSameChild (child, oldChild) {
   return oldChild.key === child.key && oldChild.tag === child.tag
+}
+
+function isAsyncPlaceholder (node) {
+  return node.isComment && node.asyncFactory
 }
 
 var Transition = {
@@ -9585,14 +9455,29 @@ var he = {
  */
 
 // Regular Expressions for parsing tags and attributes
-var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
+var singleAttrIdentifier = /([^\s"'<>/=]+)/;
+var singleAttrAssign = /(?:=)/;
+var singleAttrValues = [
+  // attr value double quotes
+  /"([^"]*)"+/.source,
+  // attr value, single quotes
+  /'([^']*)'+/.source,
+  // attr value, no quotes
+  /([^\s"'=<>`]+)/.source
+];
+var attribute = new RegExp(
+  '^\\s*' + singleAttrIdentifier.source +
+  '(?:\\s*(' + singleAttrAssign.source + ')' +
+  '\\s*(?:' + singleAttrValues.join('|') + '))?'
+);
+
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
 // but for Vue templates we can enforce a simple charset
 var ncname = '[a-zA-Z_][\\w\\-\\.]*';
-var qnameCapture = "((?:" + ncname + "\\:)?" + ncname + ")";
-var startTagOpen = new RegExp(("^<" + qnameCapture));
+var qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')';
+var startTagOpen = new RegExp('^<' + qnameCapture);
 var startTagClose = /^\s*(\/?)>/;
-var endTag = new RegExp(("^<\\/" + qnameCapture + "[^>]*>"));
+var endTag = new RegExp('^<\\/' + qnameCapture + '[^>]*>');
 var doctype = /^<!DOCTYPE [^>]+>/i;
 var comment = /^<!--/;
 var conditionalComment = /^<!\[/;
@@ -10292,8 +10177,6 @@ function processSlot (el) {
     var slotTarget = getBindingAttr(el, 'slot');
     if (slotTarget) {
       el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
-      // preserve slot as an attribute for native shadow DOM compat
-      addAttr(el, 'slot', slotTarget);
     }
     if (el.tag === 'template') {
       el.slotScope = getAndRemoveAttr(el, 'scope');
@@ -10830,7 +10713,7 @@ function genOnce (el, state) {
       );
       return genElement(el, state)
     }
-    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + "," + key + ")")
+    return ("_o(" + (genElement(el, state)) + "," + (state.onceId++) + (key ? ("," + key) : "") + ")")
   } else {
     return genStatic(el, state)
   }
@@ -11557,8 +11440,7 @@ module.exports = __webpack_require__(115);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(101);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -11579,12 +11461,11 @@ Vue.component('live-channels', __webpack_require__(44));
 Vue.component('twitch-chat-widget', __webpack_require__(50));
 Vue.component('media-player-widget', __webpack_require__(61));
 Vue.component('stream-setup-widget', __webpack_require__(67));
-//Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+Vue.component('twitch-events-widget', __webpack_require__(75));
 
-Vue.component('add-song-modal', __webpack_require__(80));
-Vue.component('playlist-modal', __webpack_require__(90));
-Vue.component('reqplaylist-modal', __webpack_require__(95));
-
+Vue.component('add-song-modal', __webpack_require__(81));
+Vue.component('playlist-modal', __webpack_require__(91));
+Vue.component('reqplaylist-modal', __webpack_require__(96));
 
 
 
@@ -11639,21 +11520,8 @@ var app = new Vue({
     },
 
     mounted: function mounted() {
-        var _this3 = this;
-
-        var user = this.user;
-
-        setTimeout(function () {
-            if (user !== null) {
-                console.log(user);
-
-                var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__["a" /* TwitchListener */]('whispers', user.channel_id, user.access_token);
-
-                tl.connect();
-
-                _this3.getChannelData();
-            }
-        }, 5000);
+        this.getUser();
+        this.getChannelData();
     }
 });
 
@@ -37760,25 +37628,19 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(45)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(48)
-/* template */
-var __vue_template__ = __webpack_require__(49)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(48),
+  /* template */
+  __webpack_require__(49),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/header/LiveChannels.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/header/LiveChannels.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] LiveChannels.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -37977,98 +37839,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "livechannels" } }, [
-    _c(
-      "span",
-      { staticClass: "activity-dropdown", attrs: { id: "activity" } },
-      [
-        _c("i", { staticClass: "fa fa-user" }),
-        _vm._v(" "),
-        _c("b", { class: ["badge", { "bg-color-red": _vm.total > 0 }] }, [
-          _vm._v(" " + _vm._s(_vm.total) + " ")
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "ajax-dropdown" }, [
-      _c("div", { staticClass: "ajax-notifications custom-scroll" }, [
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.streams, function(stream) {
-            return _c("div", { staticClass: "col-md-12" }, [
-              _c("div", { staticClass: "thumbnail" }, [
-                _c(
-                  "a",
-                  {
-                    attrs: { href: stream["channel"]["url"], target: "_blank" }
-                  },
-                  [
-                    _c("img", {
-                      attrs: {
-                        src: stream["preview"]["medium"],
-                        alt: "No Thumbnail ..."
-                      }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "caption" }, [
-                  _c("h3", [
-                    _vm._v(
-                      "\n                                    " +
-                        _vm._s(stream["channel"]["display_name"]) +
-                        "\n                                    "
-                    ),
-                    _c("small", [
-                      _c("i", [_vm._v(_vm._s(stream["channel"]["game"]))])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                    " +
-                        _vm._s(stream["channel"]["description"]) +
-                        "\n                                "
-                    )
-                  ])
-                ])
-              ])
-            ])
-          })
-        )
-      ]),
-      _vm._v(" "),
-      _c("span", [
-        _vm._v(" Last updated: " + _vm._s(_vm.updated_time) + "\n\t\t\t\t\t\t"),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-xs btn-default pull-right",
-            attrs: {
-              type: "button",
-              "data-loading-text":
-                "<i class='fa fa-refresh fa-spin'></i> Loading..."
-            },
-            on: {
-              click: function($event) {
-                _vm.getLiveChannels()
-              }
-            }
-          },
-          [_c("i", { staticClass: "fa fa-refresh" })]
-        )
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    attrs: {
+      "id": "livechannels"
+    }
+  }, [_c('span', {
+    staticClass: "activity-dropdown",
+    attrs: {
+      "id": "activity"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-user"
+  }), _vm._v(" "), _c('b', {
+    class: ['badge', {
+      'bg-color-red': _vm.total > 0
+    }]
+  }, [_vm._v(" " + _vm._s(_vm.total) + " ")])]), _vm._v(" "), _c('div', {
+    staticClass: "ajax-dropdown"
+  }, [_c('div', {
+    staticClass: "ajax-notifications custom-scroll"
+  }, [_c('div', {
+    staticClass: "row"
+  }, _vm._l((_vm.streams), function(stream) {
+    return _c('div', {
+      staticClass: "col-md-12"
+    }, [_c('div', {
+      staticClass: "thumbnail"
+    }, [_c('a', {
+      attrs: {
+        "href": stream['channel']['url'],
+        "target": "_blank"
+      }
+    }, [_c('img', {
+      attrs: {
+        "src": stream['preview']['medium'],
+        "alt": "No Thumbnail ..."
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "caption"
+    }, [_c('h3', [_vm._v("\n                                    " + _vm._s(stream['channel']['display_name']) + "\n                                    "), _c('small', [_c('i', [_vm._v(_vm._s(stream['channel']['game']))])])]), _vm._v(" "), _c('p', [_vm._v("\n                                    " + _vm._s(stream['channel']['description']) + "\n                                ")])])])])
+  }))]), _vm._v(" "), _c('span', [_vm._v(" Last updated: " + _vm._s(_vm.updated_time) + "\n\t\t\t\t\t\t"), _c('button', {
+    staticClass: "btn btn-xs btn-default pull-right",
+    attrs: {
+      "type": "button",
+      "data-loading-text": "<i class='fa fa-refresh fa-spin'></i> Loading..."
+    },
+    on: {
+      "click": function($event) {
+        _vm.getLiveChannels()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-refresh"
+  })])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -38085,25 +37911,19 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(51)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(53)
-/* template */
-var __vue_template__ = __webpack_require__(60)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(53),
+  /* template */
+  __webpack_require__(60),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/widgets/TwitchChatWidget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/TwitchChatWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] TwitchChatWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -38394,25 +38214,19 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(56)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = null
-/* template */
-var __vue_template__ = __webpack_require__(58)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  null,
+  /* template */
+  __webpack_require__(58),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ToolbarColorPicker.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -38479,269 +38293,175 @@ exports.push([module.i, "\n.toolbar-colorpicker {\n    padding-top: 5px !importa
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "toolbar-colorpicker" }, [
-      _c("a", {
-        staticClass: "dropdown-toggle color-box selector",
-        attrs: { "data-toggle": "dropdown", href: "javascript:void(0);" }
-      }),
-      _vm._v(" "),
-      _c(
-        "ul",
-        {
-          staticClass:
-            "dropdown-menu arrow-box-up-right color-select pull-right"
-        },
-        [
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-green",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-green",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Green Grass"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-greenDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-greenDark",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Dark Green"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-greenLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-greenLight",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Light Green"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-purple",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-purple",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Purple"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-magenta",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-magenta",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Magenta"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-pink",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-pink",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Pink"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-pinkDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-pinkDark",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Fade Pink"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blueLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blueLight",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Light Blue"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-teal",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-teal",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Teal"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blue",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blue",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Ocean Blue"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blueDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blueDark",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Night Sky"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-darken",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-darken",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Night"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-yellow",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-yellow",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Day Light"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-orange",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-orange",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Orange"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-orangeDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-orangeDark",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Dark Orange"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-red",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-red",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Red Rose"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-redLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-redLight",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Light Red"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-white",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-white",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Purity"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              {
-                staticClass: "jarviswidget-remove-colors",
-                attrs: {
-                  href: "javascript:void(0);",
-                  "data-widget-setstyle": "",
-                  rel: "tooltip",
-                  "data-placement": "bottom",
-                  "data-original-title": "Reset widget color to default"
-                }
-              },
-              [_vm._v("Remove")]
-            )
-          ])
-        ]
-      )
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "toolbar-colorpicker"
+  }, [_c('a', {
+    staticClass: "dropdown-toggle color-box selector",
+    attrs: {
+      "data-toggle": "dropdown",
+      "href": "javascript:void(0);"
+    }
+  }), _vm._v(" "), _c('ul', {
+    staticClass: "dropdown-menu arrow-box-up-right color-select pull-right"
+  }, [_c('li', [_c('span', {
+    staticClass: "bg-color-green",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-green",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Green Grass"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-greenDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-greenDark",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Dark Green"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-greenLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-greenLight",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Light Green"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-purple",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-purple",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Purple"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-magenta",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-magenta",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Magenta"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-pink",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-pink",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Pink"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-pinkDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-pinkDark",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Fade Pink"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blueLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blueLight",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Light Blue"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-teal",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-teal",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Teal"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blue",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blue",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Ocean Blue"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-blueDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-blueDark",
+      "rel": "tooltip",
+      "data-placement": "top",
+      "data-original-title": "Night Sky"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-darken",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-darken",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Night"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-yellow",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-yellow",
+      "rel": "tooltip",
+      "data-placement": "left",
+      "data-original-title": "Day Light"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-orange",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-orange",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Orange"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-orangeDark",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-orangeDark",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Dark Orange"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-red",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-red",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Red Rose"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-redLight",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-redLight",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Light Red"
+    }
+  })]), _vm._v(" "), _c('li', [_c('span', {
+    staticClass: "bg-color-white",
+    attrs: {
+      "data-widget-setstyle": "jarviswidget-color-white",
+      "rel": "tooltip",
+      "data-placement": "right",
+      "data-original-title": "Purity"
+    }
+  })]), _vm._v(" "), _c('li', [_c('a', {
+    staticClass: "jarviswidget-remove-colors",
+    attrs: {
+      "href": "javascript:void(0);",
+      "data-widget-setstyle": "",
+      "rel": "tooltip",
+      "data-placement": "bottom",
+      "data-original-title": "Reset widget color to default"
+    }
+  }, [_vm._v("Remove")])])])])
+}]}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -38753,127 +38473,80 @@ if (false) {
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: [
-        "jarviswidget",
-        _vm.titleColor,
-        { "jarviswidget-sortable": _vm.sortable }
-      ],
-      attrs: {
-        id: _vm.widId,
-        "data-widget-editbutton": "false",
-        role: "widget"
-      }
-    },
-    [
-      _c(
-        "header",
-        { attrs: { role: "heading" } },
-        [
-          _c(
-            "div",
-            { staticClass: "jarviswidget-ctrls", attrs: { role: "menu" } },
-            [
-              _vm.collapse
-                ? _c(
-                    "a",
-                    {
-                      staticClass: "button-icon jarviswidget-toggle-btn",
-                      attrs: {
-                        href: "javascript:void(0);",
-                        rel: "tooltip",
-                        title: "",
-                        "data-placement": "bottom",
-                        "data-original-title": "Collapse"
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-minus " })]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.fullscreen
-                ? _c(
-                    "a",
-                    {
-                      staticClass: "button-icon jarviswidget-fullscreen-btn",
-                      attrs: {
-                        href: "javascript:void(0);",
-                        rel: "tooltip",
-                        title: "",
-                        "data-placement": "bottom",
-                        "data-original-title": "Fullscreen"
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-expand " })]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.deletebtn
-                ? _c(
-                    "a",
-                    {
-                      staticClass: "button-icon jarviswidget-delete-btn",
-                      attrs: {
-                        href: "javascript:void(0);",
-                        rel: "tooltip",
-                        title: "",
-                        "data-placement": "bottom",
-                        "data-original-title": "Delete"
-                      }
-                    },
-                    [_c("i", { staticClass: "fa fa-times" })]
-                  )
-                : _vm._e()
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "widget-toolbar", attrs: { role: "menu" } },
-            [_vm.colorpicker ? _c("color-picker") : _vm._e()],
-            1
-          ),
-          _vm._v(" "),
-          _vm._t("toolbars"),
-          _vm._v(" "),
-          _c("span", { staticClass: "widget-icon" }, [_vm._t("icon")], 2),
-          _vm._v(" "),
-          _c("h2", [_vm._t("title")], 2),
-          _vm._v(" "),
-          _vm._m(0)
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c("div", { attrs: { role: "content" } }, [
-        _c(
-          "div",
-          { staticClass: "widget-body widget-hide-overflow no-padding" },
-          [_vm._t("body", [_vm._t("footer")])],
-          2
-        )
-      ])
-    ]
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "jarviswidget-loader" }, [
-      _c("i", { staticClass: "fa fa-refresh fa-spin" })
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    class: ['jarviswidget', _vm.titleColor, {
+      'jarviswidget-sortable': _vm.sortable
+    }],
+    attrs: {
+      "id": _vm.widId,
+      "data-widget-editbutton": "false",
+      "role": "widget"
+    }
+  }, [_c('header', {
+    attrs: {
+      "role": "heading"
+    }
+  }, [_c('div', {
+    staticClass: "jarviswidget-ctrls",
+    attrs: {
+      "role": "menu"
+    }
+  }, [(_vm.collapse) ? _c('a', {
+    staticClass: "button-icon jarviswidget-toggle-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Collapse"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-minus "
+  })]) : _vm._e(), _vm._v(" "), (_vm.fullscreen) ? _c('a', {
+    staticClass: "button-icon jarviswidget-fullscreen-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Fullscreen"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-expand "
+  })]) : _vm._e(), _vm._v(" "), (_vm.deletebtn) ? _c('a', {
+    staticClass: "button-icon jarviswidget-delete-btn",
+    attrs: {
+      "href": "javascript:void(0);",
+      "rel": "tooltip",
+      "title": "",
+      "data-placement": "bottom",
+      "data-original-title": "Delete"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-times"
+  })]) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [(_vm.colorpicker) ? _c('color-picker') : _vm._e()], 1), _vm._v(" "), _vm._t("toolbars"), _vm._v(" "), _c('span', {
+    staticClass: "widget-icon"
+  }, [_vm._t("icon")], 2), _vm._v(" "), _c('h2', [_vm._t("title")], 2), _vm._v(" "), _vm._m(0)], 2), _vm._v(" "), _c('div', {
+    attrs: {
+      "role": "content"
+    }
+  }, [_c('div', {
+    staticClass: "widget-body widget-hide-overflow no-padding"
+  }, [_vm._t("body", [_vm._t("footer")])], 2)])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "jarviswidget-loader"
+  }, [_c('i', {
+    staticClass: "fa fa-refresh fa-spin"
+  })])
+}]}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -38885,46 +38558,37 @@ if (false) {
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "widget",
-    { attrs: { "wid-id": "58974", color: "purple", fullscreen: true } },
-    [
-      _c("div", { attrs: { slot: "title" }, slot: "title" }, [
-        _vm._v("Twitch Chat")
-      ]),
-      _vm._v(" "),
-      _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
-      _vm._v(" "),
-      _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
-      _vm._v(" "),
-      _c("div", { attrs: { slot: "body" }, slot: "body" }, [
-        _c("div", { staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "panel-body" }, [
-            _vm.TwitchURL
-              ? _c("iframe", {
-                  attrs: {
-                    frameborder: "0",
-                    scrolling: "no",
-                    id: "chat_embed",
-                    src: _vm.TwitchURL,
-                    height: "410",
-                    width: "100%"
-                  }
-                })
-              : _vm._e()
-          ])
-        ])
-      ])
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "58974",
+      "color": "purple",
+      "fullscreen": true
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("Twitch Chat")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }), _vm._v(" "), _c('div', {
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [(_vm.TwitchURL) ? _c('iframe', {
+    attrs: {
+      "frameborder": "0",
+      "scrolling": "no",
+      "id": "chat_embed",
+      "src": _vm.TwitchURL,
+      "height": "410",
+      "width": "100%"
+    }
+  }) : _vm._e()])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -38941,25 +38605,19 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(62)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(64)
-/* template */
-var __vue_template__ = __webpack_require__(66)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(64),
+  /* template */
+  __webpack_require__(66),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/widgets/MediaPlayerWidget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/MediaPlayerWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MediaPlayerWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -39619,196 +39277,134 @@ Object.defineProperty(exports, '__esModule', { value: true });
 /* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "widget",
-    {
-      attrs: {
-        "wid-id": "65846",
-        fullscreen: false,
-        color: "red",
-        sortable: false
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "65846",
+      "fullscreen": false,
+      "color": "red",
+      "sortable": false
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("\n        Media Player\n    ")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }, [_c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('div', {
+    staticClass: "progress progress-striped active"
+  }, [_c('div', {
+    staticClass: "progress-bar bg-color-darken",
+    style: ({
+      width: _vm.progress + '%'
+    }),
+    attrs: {
+      "role": "progressbar"
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "widget-toolbar",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('div', {
+    staticClass: "btn-group"
+  }, [_c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.play()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-play"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.pause()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-pause"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.stop()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-stop"
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": function($event) {
+        _vm.next()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-forward"
+  })])])])]), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "background-color": "#000000",
+      "padding-bottom": "35px"
+    },
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "alert alert-info no-margin fade in"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "data-dismiss": "alert"
+    }
+  }, [_vm._v("\n                ×\n            ")]), _vm._v(" "), _c('i', {
+    staticClass: "fa-fw fa fa-info"
+  }), _vm._v("\n            Media Player Widget v1.0 Beta\n        ")]), _vm._v(" "), (_vm.player) ? _c('div', {
+    staticClass: "alert alert-default no-margin fade in text-center"
+  }, [_c('i', {
+    staticClass: "fa-fw fa fa-music"
+  }), _vm._v("\n            Current Song: " + _vm._s(_vm.title) + "\n        ")]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "text-center"
+  }, [(_vm.listReady) ? _c('youtube', {
+    attrs: {
+      "video-id": _vm.videoId,
+      "player-width": _vm.width,
+      "player-height": _vm.height,
+      "player-vars": {
+        autoplay: 1,
+        controls: 0,
+        showinfo: 0,
+        rel: 0
       }
     },
-    [
-      _c("div", { attrs: { slot: "title" }, slot: "title" }, [
-        _vm._v("\n        Media Player\n    ")
-      ]),
-      _vm._v(" "),
-      _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
-      _vm._v(" "),
-      _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }, [
-        _c("div", { staticClass: "widget-toolbar", attrs: { role: "menu" } }, [
-          _c("div", { staticClass: "progress progress-striped active" }, [
-            _c("div", {
-              staticClass: "progress-bar bg-color-darken",
-              style: { width: _vm.progress + "%" },
-              attrs: { role: "progressbar" }
-            })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "widget-toolbar", attrs: { role: "menu" } }, [
-          _c("div", { staticClass: "btn-group" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default btn-xs",
-                on: {
-                  click: function($event) {
-                    _vm.play()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fa fa-play" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default btn-xs",
-                on: {
-                  click: function($event) {
-                    _vm.pause()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fa fa-pause" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default btn-xs",
-                on: {
-                  click: function($event) {
-                    _vm.stop()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fa fa-stop" })]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default btn-xs",
-                on: {
-                  click: function($event) {
-                    _vm.next()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "fa fa-forward" })]
-            )
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticStyle: {
-            "background-color": "#000000",
-            "padding-bottom": "35px"
-          },
-          attrs: { slot: "body" },
-          slot: "body"
-        },
-        [
-          _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
-            _c(
-              "button",
-              { staticClass: "close", attrs: { "data-dismiss": "alert" } },
-              [_vm._v("\n                ×\n            ")]
-            ),
-            _vm._v(" "),
-            _c("i", { staticClass: "fa-fw fa fa-info" }),
-            _vm._v("\n            Media Player Widget v1.0 Beta\n        ")
-          ]),
-          _vm._v(" "),
-          _vm.player
-            ? _c(
-                "div",
-                {
-                  staticClass:
-                    "alert alert-default no-margin fade in text-center"
-                },
-                [
-                  _c("i", { staticClass: "fa-fw fa fa-music" }),
-                  _vm._v(
-                    "\n            Current Song: " +
-                      _vm._s(_vm.title) +
-                      "\n        "
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "text-center" },
-            [
-              _vm.listReady
-                ? _c("youtube", {
-                    attrs: {
-                      "video-id": _vm.videoId,
-                      "player-width": _vm.width,
-                      "player-height": _vm.height,
-                      "player-vars": {
-                        autoplay: 1,
-                        controls: 0,
-                        showinfo: 0,
-                        rel: 0
-                      }
-                    },
-                    on: {
-                      ready: _vm.ready,
-                      playing: _vm.playing,
-                      ended: _vm.ended,
-                      buffering: _vm.buffering,
-                      paused: _vm.paused,
-                      queued: _vm.queued
-                    }
-                  })
-                : _vm._e()
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.listEmpty
-            ? _c("div", { staticClass: "text-center" }, [
-                _c("h1", [_vm._v("Playlist is empty")]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-labeled btn-success",
-                    attrs: {
-                      "data-toggle": "modal",
-                      "data-target": "#AddSongModal"
-                    }
-                  },
-                  [
-                    _c("span", { staticClass: "btn-label" }, [
-                      _c("i", { staticClass: "fa fa-plus" })
-                    ]),
-                    _vm._v("\n                Add First Song\n            ")
-                  ]
-                )
-              ])
-            : _vm._e()
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+    on: {
+      "ready": _vm.ready,
+      "playing": _vm.playing,
+      "ended": _vm.ended,
+      "buffering": _vm.buffering,
+      "paused": _vm.paused,
+      "queued": _vm.queued
+    }
+  }) : _vm._e()], 1), _vm._v(" "), (_vm.listEmpty) ? _c('div', {
+    staticClass: "text-center"
+  }, [_c('h1', [_vm._v("Playlist is empty")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-labeled btn-success",
+    attrs: {
+      "data-toggle": "modal",
+      "data-target": "#AddSongModal"
+    }
+  }, [_c('span', {
+    staticClass: "btn-label"
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  })]), _vm._v("\n                Add First Song\n            ")])]) : _vm._e()])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -39826,25 +39422,19 @@ function injectStyle (ssrContext) {
   __webpack_require__(68)
   __webpack_require__(70)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(72)
-/* template */
-var __vue_template__ = __webpack_require__(74)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(72),
+  /* template */
+  __webpack_require__(74),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/widgets/StreamSetupWidget.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/StreamSetupWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] StreamSetupWidget.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -40051,8 +39641,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             games: [],
             game: null,
             title: null,
-            delay: 0,
-            feed_enabled: false
+            delay: 0
         };
     },
 
@@ -40090,8 +39679,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     params: {
                         status: this.title,
                         game: this.game.name,
-                        delay: this.delay,
-                        channel_feed_enabled: this.feed_enabled
+                        delay: this.delay
                     }
                 }).then(function (response) {
                     _this2.$store.commit('SET_CHANNEL', response.data);
@@ -40130,128 +39718,93 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("widget", { attrs: { "wid-id": "58234", fullscreen: true } }, [
-    _c("div", { attrs: { slot: "title" }, slot: "title" }, [
-      _vm._v("Stream Setup")
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "body" }, slot: "body" }, [
-      _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
-        _c(
-          "button",
-          { staticClass: "close", attrs: { "data-dismiss": "alert" } },
-          [_vm._v("\n                ×\n            ")]
-        ),
-        _vm._v(" "),
-        _c("i", { staticClass: "fa-fw fa fa-info" }),
-        _vm._v("\n            Stream Setup Widget v1.0 Beta\n        ")
-      ]),
-      _vm._v(" "),
-      _c("form", { staticClass: "smart-form" }, [
-        _c("header", [_vm._v("\n                Setup Stream\n            ")]),
-        _vm._v(" "),
-        _c("fieldset", [
-          _c("section", [
-            _c("label", { staticClass: "input" }, [
-              _c("i", { staticClass: "icon-append fa fa-comment" }),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.title,
-                    expression: "title"
-                  }
-                ],
-                attrs: { type: "text", placeholder: _vm.current_title },
-                domProps: { value: _vm.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.title = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("b", { staticClass: "tooltip tooltip-bottom-right" }, [
-                _vm._v(
-                  "\n                            Enter the title of your stream.\n                        "
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "section",
-            [
-              _c("label", [
-                _vm._v("\n                        Current: "),
-                _c("strong", [_vm._v(_vm._s(_vm.current_game))])
-              ]),
-              _vm._v(" "),
-              _c("multiselect", {
-                attrs: {
-                  "open-direction": "bottom",
-                  searchable: true,
-                  "max-height": 300,
-                  options: _vm.games,
-                  loading: _vm.isLoading,
-                  "internal-search": false,
-                  "close-on-select": true,
-                  placeholder: "Search ...",
-                  label: "name",
-                  "track-by": "name"
-                },
-                on: { "search-change": _vm.asyncFind },
-                model: {
-                  value: _vm.game,
-                  callback: function($$v) {
-                    _vm.game = $$v
-                  },
-                  expression: "game"
-                }
-              })
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c("footer", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.updateStream()
-                }
-              }
-            },
-            [
-              _c("i", { staticClass: "fa fa-save" }),
-              _vm._v("\n                    Update\n                ")
-            ]
-          )
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "58234",
+      "fullscreen": true
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("Stream Setup")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }), _vm._v(" "), _c('div', {
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "alert alert-info no-margin fade in"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "data-dismiss": "alert"
+    }
+  }, [_vm._v("\n                ×\n            ")]), _vm._v(" "), _c('i', {
+    staticClass: "fa-fw fa fa-info"
+  }), _vm._v("\n            Stream Setup Widget v1.0 Beta\n        ")]), _vm._v(" "), _c('form', {
+    staticClass: "smart-form"
+  }, [_c('header', [_vm._v("\n                Setup Stream\n            ")]), _vm._v(" "), _c('fieldset', [_c('section', [_c('label', {
+    staticClass: "input"
+  }, [_c('i', {
+    staticClass: "icon-append fa fa-comment"
+  }), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.title),
+      expression: "title"
+    }],
+    attrs: {
+      "type": "text",
+      "placeholder": _vm.current_title
+    },
+    domProps: {
+      "value": (_vm.title)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.title = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('b', {
+    staticClass: "tooltip tooltip-bottom-right"
+  }, [_vm._v("\n                            Enter the title of your stream.\n                        ")])])]), _vm._v(" "), _c('section', [_c('label', [_vm._v("\n                        Current: "), _c('strong', [_vm._v(_vm._s(_vm.current_game))])]), _vm._v(" "), _c('multiselect', {
+    attrs: {
+      "open-direction": "bottom",
+      "searchable": true,
+      "max-height": 300,
+      "options": _vm.games,
+      "loading": _vm.isLoading,
+      "internal-search": false,
+      "close-on-select": true,
+      "placeholder": "Search ...",
+      "label": "name",
+      "track-by": "name"
+    },
+    on: {
+      "search-change": _vm.asyncFind
+    },
+    model: {
+      value: (_vm.game),
+      callback: function($$v) {
+        _vm.game = $$v
+      },
+      expression: "game"
+    }
+  })], 1)]), _vm._v(" "), _c('footer', [_c('button', {
+    staticClass: "btn btn-primary",
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.updateStream()
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-save"
+  }), _vm._v("\n                    Update\n                ")])])])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -40260,38 +39813,337 @@ if (false) {
 }
 
 /***/ }),
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(81)
+  __webpack_require__(76)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(83)
-/* template */
-var __vue_template__ = __webpack_require__(89)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(78),
+  /* template */
+  __webpack_require__(80),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/modals/AddSongModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/widgets/TwitchEventsWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] TwitchEventsWidget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-02cefac8", Component.options)
+  } else {
+    hotAPI.reload("data-v-02cefac8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(77);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("9eca4daa", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-02cefac8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchEventsWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-02cefac8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./TwitchEventsWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.ws-output {\n    font-family:Courier,serif;\n    margin-left: 15px;\n    padding: 5px;\n    width: 95%;\n    background-color: #000000;\n    color: #FFFFFF;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(79);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        channelId: { required: true },
+        token: { required: true }
+    },
+
+    data: function data() {
+        return {};
+    },
+
+
+    components: {
+        Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
+    },
+
+    methods: {
+        listenTwitchEvents: function listenTwitchEvents() {
+            var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__["a" /* TwitchListener */]('whispers', this.channelId, this.token);
+            tl.connect();
+        }
+    },
+    computed: {},
+    created: function created() {
+        this.listenTwitchEvents();
+    }
+});
+
+/***/ }),
+/* 79 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchListener; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var TwitchListener = function () {
+    function TwitchListener(topic, channel_id, access_token) {
+        _classCallCheck(this, TwitchListener);
+
+        this.topic = topic;
+        this.channel_id = channel_id;
+        this.access_token = access_token;
+        this.ws = null;
+    }
+
+    _createClass(TwitchListener, [{
+        key: "nonce",
+        value: function nonce(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        }
+    }, {
+        key: "heartbeat",
+        value: function heartbeat() {
+            var message = {
+                type: 'PING'
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "listen",
+        value: function listen(topic) {
+            var message = {
+                type: 'LISTEN',
+                nonce: this.nonce(15),
+                data: {
+                    topics: [topic],
+                    auth_token: this.access_token
+                }
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "connect",
+        value: function connect() {
+            var _this = this;
+
+            var heartbeatInterval = 1000 * 60; //ms between PING's
+            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
+            var heartbeatHandle = void 0;
+
+            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
+
+            this.ws.onopen = function (event) {
+                _this.listen(_this.topic + "." + _this.channel_id);
+                _this.heartbeat();
+                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
+                console.log("Listening to " + _this.topic + " with channel id " + _this.channel_id);
+
+                //alerts.success('Connected to wss://pubsub-edge.twitch.tv')
+            };
+
+            this.ws.onerror = function (error) {
+                console.error(error);
+                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error);
+            };
+
+            this.ws.onmessage = function (event) {
+                var data = JSON.parse(event.data);
+
+                if (data.type === 'RECONNECT') {
+                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
+                    setTimeout(_this.connect(), reconnectInterval);
+                }
+
+                if (data.type === 'MESSAGE') {
+                    console.log(JSON.parse(data.data.message).data_object);
+                    __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["d" /* whisper */](_this.getRecipient(data), _this.getWhisper(data));
+                }
+            };
+
+            this.ws.onclose = function () {
+                //console.log(`Closed connection to ${this.topic} with channel id ${this.channel_id}`);
+                clearInterval(heartbeatHandle);
+                setTimeout(_this.connect(), reconnectInterval);
+            };
+        }
+    }, {
+        key: "getWhisper",
+        value: function getWhisper(data) {
+            return JSON.parse(data.data.message).data_object.body;
+        }
+    }, {
+        key: "getRecipient",
+        value: function getRecipient(data) {
+            return JSON.parse(data.data.message).data_object.recipient.display_name;
+        }
+    }]);
+
+    return TwitchListener;
+}();
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('widget', {
+    attrs: {
+      "wid-id": "58375",
+      "color": "purple",
+      "fullscreen": true
+    }
+  }, [_c('div', {
+    slot: "title"
+  }, [_vm._v("Twitch Events")]), _vm._v(" "), _c('div', {
+    slot: "icon"
+  }), _vm._v(" "), _c('div', {
+    slot: "toolbars"
+  }), _vm._v(" "), _c('div', {
+    slot: "body"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('textarea', {
+    staticClass: "ws-output",
+    attrs: {
+      "rows": "20",
+      "readonly": ""
+    }
+  })])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-02cefac8", module.exports)
+  }
+}
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(82)
+}
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(84),
+  /* template */
+  __webpack_require__(90),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/AddSongModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AddSongModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -40315,13 +40167,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(82);
+var content = __webpack_require__(83);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -40341,7 +40193,7 @@ if(false) {
 }
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -40355,7 +40207,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40482,13 +40334,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(86);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -40508,7 +40360,7 @@ if(false) {
 }
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -40522,12 +40374,12 @@ exports.push([module.i, "\n.modal {\n    transition: all 0.3s ease;\n}\n.modal.i
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(88);
 //
 //
 //
@@ -40639,7 +40491,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40842,120 +40694,83 @@ function VueFixer(vue) {
 }
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: ["modal", _vm.effect],
-      attrs: { role: "dialog" },
-      on: {
-        click: function($event) {
-          _vm.backdrop && _vm.action(false, 1)
-        },
-        transitionend: function($event) {
-          _vm.transition = false
-        }
-      }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    class: ['modal', _vm.effect],
+    attrs: {
+      "role": "dialog"
     },
-    [
-      _c(
-        "div",
-        {
-          class: [
-            "modal-dialog",
-            { "modal-lg": _vm.large, "modal-sm": _vm.small }
-          ],
-          style: { width: _vm.optionalWidth },
-          attrs: { role: "document" },
-          on: {
-            click: function($event) {
-              $event.stopPropagation()
-              _vm.action(null)
-            }
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-content" },
-            [
-              _vm._t("modal-header", [
-                _c("div", { staticClass: "modal-header" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.action(false, 2)
-                        }
-                      }
-                    },
-                    [_c("span", [_vm._v("×")])]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "h4",
-                    { staticClass: "modal-title" },
-                    [_vm._t("title", [_vm._v(_vm._s(_vm.title))])],
-                    2
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _vm._t("modal-body", [
-                _c("div", { staticClass: "modal-body" }, [_vm._t("default")], 2)
-              ]),
-              _vm._v(" "),
-              _vm._t("modal-footer", [
-                _c("div", { staticClass: "modal-footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-default",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.action(false, 3)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.cancelText))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.action(true, 4)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.okText))]
-                  )
-                ])
-              ])
-            ],
-            2
-          )
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+    on: {
+      "click": function($event) {
+        _vm.backdrop && _vm.action(false, 1)
+      },
+      "transitionend": function($event) {
+        _vm.transition = false
+      }
+    }
+  }, [_c('div', {
+    class: ['modal-dialog', {
+      'modal-lg': _vm.large,
+      'modal-sm': _vm.small
+    }],
+    style: ({
+      width: _vm.optionalWidth
+    }),
+    attrs: {
+      "role": "document"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.action(null)
+      }
+    }
+  }, [_c('div', {
+    staticClass: "modal-content"
+  }, [_vm._t("modal-header", [_c('div', {
+    staticClass: "modal-header"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.action(false, 2)
+      }
+    }
+  }, [_c('span', [_vm._v("×")])]), _vm._v(" "), _c('h4', {
+    staticClass: "modal-title"
+  }, [_vm._t("title", [_vm._v(_vm._s(_vm.title))])], 2)])]), _vm._v(" "), _vm._t("modal-body", [_c('div', {
+    staticClass: "modal-body"
+  }, [_vm._t("default")], 2)]), _vm._v(" "), _vm._t("modal-footer", [_c('div', {
+    staticClass: "modal-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.action(false, 3)
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.cancelText))]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": function($event) {
+        _vm.action(true, 4)
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.okText))])])])], 2)])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -40964,117 +40779,80 @@ if (false) {
 }
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "modal",
-    {
-      attrs: { effect: "fade", value: _vm.show },
-      on: {
-        closed: function($event) {
-          _vm.$emit("closed")
-        }
-      }
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('modal', {
+    attrs: {
+      "effect": "fade",
+      "value": _vm.show
     },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "modal-header",
-          attrs: { slot: "modal-header" },
-          slot: "modal-header"
-        },
-        [
-          _c("h4", { staticClass: "modal-title" }, [
-            _c("i", [_vm._v("Add Song To A Playlist")])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("form", [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-12" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.formModel.video_id,
-                    expression: "formModel.video_id"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "YouTube ID or URL ...",
-                  required: ""
-                },
-                domProps: { value: _vm.formModel.video_id },
-                on: {
-                  keydown: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "enter", 13)
-                    ) {
-                      return null
-                    }
-                    $event.preventDefault()
-                    _vm.addNew()
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.formModel.video_id = $event.target.value
-                  }
-                }
-              })
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal-footer",
-          attrs: { slot: "modal-footer" },
-          slot: "modal-footer"
-        },
-        [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default",
-              attrs: { type: "button" },
-              on: { click: _vm.cancelNew }
-            },
-            [_vm._v("Cancel")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { type: "button" },
-              on: { click: _vm.addNew }
-            },
-            [_vm._v("Add Song")]
-          )
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+    on: {
+      "closed": function($event) {
+        _vm.$emit('closed')
+      }
+    }
+  }, [_c('div', {
+    staticClass: "modal-header",
+    slot: "modal-header"
+  }, [_c('h4', {
+    staticClass: "modal-title"
+  }, [_c('i', [_vm._v("Add Song To A Playlist")])])]), _vm._v(" "), _c('form', [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-12"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.formModel.video_id),
+      expression: "formModel.video_id"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      "type": "text",
+      "placeholder": "YouTube ID or URL ...",
+      "required": ""
+    },
+    domProps: {
+      "value": (_vm.formModel.video_id)
+    },
+    on: {
+      "keydown": function($event) {
+        if (!('button' in $event) && _vm._k($event.keyCode, "enter", 13)) { return null; }
+        $event.preventDefault();
+        _vm.addNew()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.formModel.video_id = $event.target.value
+      }
+    }
+  })])])])]), _vm._v(" "), _c('div', {
+    staticClass: "modal-footer",
+    slot: "modal-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.cancelNew
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary",
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.addNew
+    }
+  }, [_vm._v("Add Song")])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -41083,33 +40861,27 @@ if (false) {
 }
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(91)
+  __webpack_require__(92)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(93)
-/* template */
-var __vue_template__ = __webpack_require__(94)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(94),
+  /* template */
+  __webpack_require__(95),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/modals/PlaylistModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/PlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] PlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -41133,13 +40905,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(92);
+var content = __webpack_require__(93);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41159,7 +40931,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -41173,7 +40945,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41298,123 +41070,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "modal",
-    {
-      attrs: { effect: "fade", value: _vm.show, large: true },
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('modal', {
+    attrs: {
+      "effect": "fade",
+      "value": _vm.show,
+      "large": true
+    },
+    on: {
+      "closed": function($event) {
+        _vm.$emit('closed')
+      }
+    }
+  }, [_c('div', {
+    staticClass: "modal-header",
+    slot: "modal-header"
+  }, [_c('h4', {
+    staticClass: "modal-title"
+  }, [_c('i', [_vm._v("Playlist")])])]), _vm._v(" "), _c('div', {
+    staticClass: "table-responsive"
+  }, [_c('table', {
+    staticClass: "table table-bordered table-striped"
+  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Title")]), _vm._v(" "), _c('th', [_vm._v("Video ID")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.songs), function(song) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(song.id))]), _vm._v(" "), (song.title !== '') ? _c('td', [_vm._v("\n                        " + _vm._s(song.title) + "\n                    ")]) : _c('td', [_c('i', {
+      staticClass: "text-danger"
+    }, [_vm._v("The song title will be updated shortly ...")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.video_id))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_c('button', {
+      staticClass: "btn btn-danger btn-sm",
       on: {
-        closed: function($event) {
-          _vm.$emit("closed")
+        "click": function($event) {
+          _vm.confirmDelete(song)
         }
       }
+    }, [_vm._v("X")])])])
+  }))])]), _vm._v(" "), _c('div', {
+    staticClass: "modal-footer",
+    slot: "modal-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button"
     },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "modal-header",
-          attrs: { slot: "modal-header" },
-          slot: "modal-header"
-        },
-        [
-          _c("h4", { staticClass: "modal-title" }, [
-            _c("i", [_vm._v("Playlist")])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", [_vm._v("#")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Title")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Video ID")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Actions")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.songs, function(song) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(song.id))]),
-                _vm._v(" "),
-                song.title !== ""
-                  ? _c("td", [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(song.title) +
-                          "\n                    "
-                      )
-                    ])
-                  : _c("td", [
-                      _c("i", { staticClass: "text-danger" }, [
-                        _vm._v("The song title will be updated shortly ...")
-                      ])
-                    ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(song.video_id))]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      on: {
-                        click: function($event) {
-                          _vm.confirmDelete(song)
-                        }
-                      }
-                    },
-                    [_vm._v("X")]
-                  )
-                ])
-              ])
-            })
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal-footer",
-          attrs: { slot: "modal-footer" },
-          slot: "modal-footer"
-        },
-        [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.$emit("closed")
-                }
-              }
-            },
-            [_vm._v("Exit")]
-          )
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+    on: {
+      "click": function($event) {
+        _vm.$emit('closed')
+      }
+    }
+  }, [_vm._v("Exit")])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -41423,33 +41131,27 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(96)
+  __webpack_require__(97)
 }
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(98)
-/* template */
-var __vue_template__ = __webpack_require__(99)
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
+var Component = __webpack_require__(3)(
+  /* script */
+  __webpack_require__(99),
+  /* template */
+  __webpack_require__(100),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
 )
-Component.options.__file = "resources/assets/js/components/modals/ReqPlaylistModal.vue"
+Component.options.__file = "/home/poppabear/projects/www/vtb/resources/assets/js/components/modals/ReqPlaylistModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ReqPlaylistModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -41473,13 +41175,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(97);
+var content = __webpack_require__(98);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41499,7 +41201,7 @@ if(false) {
 }
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -41513,7 +41215,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41646,127 +41348,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "modal",
-    {
-      attrs: { effect: "fade", value: _vm.show, large: true },
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('modal', {
+    attrs: {
+      "effect": "fade",
+      "value": _vm.show,
+      "large": true
+    },
+    on: {
+      "closed": function($event) {
+        _vm.$emit('closed')
+      }
+    }
+  }, [_c('div', {
+    staticClass: "modal-header",
+    slot: "modal-header"
+  }, [_c('h4', {
+    staticClass: "modal-title"
+  }, [_c('i', [_vm._v("Requested Playlist")])])]), _vm._v(" "), _c('div', {
+    staticClass: "table-responsive"
+  }, [_c('table', {
+    staticClass: "table table-bordered table-striped"
+  }, [_c('thead', [_c('tr', [_c('th', [_vm._v("#")]), _vm._v(" "), _c('th', [_vm._v("Title")]), _vm._v(" "), _c('th', [_vm._v("By")]), _vm._v(" "), _c('th', [_vm._v("Video ID")]), _vm._v(" "), _c('th', [_vm._v("Actions")])])]), _vm._v(" "), _c('tbody', _vm._l((_vm.songs), function(song) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(song.id))]), _vm._v(" "), (song.title !== '') ? _c('td', [_vm._v("\n                        " + _vm._s(song.title) + "\n                    ")]) : _c('td', [_c('i', {
+      staticClass: "text-danger"
+    }, [_vm._v("The song title will be updated shortly ...")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.requested_by))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(song.video_id))]), _vm._v(" "), _c('td', {
+      staticClass: "text-center"
+    }, [_c('button', {
+      staticClass: "btn btn-danger btn-sm",
       on: {
-        closed: function($event) {
-          _vm.$emit("closed")
+        "click": function($event) {
+          _vm.confirmDelete(song)
         }
       }
+    }, [_vm._v("X")])])])
+  }))])]), _vm._v(" "), _c('div', {
+    staticClass: "modal-footer",
+    slot: "modal-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button"
     },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "modal-header",
-          attrs: { slot: "modal-header" },
-          slot: "modal-header"
-        },
-        [
-          _c("h4", { staticClass: "modal-title" }, [
-            _c("i", [_vm._v("Requested Playlist")])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", [_vm._v("#")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Title")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("By")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Video ID")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Actions")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.songs, function(song) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(song.id))]),
-                _vm._v(" "),
-                song.title !== ""
-                  ? _c("td", [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(song.title) +
-                          "\n                    "
-                      )
-                    ])
-                  : _c("td", [
-                      _c("i", { staticClass: "text-danger" }, [
-                        _vm._v("The song title will be updated shortly ...")
-                      ])
-                    ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(song.requested_by))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(song.video_id))]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      on: {
-                        click: function($event) {
-                          _vm.confirmDelete(song)
-                        }
-                      }
-                    },
-                    [_vm._v("X")]
-                  )
-                ])
-              ])
-            })
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal-footer",
-          attrs: { slot: "modal-footer" },
-          slot: "modal-footer"
-        },
-        [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  _vm.$emit("closed")
-                }
-              }
-            },
-            [_vm._v("Exit")]
-          )
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+    on: {
+      "click": function($event) {
+        _vm.$emit('closed')
+      }
+    }
+  }, [_vm._v("Exit")])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -41775,16 +41409,16 @@ if (false) {
 }
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__ = __webpack_require__(106);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Account_index__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Account_index__ = __webpack_require__(111);
 
 
 
@@ -41804,7 +41438,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 }));
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42698,13 +42332,13 @@ var index_esm = {
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(106);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -42747,7 +42381,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42761,7 +42395,7 @@ var UPDATE_SONG = 'UPDATE_SONG';
 var DELETE_SONG = 'DELETE_SONG';
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42772,7 +42406,7 @@ function getSongs(state) {
 }
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42799,13 +42433,13 @@ function deleteSong(context, id) {
 }
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(110);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -42848,7 +42482,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42862,7 +42496,7 @@ var UPDATE_REQSONG = 'UPDATE_REQSONG';
 var DELETE_REQSONG = 'DELETE_REQSONG';
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42873,7 +42507,7 @@ function getReqSongs(state) {
 }
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42900,13 +42534,13 @@ function deleteReqSong(context, id) {
 }
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(111);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(114);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -42934,7 +42568,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42944,23 +42578,33 @@ var SET_USER = 'SET_USER';
 var SET_CHANNEL = 'SET_CHANNEL';
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["getUser"] = getUser;
+/* harmony export (immutable) */ __webpack_exports__["getAccessToken"] = getAccessToken;
 /* harmony export (immutable) */ __webpack_exports__["getChannel"] = getChannel;
+/* harmony export (immutable) */ __webpack_exports__["getChannelId"] = getChannelId;
 function getUser(state) {
     return state.user;
+}
+
+function getAccessToken(state) {
+    return state.user.access_token;
 }
 
 function getChannel(state) {
     return state.channel;
 }
 
+function getChannelId(state) {
+    return state.channel._id;
+}
+
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42975,120 +42619,6 @@ function setUser(context, user) {
 function setChannel(context, channel) {
     context.commit('SET_CHANNEL', channel);
 }
-
-/***/ }),
-/* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchListener; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var TwitchListener = function () {
-    function TwitchListener(topic, channel_id, access_token) {
-        _classCallCheck(this, TwitchListener);
-
-        this.topic = topic;
-        this.channel_id = channel_id;
-        this.access_token = access_token;
-        this.ws = null;
-    }
-
-    _createClass(TwitchListener, [{
-        key: "nonce",
-        value: function nonce(length) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < length; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        }
-    }, {
-        key: "heartbeat",
-        value: function heartbeat() {
-            var message = {
-                type: 'PING'
-            };
-
-            this.ws.send(JSON.stringify(message));
-        }
-    }, {
-        key: "listen",
-        value: function listen(topic) {
-            var message = {
-                type: 'LISTEN',
-                nonce: this.nonce(15),
-                data: {
-                    topics: [topic],
-                    auth_token: this.access_token
-                }
-            };
-
-            this.ws.send(JSON.stringify(message));
-        }
-    }, {
-        key: "connect",
-        value: function connect() {
-            var _this = this;
-
-            var heartbeatInterval = 1000 * 60; //ms between PING's
-            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
-            var heartbeatHandle = void 0;
-
-            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
-
-            this.ws.onopen = function (event) {
-                _this.listen(_this.topic + "." + _this.channel_id);
-                _this.heartbeat();
-                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
-                console.log("Listening to " + _this.topic + " with channel id " + _this.channel_id);
-
-                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["c" /* success */]('Connected to wss://pubsub-edge.twitch.tv');
-            };
-
-            this.ws.onerror = function (error) {
-                console.error(error);
-                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error);
-            };
-
-            this.ws.onmessage = function (event) {
-                var data = JSON.parse(event.data);
-
-                console.log(data);
-
-                if (data.type === 'RECONNECT') {
-                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
-                    setTimeout(_this.connect(), reconnectInterval);
-                }
-
-                if (data.type === 'MESSAGE') {
-                    __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["d" /* whisper */](_this.getWhisper(data).message);
-                }
-            };
-
-            this.ws.onclose = function () {
-                //console.log(`Closed connection to ${this.topic} with channel id ${this.channel_id}`);
-                clearInterval(heartbeatHandle);
-                setTimeout(_this.connect(), reconnectInterval);
-            };
-        }
-    }, {
-        key: "getWhisper",
-        value: function getWhisper(data) {
-            return {
-                message: JSON.parse(data.data.message).data_object.body
-            };
-        }
-    }]);
-
-    return TwitchListener;
-}();
 
 /***/ }),
 /* 115 */

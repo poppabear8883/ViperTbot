@@ -54,7 +54,7 @@
             /**
              * @return {string}
              */
-            TwitchURL: function() {
+            TwitchURL() {
 
                 if(this.user.username !== null) {
                     return `http://www.twitch.tv/${this.user.username}/chat`

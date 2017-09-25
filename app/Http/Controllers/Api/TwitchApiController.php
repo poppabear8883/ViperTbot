@@ -67,14 +67,15 @@ class TwitchApiController extends Controller
         return response($this->api->authChannel($this->token()), 200);
     }
 
+    /**
+     * @param array $params
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     protected function updateChannel($params = [])
     {
-        return response(
-            $this->api->updateChannel(
-                $this->channel_id(),
-                $params,
-                $this->token()
-            ), 200);
+        $this->api->updateChannel($this->channel_id(), $params, $this->token());
+
+        return response($this->api->authChannel($this->token()), 200);
     }
 
 }

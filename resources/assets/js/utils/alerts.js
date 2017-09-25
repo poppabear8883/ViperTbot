@@ -33,15 +33,15 @@ export function error(msg)
 
 }
 
-export function whisper(msg)
+export function whisper(from, msg)
 {
     $.bigBox({
-        title: '!ERROR!',
+        title: `${from} has sent you a whisper :)`,
         content: msg,
-        color: '#C46A69',
+        color: '#007B7F',
         icon: 'fa fa-comment shake animated',
         number: Math.floor(Math.random()*(15-1+1)+1),
-        timeout: 10000
+        //timeout: 10000
     });
 
 }

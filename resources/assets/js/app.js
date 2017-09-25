@@ -18,14 +18,13 @@ Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
 Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
 Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
-//Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
 Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
 
 import store from './vuex/store'
-import { TwitchListener } from './webhooks/TwitchListener'
 
 const app = new Vue({
     el: '#app',
@@ -57,7 +56,6 @@ const app = new Vue({
                 this.$store.commit('SET_USER', response.data);
                 this.$store.commit('SET_SONGS', response.data.songs);
                 this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
-
             }).catch((error) => {
                 console.log(error);
                 return null
@@ -75,18 +73,7 @@ const app = new Vue({
     },
 
     mounted() {
-        let user = this.user;
-
-        setTimeout(() => {
-            if (user !== null) {
-                console.log(user);
-
-                let tl = new TwitchListener('whispers', user.channel_id, user.access_token);
-
-                tl.connect();
-
-                this.getChannelData();
-            }
-        }, 5000);
+        this.getUser();
+        this.getChannelData();
     }
 });

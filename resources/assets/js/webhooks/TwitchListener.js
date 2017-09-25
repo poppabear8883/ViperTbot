@@ -52,7 +52,7 @@ export class TwitchListener {
             heartbeatHandle = setInterval(this.heartbeat(), heartbeatInterval);
             console.log(`Listening to ${this.topic} with channel id ${this.channel_id}`);
 
-            alerts.success('Connected to wss://pubsub-edge.twitch.tv')
+            //alerts.success('Connected to wss://pubsub-edge.twitch.tv')
         };
 
         this.ws.onerror = (error) => {
@@ -63,15 +63,14 @@ export class TwitchListener {
         this.ws.onmessage = (event) => {
             let data = JSON.parse(event.data);
 
-            console.log(data);
-
             if (data.type === 'RECONNECT') {
                 console.log(`Reconnecting to ${this.topic} with channel id ${this.channel_id}`);
                 setTimeout(this.connect(), reconnectInterval);
             }
 
             if (data.type === 'MESSAGE') {
-                alerts.whisper(this.getWhisper(data).message);
+                console.log(JSON.parse(data.data.message).data_object);
+                alerts.whisper(this.getRecipient(data), this.getWhisper(data));
             }
         };
 
@@ -84,9 +83,11 @@ export class TwitchListener {
     }
 
     getWhisper(data) {
-        return {
-            message: JSON.parse(data.data.message).data_object.body
-        }
+        return JSON.parse(data.data.message).data_object.body;
+    }
+
+    getRecipient(data) {
+        return JSON.parse(data.data.message).data_object.recipient.display_name;
     }
 }
 

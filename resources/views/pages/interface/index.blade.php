@@ -61,10 +61,10 @@
 
                 <media-player-widget></media-player-widget>
 
-                {{--<twitch-events-widget
-                    token="{{$access_token}}"
-                    channel-id="{{$channel_id}}"
-                ></twitch-events-widget>--}}
+                <twitch-events-widget
+                        channel-id="{{Auth::user()->channel_id}}"
+                        token="{{Auth::user()->access_token}}"
+                ></twitch-events-widget>
 
             </article><!-- END GRID -->
 
