@@ -1,9 +1,9 @@
 import * as alerts from '../utils/alerts'
 
-export class TwitchListener {
+export class TwitchPubSub {
 
-    constructor(topic, channel_id, access_token) {
-        this.topic = topic;
+    constructor(topics, channel_id, access_token) {
+        this.topics = topics;
         this.channel_id = channel_id;
         this.access_token = access_token;
 
@@ -40,27 +40,25 @@ export class TwitchListener {
         };
 
         this.ws.send(JSON.stringify(message));
+        console.log(`Listening to ${topic} with channel id ${this.channel_id}`);
     }
 
     connect() {
-        let heartbeatInterval = 1000 * 60; //ms between PING's
+        let heartbeatInterval = 1000 * 45; //ms between PING's
         let reconnectInterval = 1000 * 3; //ms to wait before reconnect
         let heartbeatHandle;
 
         this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
 
         this.ws.onopen = (event) => {
-            this.listen(`${this.topic}.${this.channel_id}`);
+
+            _.forEach(this.topics, (topic) => {
+                this.listen(`${topic}.${this.channel_id}`);
+            });
+
             this.heartbeat();
             heartbeatHandle = setInterval(this.heartbeat(), heartbeatInterval);
-            console.log(`Listening to ${this.topic} with channel id ${this.channel_id}`);
 
-            //alerts.success('Connected to wss://pubsub-edge.twitch.tv')
-        };
-
-        this.ws.onerror = (error) => {
-            console.error(error);
-            alerts.error(error)
         };
 
         this.ws.onmessage = (event) => {
@@ -72,30 +70,39 @@ export class TwitchListener {
             }
 
             if (this.data.type === 'MESSAGE') {
-                //console.log(this.data);
-                console.log(this.data);
 
-                let msg = this.getDataObj().body;
-                let from_id = this.getDataObj().from_id;
-                let from = this.getDataObj().tags.display_name;
-
-                if (from_id != this.channel_id)
-                {
-                    alerts.whisper(from, msg);
+                switch(this.getMessageData().type) {
+                    case 'whisper_received':
+                        this.whisperReceived();
+                        break;
                 }
             }
         };
 
         this.ws.onclose = () => {
-            //console.log(`Closed connection to ${this.topic} with channel id ${this.channel_id}`);
             clearInterval(heartbeatHandle);
             setTimeout(this.connect(), reconnectInterval);
         };
 
+        this.ws.onerror = (error) => {
+            console.error(error);
+            alerts.error(error)
+        };
+    }
+
+    whisperReceived() {
+        let msg = this.getDataObj().body;
+        let from = this.getDataObj().tags.display_name;
+
+        alerts.whisper(from, msg);
+    }
+
+    getMessageData() {
+        return JSON.parse(this.data.data.message);
     }
 
     getDataObj() {
-        return JSON.parse(this.data.data.message).data_object;
+        return this.getMessageData().data_object;
     }
 
     getWhisper() {

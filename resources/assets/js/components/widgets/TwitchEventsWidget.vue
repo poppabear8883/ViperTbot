@@ -33,7 +33,7 @@
 </style>
 <script>
     import Widget from './Widget.vue'
-    import { TwitchListener } from '../../webhooks/TwitchListener'
+    import { TwitchPubSub } from '../../webhooks/TwitchListener'
 
     export default {
         props: {
@@ -53,7 +53,7 @@
 
         methods: {
             listenTwitchEvents() {
-                let tl = new TwitchListener('whispers', this.channelId, this.token);
+                let tl = new TwitchPubSub('whispers', this.channelId, this.token);
                 tl.connect();
             }
         },

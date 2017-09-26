@@ -25,7 +25,7 @@ Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue')
 Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
 
 import store from './vuex/store'
-import {TwitchListener} from "./webhooks/TwitchListener";
+import {TwitchPubSub} from "./webhooks/TwitchPubSub";
 
 const app = new Vue({
     el: '#app',
@@ -61,6 +61,16 @@ const app = new Vue({
                 console.log(error);
                 return null
             });
+        },
+        pubSubConnect() {
+            let topics = [
+                'whispers'
+            ];
+
+            setTimeout(() => {
+                let tl = new TwitchPubSub(topics, this.user.channel_id, this.user.access_token);
+                tl.connect();
+            }, 5000);
         }
     },
 
@@ -76,10 +86,6 @@ const app = new Vue({
     mounted() {
         this.getUser();
         this.getChannelData();
-
-        setTimeout(() => {
-            let tl = new TwitchListener('whispers', this.user.channel_id, this.user.access_token);
-            tl.connect();
-        }, 5000);
+        this.pubSubConnect();
     }
 });

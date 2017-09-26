@@ -828,52 +828,6 @@ function whisper(from, msg) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var disposed = false
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(54)
-/* template */
-var __vue_template__ = __webpack_require__(59)
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/widgets/Widget.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-31683ea0", Component.options)
-  } else {
-    hotAPI.reload("data-v-31683ea0", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
@@ -971,19 +925,65 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(59)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/widgets/Widget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Widget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-31683ea0", Component.options)
+  } else {
+    hotAPI.reload("data-v-31683ea0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(85)
+  __webpack_require__(79)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(87)
+var __vue_script__ = __webpack_require__(81)
 /* template */
-var __vue_template__ = __webpack_require__(89)
+var __vue_template__ = __webpack_require__(83)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -11548,7 +11548,7 @@ module.exports = Vue$3;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(115);
+module.exports = __webpack_require__(110);
 
 
 /***/ }),
@@ -11557,8 +11557,8 @@ module.exports = __webpack_require__(115);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(124);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -11581,9 +11581,9 @@ Vue.component('media-player-widget', __webpack_require__(61));
 Vue.component('stream-setup-widget', __webpack_require__(67));
 //Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
 
-Vue.component('add-song-modal', __webpack_require__(81));
-Vue.component('playlist-modal', __webpack_require__(91));
-Vue.component('reqplaylist-modal', __webpack_require__(96));
+Vue.component('add-song-modal', __webpack_require__(75));
+Vue.component('playlist-modal', __webpack_require__(85));
+Vue.component('reqplaylist-modal', __webpack_require__(90));
 
 
 
@@ -11626,6 +11626,16 @@ var app = new Vue({
                 console.log(error);
                 return null;
             });
+        },
+        pubSubConnect: function pubSubConnect() {
+            var _this3 = this;
+
+            var topics = ['whispers'];
+
+            setTimeout(function () {
+                var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__["a" /* TwitchPubSub */](topics, _this3.user.channel_id, _this3.user.access_token);
+                tl.connect();
+            }, 5000);
         }
     },
 
@@ -11639,15 +11649,9 @@ var app = new Vue({
     },
 
     mounted: function mounted() {
-        var _this3 = this;
-
         this.getUser();
         this.getChannelData();
-
-        setTimeout(function () {
-            var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchListener__["a" /* TwitchListener */]('whispers', _this3.user.channel_id, _this3.user.access_token);
-            tl.connect();
-        }, 5000);
+        this.pubSubConnect();
     }
 });
 
@@ -36697,7 +36701,7 @@ module.exports = __webpack_require__(25);
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(10);
 var Axios = __webpack_require__(27);
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(5);
 
 /**
  * Create an instance of Axios
@@ -36780,7 +36784,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(5);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(37);
 var dispatchRequest = __webpack_require__(38);
@@ -37502,7 +37506,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(39);
 var isCancel = __webpack_require__(13);
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(5);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -38166,7 +38170,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 //
 //
@@ -39024,7 +39028,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_alerts__ = __webpack_require__(4);
 //
@@ -39947,7 +39951,7 @@ exports.push([module.i, "\n.jarviswidget .widget-body.widget-hide-overflow {\n  
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_multiselect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_multiselect__);
@@ -40252,155 +40256,19 @@ if (false) {
 }
 
 /***/ }),
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchListener; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var TwitchListener = function () {
-    function TwitchListener(topic, channel_id, access_token) {
-        _classCallCheck(this, TwitchListener);
-
-        this.topic = topic;
-        this.channel_id = channel_id;
-        this.access_token = access_token;
-
-        this.ws = null;
-        this.data = null;
-    }
-
-    _createClass(TwitchListener, [{
-        key: "nonce",
-        value: function nonce(length) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < length; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        }
-    }, {
-        key: "heartbeat",
-        value: function heartbeat() {
-            var message = {
-                type: 'PING'
-            };
-
-            this.ws.send(JSON.stringify(message));
-        }
-    }, {
-        key: "listen",
-        value: function listen(topic) {
-            var message = {
-                type: 'LISTEN',
-                nonce: this.nonce(15),
-                data: {
-                    topics: [topic],
-                    auth_token: this.access_token
-                }
-            };
-
-            this.ws.send(JSON.stringify(message));
-        }
-    }, {
-        key: "connect",
-        value: function connect() {
-            var _this = this;
-
-            var heartbeatInterval = 1000 * 60; //ms between PING's
-            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
-            var heartbeatHandle = void 0;
-
-            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
-
-            this.ws.onopen = function (event) {
-                _this.listen(_this.topic + "." + _this.channel_id);
-                _this.heartbeat();
-                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
-                console.log("Listening to " + _this.topic + " with channel id " + _this.channel_id);
-
-                //alerts.success('Connected to wss://pubsub-edge.twitch.tv')
-            };
-
-            this.ws.onerror = function (error) {
-                console.error(error);
-                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error);
-            };
-
-            this.ws.onmessage = function (event) {
-                _this.data = JSON.parse(event.data);
-
-                if (_this.data.type === 'RECONNECT') {
-                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
-                    setTimeout(_this.connect(), reconnectInterval);
-                }
-
-                if (_this.data.type === 'MESSAGE') {
-                    //console.log(this.data);
-                    console.log(_this.data);
-
-                    var msg = _this.getDataObj().body;
-                    var from_id = _this.getDataObj().from_id;
-                    var from = _this.getDataObj().tags.display_name;
-
-                    if (from_id != _this.channel_id) {
-                        __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["d" /* whisper */](from, msg);
-                    }
-                }
-            };
-
-            this.ws.onclose = function () {
-                //console.log(`Closed connection to ${this.topic} with channel id ${this.channel_id}`);
-                clearInterval(heartbeatHandle);
-                setTimeout(_this.connect(), reconnectInterval);
-            };
-        }
-    }, {
-        key: "getDataObj",
-        value: function getDataObj() {
-            return JSON.parse(this.data.data.message).data_object;
-        }
-    }, {
-        key: "getWhisper",
-        value: function getWhisper() {
-            return this.getDataObj().body;
-        }
-    }, {
-        key: "getRecipient",
-        value: function getRecipient() {
-            return this.getDataObj().recipient.display_name;
-        }
-    }]);
-
-    return TwitchListener;
-}();
-
-/***/ }),
-/* 80 */,
-/* 81 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(82)
+  __webpack_require__(76)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(84)
+var __vue_script__ = __webpack_require__(78)
 /* template */
-var __vue_template__ = __webpack_require__(90)
+var __vue_template__ = __webpack_require__(84)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -40438,13 +40306,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 82 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(83);
+var content = __webpack_require__(77);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -40464,7 +40332,7 @@ if(false) {
 }
 
 /***/ }),
-/* 83 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -40478,7 +40346,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 84 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40605,13 +40473,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 85 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(86);
+var content = __webpack_require__(80);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -40631,7 +40499,7 @@ if(false) {
 }
 
 /***/ }),
-/* 86 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -40645,12 +40513,12 @@ exports.push([module.i, "\n.modal {\n    transition: all 0.3s ease;\n}\n.modal.i
 
 
 /***/ }),
-/* 87 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_utils_js__ = __webpack_require__(82);
 //
 //
 //
@@ -40762,7 +40630,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 88 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40965,7 +40833,7 @@ function VueFixer(vue) {
 }
 
 /***/ }),
-/* 89 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41087,7 +40955,7 @@ if (false) {
 }
 
 /***/ }),
-/* 90 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41206,19 +41074,19 @@ if (false) {
 }
 
 /***/ }),
-/* 91 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(92)
+  __webpack_require__(86)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(94)
+var __vue_script__ = __webpack_require__(88)
 /* template */
-var __vue_template__ = __webpack_require__(95)
+var __vue_template__ = __webpack_require__(89)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -41256,13 +41124,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 92 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(93);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41282,7 +41150,7 @@ if(false) {
 }
 
 /***/ }),
-/* 93 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -41296,7 +41164,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 94 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41421,7 +41289,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 95 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41546,19 +41414,19 @@ if (false) {
 }
 
 /***/ }),
-/* 96 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(97)
+  __webpack_require__(91)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(99)
+var __vue_script__ = __webpack_require__(93)
 /* template */
-var __vue_template__ = __webpack_require__(100)
+var __vue_template__ = __webpack_require__(94)
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -41596,13 +41464,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 97 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(98);
+var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -41622,7 +41490,7 @@ if(false) {
 }
 
 /***/ }),
-/* 98 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -41636,7 +41504,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 99 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41769,7 +41637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 100 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -41898,16 +41766,16 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Account_index__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Account_index__ = __webpack_require__(105);
 
 
 
@@ -41927,7 +41795,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 }));
 
 /***/ }),
-/* 102 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42821,13 +42689,13 @@ var index_esm = {
 
 
 /***/ }),
-/* 103 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(100);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -42870,7 +42738,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 104 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42884,7 +42752,7 @@ var UPDATE_SONG = 'UPDATE_SONG';
 var DELETE_SONG = 'DELETE_SONG';
 
 /***/ }),
-/* 105 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42895,7 +42763,7 @@ function getSongs(state) {
 }
 
 /***/ }),
-/* 106 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42922,13 +42790,13 @@ function deleteSong(context, id) {
 }
 
 /***/ }),
-/* 107 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(104);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -42971,7 +42839,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 108 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42985,7 +42853,7 @@ var UPDATE_REQSONG = 'UPDATE_REQSONG';
 var DELETE_REQSONG = 'DELETE_REQSONG';
 
 /***/ }),
-/* 109 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42996,7 +42864,7 @@ function getReqSongs(state) {
 }
 
 /***/ }),
-/* 110 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43023,13 +42891,13 @@ function deleteReqSong(context, id) {
 }
 
 /***/ }),
-/* 111 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(108);
 var _mutations;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -43057,7 +42925,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 });
 
 /***/ }),
-/* 112 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43067,7 +42935,7 @@ var SET_USER = 'SET_USER';
 var SET_CHANNEL = 'SET_CHANNEL';
 
 /***/ }),
-/* 113 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43093,7 +42961,7 @@ function getChannelId(state) {
 }
 
 /***/ }),
-/* 114 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43110,10 +42978,165 @@ function setChannel(context, channel) {
 }
 
 /***/ }),
-/* 115 */
+/* 109 */,
+/* 110 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchPubSub; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var TwitchPubSub = function () {
+    function TwitchPubSub(topics, channel_id, access_token) {
+        _classCallCheck(this, TwitchPubSub);
+
+        this.topics = topics;
+        this.channel_id = channel_id;
+        this.access_token = access_token;
+
+        this.ws = null;
+        this.data = null;
+    }
+
+    _createClass(TwitchPubSub, [{
+        key: "nonce",
+        value: function nonce(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        }
+    }, {
+        key: "heartbeat",
+        value: function heartbeat() {
+            var message = {
+                type: 'PING'
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "listen",
+        value: function listen(topic) {
+            var message = {
+                type: 'LISTEN',
+                nonce: this.nonce(15),
+                data: {
+                    topics: [topic],
+                    auth_token: this.access_token
+                }
+            };
+
+            this.ws.send(JSON.stringify(message));
+            console.log("Listening to " + topic + " with channel id " + this.channel_id);
+        }
+    }, {
+        key: "connect",
+        value: function connect() {
+            var _this = this;
+
+            var heartbeatInterval = 1000 * 45; //ms between PING's
+            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
+            var heartbeatHandle = void 0;
+
+            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
+
+            this.ws.onopen = function (event) {
+
+                _.forEach(_this.topics, function (topic) {
+                    _this.listen(topic + "." + _this.channel_id);
+                });
+
+                _this.heartbeat();
+                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
+            };
+
+            this.ws.onmessage = function (event) {
+                _this.data = JSON.parse(event.data);
+
+                if (_this.data.type === 'RECONNECT') {
+                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
+                    setTimeout(_this.connect(), reconnectInterval);
+                }
+
+                if (_this.data.type === 'MESSAGE') {
+
+                    switch (_this.getMessageData().type) {
+                        case 'whisper_received':
+                            _this.whisperReceived();
+                            break;
+                    }
+                }
+            };
+
+            this.ws.onclose = function () {
+                clearInterval(heartbeatHandle);
+                setTimeout(_this.connect(), reconnectInterval);
+            };
+
+            this.ws.onerror = function (error) {
+                console.error(error);
+                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error);
+            };
+        }
+    }, {
+        key: "whisperReceived",
+        value: function whisperReceived() {
+            var msg = this.getDataObj().body;
+            var from = this.getDataObj().tags.display_name;
+
+            __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["d" /* whisper */](from, msg);
+        }
+    }, {
+        key: "getMessageData",
+        value: function getMessageData() {
+            return JSON.parse(this.data.data.message);
+        }
+    }, {
+        key: "getDataObj",
+        value: function getDataObj() {
+            return this.getMessageData().data_object;
+        }
+    }, {
+        key: "getWhisper",
+        value: function getWhisper() {
+            return this.getDataObj().body;
+        }
+    }, {
+        key: "getRecipient",
+        value: function getRecipient() {
+            return this.getDataObj().recipient.display_name;
+        }
+    }]);
+
+    return TwitchPubSub;
+}();
 
 /***/ })
 /******/ ]);
