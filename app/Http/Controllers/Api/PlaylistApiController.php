@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Api;
 
+use Alaouy\Youtube\Youtube;
 use App\Http\Controllers\Controller;
 use App\Song;
 use App\Traits\HandlesApiRequests;
@@ -43,13 +44,19 @@ class PlaylistApiController extends Controller
     private $song;
 
     /**
+     * @var Youtube
+     */
+    private $youtube;
+
+    /**
      * Injects Playlist dependency.
      *
      * @param Song $playlist
      */
-    public function __construct(Song $song)
+    public function __construct(Song $song, Youtube $youtube)
     {
         $this->song = $song;
+        $this->youtube = $youtube;
     }
 
     /**

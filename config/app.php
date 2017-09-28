@@ -170,6 +170,7 @@ return [
         // Laravel\Socialite\SocialiteServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
         //Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
+        Alaouy\Youtube\YoutubeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -233,6 +234,7 @@ return [
 
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'TwitchApi' => Zarlach\TwitchApi\Facades\TwitchApiServiceFacade::class,
+        'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
     ],
 

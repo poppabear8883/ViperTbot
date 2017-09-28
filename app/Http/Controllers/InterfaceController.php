@@ -36,6 +36,7 @@ class InterfaceController extends Controller
      */
     public function index()
     {
+        //dd(\Youtube::getVideoInfo('bbEoRnaOIbs'));
         return view('pages.interface.index', $this->data());
     }
 

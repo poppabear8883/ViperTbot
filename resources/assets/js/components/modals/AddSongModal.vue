@@ -29,7 +29,6 @@
         <!-- custom buttons -->
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="cancelNew">Cancel</button>
-            <button type="button" class="btn btn-primary" @click="addNew">Add Song</button>
         </div>
     </modal>
 </template>
