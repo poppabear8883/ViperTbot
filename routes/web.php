@@ -48,4 +48,7 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
         Route::any('', 'TwitchApiController@api');
     });
 
+    Route::prefix('regulars')->group(function() {
+        Route::any('', 'RegularsApiController@api');
+    });
 });

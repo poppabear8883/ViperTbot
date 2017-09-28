@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(RequestedSong::class);
     }
+
+    public function regulars()
+    {
+        return $this->hasMany(Regular::class);
+    }
 }

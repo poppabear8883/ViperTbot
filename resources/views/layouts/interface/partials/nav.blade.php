@@ -81,7 +81,7 @@
                 </a>
                 <ul>
                     <li>
-                        <a href="#" data-toggle="modal" data-target="#AddRegularModal">Add New</a>
+                        <a href="#" @click.prevent="showAddRegularModal = true">Add New</a>
                     </li>
                 </ul>
             </li>

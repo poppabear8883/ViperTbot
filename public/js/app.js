@@ -11558,7 +11558,7 @@ module.exports = __webpack_require__(110);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(109);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -11579,11 +11579,12 @@ Vue.component('live-channels', __webpack_require__(44));
 Vue.component('twitch-chat-widget', __webpack_require__(50));
 Vue.component('media-player-widget', __webpack_require__(61));
 Vue.component('stream-setup-widget', __webpack_require__(67));
-//Vue.component('twitch-events-widget', require('./components/widgets/TwitchEventsWidget.vue'));
+Vue.component('playlist-widget', __webpack_require__(129));
 
 Vue.component('add-song-modal', __webpack_require__(75));
 Vue.component('playlist-modal', __webpack_require__(85));
 Vue.component('reqplaylist-modal', __webpack_require__(90));
+Vue.component('add-regular-modal', __webpack_require__(124));
 
 
 
@@ -11594,7 +11595,8 @@ var app = new Vue({
     data: {
         showAddSongModal: false,
         showPlaylistModal: false,
-        showReqPlaylistModal: false
+        showReqPlaylistModal: false,
+        showAddRegularModal: false
     },
     methods: {
         getChannelData: function getChannelData() {
@@ -40340,7 +40342,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40354,7 +40356,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
-//
 //
 //
 //
@@ -41047,16 +41048,6 @@ var render = function() {
               on: { click: _vm.cancelNew }
             },
             [_vm._v("Cancel")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { type: "button" },
-              on: { click: _vm.addNew }
-            },
-            [_vm._v("Add Song")]
           )
         ]
       )
@@ -42978,27 +42969,7 @@ function setChannel(context, channel) {
 }
 
 /***/ }),
-/* 109 */,
-/* 110 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43137,6 +43108,693 @@ var TwitchPubSub = function () {
 
     return TwitchPubSub;
 }();
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(125)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(127)
+/* template */
+var __vue_template__ = __webpack_require__(128)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/modals/AddRegularModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] AddRegularModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-390b0156", Component.options)
+  } else {
+    hotAPI.reload("data-v-390b0156", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(126);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("6281167e", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-390b0156\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddRegularModal.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-390b0156\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddRegularModal.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    props: ['show'],
+
+    data: function data() {
+        return {
+            formModel: {
+                name: ''
+            }
+        };
+    },
+
+
+    components: {
+        Modal: __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default.a
+    },
+
+    methods: {
+        addNew: function addNew(e) {
+            var _this = this;
+
+            if (e) e.preventDefault();
+
+            axios.post('/api/regulars', {
+                'action': 'create',
+                'params': this.formModel
+            }).then(function (response) {
+
+                _this.$store.commit('ADD_REGULAR', response.data);
+
+                _this.$emit('closed', _this.show);
+                _this.clearFields();
+
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('Successfully Added ' + formModel.name + '!');
+            }, function (error) {
+                console.log(error);
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](error);
+                _this.$emit('closed', _this.show);
+                _this.clearFields();
+            });
+        },
+        cancelNew: function cancelNew(e) {
+            this.clearFields();
+            this.$emit('closed', this.show);
+        },
+        clearFields: function clearFields() {
+            for (var item in this.formModel) {
+                this.formModel[item] = '';
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "modal",
+    {
+      attrs: { effect: "fade", value: _vm.show },
+      on: {
+        closed: function($event) {
+          _vm.$emit("closed")
+        }
+      }
+    },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "modal-header",
+          attrs: { slot: "modal-header" },
+          slot: "modal-header"
+        },
+        [
+          _c("h4", { staticClass: "modal-title" }, [
+            _c("i", [_vm._v("Add A Regular")])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("form", [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-12" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.formModel.name,
+                    expression: "formModel.name"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  placeholder: "Twitch Name ...",
+                  required: ""
+                },
+                domProps: { value: _vm.formModel.name },
+                on: {
+                  keydown: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13)
+                    ) {
+                      return null
+                    }
+                    $event.preventDefault()
+                    _vm.addNew()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.formModel.name = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal-footer",
+          attrs: { slot: "modal-footer" },
+          slot: "modal-footer"
+        },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-default",
+              attrs: { type: "button" },
+              on: { click: _vm.cancelNew }
+            },
+            [_vm._v("Cancel")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button" },
+              on: { click: _vm.addNew }
+            },
+            [_vm._v("Add")]
+          )
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-390b0156", module.exports)
+  }
+}
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(130)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(132)
+/* template */
+var __vue_template__ = __webpack_require__(133)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/widgets/PlaylistWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PlaylistWidget.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-dccee7bc", Component.options)
+  } else {
+    hotAPI.reload("data-v-dccee7bc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(131);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("71256da5", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dccee7bc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PlaylistWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-dccee7bc\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PlaylistWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 132 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    components: {
+        Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
+    },
+
+    data: function data() {
+        return {
+            formModel: {
+                title: '',
+                video_id: ''
+            }
+        };
+    },
+
+    methods: {
+        addNew: function addNew(e) {
+            var _this = this;
+
+            if (e) e.preventDefault();
+
+            var parse = this.youtubeParser(this.formModel.video_id);
+
+            if (parse) {
+                this.formModel.video_id = parse;
+            }
+
+            axios.post('/api/playlist', {
+                'action': 'create',
+                'params': {
+                    'video_id': this.formModel.video_id
+                }
+            }).then(function (response) {
+
+                _this.$store.commit('ADD_SONG', response.data);
+
+                _this.clearFields();
+
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('You have successfully added a new song to playlist!');
+            }, function (response) {
+                console.error('-- ERROR -- ');
+                console.log(response);
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+
+                _this.clearFields();
+            });
+        },
+        youtubeParser: function youtubeParser(url) {
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            return match && match[7].length === 11 ? match[7] : false;
+        },
+        clearFields: function clearFields() {
+            for (var item in this.formModel) {
+                this.formModel[item] = '';
+            }
+        },
+        showPlaylist: function showPlaylist() {
+            this.$root.showPlaylistModal = true;
+        }
+    },
+    computed: {},
+    created: function created() {}
+});
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("widget", { attrs: { "wid-id": "68244", fullscreen: true } }, [
+    _c("div", { attrs: { slot: "title" }, slot: "title" }, [
+      _vm._v("Playlist")
+    ]),
+    _vm._v(" "),
+    _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+      _c("i", { staticClass: "fa fa-music txt-color-white" })
+    ]),
+    _vm._v(" "),
+    _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
+    _vm._v(" "),
+    _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+      _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
+        _c(
+          "button",
+          { staticClass: "close", attrs: { "data-dismiss": "alert" } },
+          [_vm._v("\n                ×\n            ")]
+        ),
+        _vm._v(" "),
+        _c("i", { staticClass: "fa-fw fa fa-info" }),
+        _vm._v("\n            Playlist Widget v1.0 Beta\n        ")
+      ]),
+      _vm._v(" "),
+      _c("form", { staticClass: "smart-form" }, [
+        _c("header", [_vm._v("\n                Playlist\n            ")]),
+        _vm._v(" "),
+        _c("fieldset", [
+          _c("section", [
+            _c("label", { staticClass: "input" }, [
+              _c("i", { staticClass: "icon-append fa fa-youtube" }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.formModel.video_id,
+                    expression: "formModel.video_id"
+                  }
+                ],
+                attrs: { type: "text", placeholder: "YouTube ID or URL ..." },
+                domProps: { value: _vm.formModel.video_id },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.formModel.video_id = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("b", { staticClass: "tooltip tooltip-bottom-right" }, [
+                _vm._v(
+                  "\n                            YouTube ID or URL ...\n                        "
+                )
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("footer", [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-default",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.showPlaylist()
+                }
+              }
+            },
+            [
+              _c("i", { staticClass: "fa fa-music" }),
+              _vm._v("\n                    Playlist\n                ")
+            ]
+          ),
+          _vm._v(" "),
+          _vm.formModel.video_id != ""
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.addNew()
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-plus" }),
+                  _vm._v("\n                    Add\n                ")
+                ]
+              )
+            : _vm._e()
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-dccee7bc", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
