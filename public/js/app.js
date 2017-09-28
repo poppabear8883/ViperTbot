@@ -38897,7 +38897,9 @@ var render = function() {
         _vm._v("Twitch Chat")
       ]),
       _vm._v(" "),
-      _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
+      _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+        _c("i", { staticClass: "fa fa-comments txt-color-white" })
+      ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
       _vm._v(" "),
@@ -40139,7 +40141,9 @@ var render = function() {
       _vm._v("Stream Setup")
     ]),
     _vm._v(" "),
-    _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
+    _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+      _c("i", { staticClass: "fa fa-cogs txt-color-white" })
+    ]),
     _vm._v(" "),
     _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
     _vm._v(" "),

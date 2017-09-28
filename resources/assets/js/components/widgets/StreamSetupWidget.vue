@@ -5,7 +5,7 @@
         <div slot="title">Stream Setup</div>
 
         <div slot="icon">
-            <!-- add a icon example: <i class="fa fa-comments txt-color-white"></i> -->
+            <i class="fa fa-cogs txt-color-white"></i>
         </div>
 
         <div slot="toolbars">
