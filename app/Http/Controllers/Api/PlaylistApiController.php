@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Api;
 
-use Alaouy\Youtube\Youtube;
+use Alaouy\Youtube\Facades\Youtube;
 use App\Http\Controllers\Controller;
 use App\Song;
 use App\Traits\HandlesApiRequests;
@@ -43,20 +43,15 @@ class PlaylistApiController extends Controller
      */
     private $song;
 
-    /**
-     * @var Youtube
-     */
-    private $youtube;
 
     /**
      * Injects Playlist dependency.
      *
      * @param Song $playlist
      */
-    public function __construct(Song $song, Youtube $youtube)
+    public function __construct(Song $song)
     {
         $this->song = $song;
-        $this->youtube = $youtube;
     }
 
     /**
@@ -85,8 +80,17 @@ class PlaylistApiController extends Controller
             ], 422);
         }
 
+        $video = Youtube::getVideoInfo($params['video_id']);
+
+        if (!$video) {
+            return response([
+                'errors' => 'Invalid video id: ' . $params['video_id']
+            ], 422);
+        }
+
         $song = $this->song->create([
             'video_id' => $params['video_id'],
+            'title' => $video->snippet->title,
             'user_id' => Auth::user()->id
         ]);
 

@@ -10,5 +10,5 @@
 */
 
 return [
-    'key' => env('YOUTUBE_KEY', null)
+    'key' => env('YOUTUBE_KEY', '')
 ];
