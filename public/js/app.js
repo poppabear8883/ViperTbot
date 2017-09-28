@@ -37986,7 +37986,7 @@ var render = function() {
       "span",
       { staticClass: "activity-dropdown", attrs: { id: "activity" } },
       [
-        _c("i", { staticClass: "fa fa-user" }),
+        _c("i", { staticClass: "fa fa-twitch" }),
         _vm._v(" "),
         _c("b", { class: ["badge", { "bg-color-red": _vm.total > 0 }] }, [
           _vm._v(" " + _vm._s(_vm.total) + " ")
@@ -39638,7 +39638,9 @@ var render = function() {
         _vm._v("\n        Media Player\n    ")
       ]),
       _vm._v(" "),
-      _c("div", { attrs: { slot: "icon" }, slot: "icon" }),
+      _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+        _c("i", { staticClass: "fa fa-music txt-color-white" })
+      ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }, [
         _c("div", { staticClass: "widget-toolbar", attrs: { role: "menu" } }, [

@@ -3,7 +3,7 @@
         <!-- Note: The activity badge color changes when clicked and resets the number to 0
              Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
         <span id="activity" class="activity-dropdown">
-            <i class="fa fa-user"></i>
+            <i class="fa fa-twitch"></i>
             <b :class="['badge', {'bg-color-red': total > 0}]"> {{ total }} </b>
         </span>
 
