@@ -4,7 +4,7 @@
             :fullscreen="true">
         <div slot="title">Twitch Chat</div>
         <div slot="icon">
-            <!-- add a icon example: <i class="fa fa-comments txt-color-white"></i> -->
+            <i class="fa fa-comments txt-color-white"></i>
         </div>
 
         <div slot="toolbars">
