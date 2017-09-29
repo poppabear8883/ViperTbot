@@ -23,43 +23,64 @@
                 Playlist Widget v1.0 Beta
             </div>
 
-            <form class="smart-form">
-                <header>
-                    Playlist
-                </header>
+            <div class="widget-body-toolbar">
 
-                <fieldset>
-                    <section>
-                        <label class="input">
-                            <i class="icon-append fa fa-youtube"></i>
+                <div class="row">
+
+                    <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-youtube"></i>
+                            </span>
 
                             <input type="text"
+                                   class="form-control"
                                    v-model="formModel.video_id"
-                                   placeholder="YouTube ID or URL ...">
+                                   placeholder="YouTube ID or URL ...">                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
 
-                            <b class="tooltip tooltip-bottom-right">
-                                YouTube ID or URL ...
-                            </b>
-                        </label>
-                    </section>
-                </fieldset>
+                        <button v-if="formModel.video_id != ''"
+                                @click.prevent="addNew()"
+                                class="btn btn-success">
 
-                <footer>
-                    <button @click.prevent="showPlaylist()" class="btn btn-default">
-                        <i class="fa fa-music"></i>
-                        Playlist
-                    </button>
-                    <button v-if="formModel.video_id != ''" @click.prevent="addNew()" class="btn btn-primary">
-                        <i class="fa fa-plus"></i>
-                        Add
-                    </button>
-                </footer>
+                            <i class="fa fa-plus"></i>
+                            <span class="hidden-mobile">Add Song</span>
+                        </button>
 
-            </form>
+                    </div>
 
-        </div>
+                </div>
 
-        <!-- end body -->
+            </div>
+
+            <div class="custom-scroll table-responsive" style="height:200px; overflow-y: scroll;">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="song in songs">
+                        <td>{{song.title}}</td>
+                        <td>
+                            <button class="btn btn-danger btn-xs">x</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer>
+
+            </footer>
+
+        </div> <!-- end body -->
     </widget>
 </template>
 
@@ -131,7 +152,9 @@
 
         },
         computed: {
-
+            songs() {
+                return this.$store.getters.getSongs;
+            }
         },
         created() {
 

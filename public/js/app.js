@@ -40433,7 +40433,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40447,6 +40447,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -40577,7 +40598,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$root.showPlaylistModal = true;
         }
     },
-    computed: {},
+    computed: {
+        songs: function songs() {
+            return this.$store.getters.getSongs;
+        }
+    },
     created: function created() {}
 });
 
@@ -40612,13 +40637,13 @@ var render = function() {
         _vm._v("\n            Playlist Widget v1.0 Beta\n        ")
       ]),
       _vm._v(" "),
-      _c("form", { staticClass: "smart-form" }, [
-        _c("header", [_vm._v("\n                Playlist\n            ")]),
-        _vm._v(" "),
-        _c("fieldset", [
-          _c("section", [
-            _c("label", { staticClass: "input" }, [
-              _c("i", { staticClass: "icon-append fa fa-youtube" }),
+      _c("div", { staticClass: "widget-body-toolbar" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-xs-9 col-sm-5 col-md-5 col-lg-5" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("span", { staticClass: "input-group-addon" }, [
+                _c("i", { staticClass: "fa fa-youtube" })
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -40629,6 +40654,7 @@ var render = function() {
                     expression: "formModel.video_id"
                   }
                 ],
+                staticClass: "form-control",
                 attrs: { type: "text", placeholder: "YouTube ID or URL ..." },
                 domProps: { value: _vm.formModel.video_id },
                 on: {
@@ -40639,55 +40665,71 @@ var render = function() {
                     _vm.formModel.video_id = $event.target.value
                   }
                 }
-              }),
-              _vm._v(" "),
-              _c("b", { staticClass: "tooltip tooltip-bottom-right" }, [
-                _vm._v(
-                  "\n                            YouTube ID or URL ...\n                        "
-                )
-              ])
+              })
             ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("footer", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-default",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.showPlaylist()
-                }
-              }
-            },
-            [
-              _c("i", { staticClass: "fa fa-music" }),
-              _vm._v("\n                    Playlist\n                ")
-            ]
-          ),
+          ]),
           _vm._v(" "),
-          _vm.formModel.video_id != ""
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.addNew()
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-plus" }),
-                  _vm._v("\n                    Add\n                ")
-                ]
-              )
-            : _vm._e()
+          _c(
+            "div",
+            { staticClass: "col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right" },
+            [
+              _vm.formModel.video_id != ""
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.addNew()
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus" }),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "hidden-mobile" }, [
+                        _vm._v("Add Song")
+                      ])
+                    ]
+                  )
+                : _vm._e()
+            ]
+          )
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "custom-scroll table-responsive",
+          staticStyle: { height: "200px", "overflow-y": "scroll" }
+        },
+        [
+          _c("table", { staticClass: "table table-bordered table-striped" }, [
+            _c("thead", [
+              _c("tr", [_c("th", [_vm._v("Title")]), _vm._v(" "), _c("th")])
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.songs, function(song) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(song.title))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("button", { staticClass: "btn btn-danger btn-xs" }, [
+                      _vm._v("x")
+                    ])
+                  ])
+                ])
+              })
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("footer")
     ])
   ])
 }
