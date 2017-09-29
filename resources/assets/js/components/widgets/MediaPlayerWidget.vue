@@ -128,7 +128,6 @@
                 this.initialize()
             },
             initialize() {
-                this.updatePlaylist();
 
                 if (this.firstLoad) {
                     this.player.stopVideo();
@@ -146,7 +145,6 @@
             },
             playing(player) {
                 //console.log('playing')
-                this.updatePlaylist()
             },
             paused(player) {
                 //console.log('paused')
@@ -248,67 +246,11 @@
             },
             updateVideo(item) {
                 this.videoId = '';
-                this.videoId = item.video_id
+                this.videoId = item.video_id;
+                this.title = item.title;
             },
-            updatePlaylist() {
-                let item = this.listItem;
-
-                if (item.title === "") {
-                    this.title = this.player.getVideoData().title;
-
-                    let url;
-
-                    if (!this.isReq) {
-                        url = window.location.origin + '/api/playlist'
-                    } else {
-                        url = window.location.origin + '/api/reqplaylist'
-                    }
-
-                    let params = {
-                        'video_id': this.videoId,
-                        'title': this.title
-                    };
-
-                    axios.patch(url, {
-                        'action': 'updateTitle',
-                        'params': params
-                    }).then(function (response) {
-                        item.title = this.title;
-                        console.log('Updated Title:' + this.title);
-
-                        /*if (!this.isReq) {
-                            this.updatePlaylistTitle(item.id, this.title)
-                        } else {
-                            this.updateReqPlaylistTitle(item.id, this.title)
-                        }*/
-                    }.bind(this)).catch(function (response) {
-                        $.bigBox({
-                            title: '!ERROR!',
-                            content: response,
-                            color: 'danger',
-                            icon: 'fa fa-warning shake animated',
-                            number: 1,
-                            timeout: 6000
-                        });
-                    });
-
-
-                } else {
-                    this.title = item.title
-                }
-            }
         },
         created() {
-            //let socket = new WebSocket("ws://162.243.241.68:8000/songrequest/");
-
-            /*socket.onmessage = function (e) {
-                this.lines.push(e.data);
-                this.$nextTick(function () {
-                    if (this.autoScroll) {
-                        this.container.scrollTop = this.container.scrollHeight;
-                    }
-                });
-            }.bind(this);*/
 
             setTimeout(function () {
                 if (this.playlist) {
@@ -319,8 +261,6 @@
                     } else {
                         this.listEmpty = true
                     }
-                } else {
-                    //AlertError('Playlist timed out ...')
                 }
             }.bind(this), 1000)
         }
