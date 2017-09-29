@@ -94,6 +94,14 @@
             }
         },
         computed: {
+            /**
+             * Vuex Getters
+             *
+             * playlist: '../../vuex/Songs'
+             * reqplaylist: '../../vuex/RequestedSongs'
+             *
+             * todo: combine these 2 modules into a single module
+             */
             playlist() {
                 return this.$store.getters.getSongs;
             },
@@ -102,11 +110,21 @@
             }
         },
         watch: {
-            playlist: function (playlist) {
+            /**
+             * Watch the Playlist for changes and update or playlist items.
+             *
+             * We use this to let the player know when to stop playing!
+             *
+             * @param playlist
+             *
+             * todo: is this all necessary ?
+             */
+            playlist: (playlist) => {
                 this.listCopy = [];
-                _(playlist).forEach(function (item) {
+
+                _(playlist).forEach((item) => {
                     this.listCopy.push(item)
-                }.bind(this));
+                });
 
                 if (this.listEmpty) {
                     this.listEmpty = false;
@@ -123,10 +141,19 @@
             Widget
         },
         methods: {
+            /**
+             * This fires when the this component is ready!
+             *
+             * @param player
+             */
             ready(player) {
                 this.player = player;
                 this.initialize()
             },
+
+            /**
+             * Some initialization
+             */
             initialize() {
 
                 if (this.firstLoad) {
@@ -143,18 +170,50 @@
                     this.updateProgressBar();
                 }.bind(this), 1000)
             },
+
+            /**
+             * Playing event
+             *
+             * @param player
+             */
             playing(player) {
                 //console.log('playing')
             },
+
+            /**
+             * Paused event
+             *
+             * @param player
+             */
             paused(player) {
                 //console.log('paused')
             },
+
+            /**
+             * Buffering event
+             *
+             * @param player
+             */
             buffering(player) {
                 //console.log('buffering')
             },
+
+            /**
+             * Queued event
+             *
+             * @param player
+             */
             queued(player) {
                 //console.log('queued')
             },
+
+            /**
+             * Ended event
+             *
+             * After the current song ends, we look for the next song.
+             *
+             * @param player
+             */
             ended(player) {
                 if (this.isReq) {
                     this.removeReq()
@@ -164,9 +223,19 @@
                     this.next(true)
                 }.bind(this), 300);
             },
+
+            /**
+             * Play the current videoId
+             */
             play() {
                 this.player.playVideo()
             },
+
+            /**
+             * Process the next song to play.
+             *
+             * @param ended
+             */
             next(ended = false) {
                 let item;
 
@@ -182,13 +251,25 @@
 
                 this.updateVideo(item);
             },
+
+            /**
+             * Stop the player
+             */
             stop() {
                 this.player.stopVideo();
                 this.progress = 0
             },
+
+            /**
+             * Pause the player
+             */
             pause() {
                 this.player.pauseVideo()
             },
+
+            /**
+             * Removes the song from the requested playlist
+             */
             removeReq() {
                 axios.delete('/api/reqplaylist', {
                     data: {
@@ -203,11 +284,22 @@
                     alerts.error(response)
                 });
             },
+
+            /**
+             * Updates times for progress bar
+             */
             updateTimerDisplay() {
                 // Update current time text display.
                 this.formatTime(this.player.getCurrentTime());
                 this.formatTime(this.player.getDuration());
             },
+
+            /**
+             * Formats Times to friendly readable
+             *
+             * @param time
+             * @returns {string}
+             */
             formatTime(time) {
                 time = Math.round(time);
 
@@ -218,15 +310,33 @@
 
                 return minutes + ":" + seconds;
             },
+
+            /**
+             * Updates the progress bar
+             */
             updateProgressBar(){
                 this.progress = (this.player.getCurrentTime() / this.player.getDuration()) * 100;
             },
+
+            /**
+             * Gets the next requested song.
+             *
+             * Always pulls from most recently added.
+             *
+             * @returns {*}
+             */
             getReqItem() {
                 console.log('Is Request');
                 this.isReq = true;
                 this.listItem = this.reqplaylist[0];
                 return this.listItem
             },
+
+            /**
+             * Gets a random song from the playlist.
+             *
+             * @returns {*}
+             */
             getRandomItem() {
                 this.isReq = false;
 
@@ -244,15 +354,28 @@
 
                 return this.listItem
             },
+
+            /**
+             * Updates video information.
+             *
+             * @param item
+             */
             updateVideo(item) {
                 this.videoId = '';
                 this.videoId = item.video_id;
                 this.title = item.title;
             },
         },
+
+        /**
+         * This fires when the component is created.
+         */
         created() {
 
-            setTimeout(function () {
+            /**
+             * If we have songs, lets go ahead and process a song to be played.
+             */
+            setTimeout(() => {
                 if (this.playlist) {
                     if (this.playlist.length > 0) {
                         this.listReady = true;
@@ -262,7 +385,8 @@
                         this.listEmpty = true
                     }
                 }
-            }.bind(this), 1000)
+            }, 1000); // end timeout
+
         }
     }
 </script>
