@@ -40,7 +40,7 @@ export class TwitchPubSub {
         };
 
         this.ws.send(JSON.stringify(message));
-        console.log(`Listening to ${topic} with channel id ${this.channel_id}`);
+        console.log(`Listening on ${topic}`);
     }
 
     connect() {

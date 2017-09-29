@@ -39019,7 +39019,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -39035,6 +39035,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_alerts__ = __webpack_require__(4);
+var _this = this;
+
 //
 //
 //
@@ -39132,6 +39134,14 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
     },
 
     computed: {
+        /**
+         * Vuex Getters
+         *
+         * playlist: '../../vuex/Songs'
+         * reqplaylist: '../../vuex/RequestedSongs'
+         *
+         * todo: combine these 2 modules into a single module
+         */
         playlist: function playlist() {
             return this.$store.getters.getSongs;
         },
@@ -39140,20 +39150,30 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
         }
     },
     watch: {
+        /**
+         * Watch the Playlist for changes and update or playlist items.
+         *
+         * We use this to let the player know when to stop playing!
+         *
+         * @param playlist
+         *
+         * todo: is this all necessary ?
+         */
         playlist: function playlist(_playlist) {
-            this.listCopy = [];
-            _(_playlist).forEach(function (item) {
-                this.listCopy.push(item);
-            }.bind(this));
+            _this.listCopy = [];
 
-            if (this.listEmpty) {
-                this.listEmpty = false;
-                this.listReady = true;
-                var item = this.getRandomItem();
-                this.updateVideo(item);
+            _(_playlist).forEach(function (item) {
+                _this.listCopy.push(item);
+            });
+
+            if (_this.listEmpty) {
+                _this.listEmpty = false;
+                _this.listReady = true;
+                var item = _this.getRandomItem();
+                _this.updateVideo(item);
             } else if (_playlist.length <= 0) {
-                this.listEmpty = true;
-                this.listReady = false;
+                _this.listEmpty = true;
+                _this.listReady = false;
             }
         }
     },
@@ -39161,10 +39181,20 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
         Widget: __WEBPACK_IMPORTED_MODULE_1__Widget_vue___default.a
     },
     methods: {
+        /**
+         * This fires when the this component is ready!
+         *
+         * @param player
+         */
         ready: function ready(player) {
             this.player = player;
             this.initialize();
         },
+
+
+        /**
+         * Some initialization
+         */
         initialize: function initialize() {
 
             if (this.firstLoad) {
@@ -39181,18 +39211,55 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
                 this.updateProgressBar();
             }.bind(this), 1000);
         },
+
+
+        /**
+         * Playing event
+         *
+         * @param player
+         */
         playing: function playing(player) {
             //console.log('playing')
         },
+
+
+        /**
+         * Paused event
+         *
+         * @param player
+         */
         paused: function paused(player) {
             //console.log('paused')
         },
+
+
+        /**
+         * Buffering event
+         *
+         * @param player
+         */
         buffering: function buffering(player) {
             //console.log('buffering')
         },
+
+
+        /**
+         * Queued event
+         *
+         * @param player
+         */
         queued: function queued(player) {
             //console.log('queued')
         },
+
+
+        /**
+         * Ended event
+         *
+         * After the current song ends, we look for the next song.
+         *
+         * @param player
+         */
         ended: function ended(player) {
             if (this.isReq) {
                 this.removeReq();
@@ -39202,9 +39269,21 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
                 this.next(true);
             }.bind(this), 300);
         },
+
+
+        /**
+         * Play the current videoId
+         */
         play: function play() {
             this.player.playVideo();
         },
+
+
+        /**
+         * Process the next song to play.
+         *
+         * @param ended
+         */
         next: function next() {
             var ended = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -39222,13 +39301,28 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
 
             this.updateVideo(item);
         },
+
+
+        /**
+         * Stop the player
+         */
         stop: function stop() {
             this.player.stopVideo();
             this.progress = 0;
         },
+
+
+        /**
+         * Pause the player
+         */
         pause: function pause() {
             this.player.pauseVideo();
         },
+
+
+        /**
+         * Removes the song from the requested playlist
+         */
         removeReq: function removeReq() {
             axios.delete('/api/reqplaylist', {
                 data: {
@@ -39243,11 +39337,24 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
                 __WEBPACK_IMPORTED_MODULE_2__utils_alerts__["b" /* error */](response);
             });
         },
+
+
+        /**
+         * Updates times for progress bar
+         */
         updateTimerDisplay: function updateTimerDisplay() {
             // Update current time text display.
             this.formatTime(this.player.getCurrentTime());
             this.formatTime(this.player.getDuration());
         },
+
+
+        /**
+         * Formats Times to friendly readable
+         *
+         * @param time
+         * @returns {string}
+         */
         formatTime: function formatTime(time) {
             time = Math.round(time);
 
@@ -39258,15 +39365,36 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
 
             return minutes + ":" + seconds;
         },
+
+
+        /**
+         * Updates the progress bar
+         */
         updateProgressBar: function updateProgressBar() {
             this.progress = this.player.getCurrentTime() / this.player.getDuration() * 100;
         },
+
+
+        /**
+         * Gets the next requested song.
+         *
+         * Always pulls from most recently added.
+         *
+         * @returns {*}
+         */
         getReqItem: function getReqItem() {
             console.log('Is Request');
             this.isReq = true;
             this.listItem = this.reqplaylist[0];
             return this.listItem;
         },
+
+
+        /**
+         * Gets a random song from the playlist.
+         *
+         * @returns {*}
+         */
         getRandomItem: function getRandomItem() {
             this.isReq = false;
 
@@ -39284,25 +39412,40 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
 
             return this.listItem;
         },
+
+
+        /**
+         * Updates video information.
+         *
+         * @param item
+         */
         updateVideo: function updateVideo(item) {
             this.videoId = '';
             this.videoId = item.video_id;
             this.title = item.title;
         }
     },
-    created: function created() {
 
+    /**
+     * This fires when the component is created.
+     */
+    created: function created() {
+        var _this2 = this;
+
+        /**
+         * If we have songs, lets go ahead and process a song to be played.
+         */
         setTimeout(function () {
-            if (this.playlist) {
-                if (this.playlist.length > 0) {
-                    this.listReady = true;
-                    var item = this.getRandomItem();
-                    this.updateVideo(item);
+            if (_this2.playlist) {
+                if (_this2.playlist.length > 0) {
+                    _this2.listReady = true;
+                    var item = _this2.getRandomItem();
+                    _this2.updateVideo(item);
                 } else {
-                    this.listEmpty = true;
+                    _this2.listEmpty = true;
                 }
             }
-        }.bind(this), 1000);
+        }, 1000); // end timeout
     }
 });
 
@@ -43641,7 +43784,7 @@ var TwitchPubSub = function () {
             };
 
             this.ws.send(JSON.stringify(message));
-            console.log("Listening to " + topic + " with channel id " + this.channel_id);
+            console.log("Listening on " + topic);
         }
     }, {
         key: "connect",
