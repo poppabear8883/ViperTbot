@@ -40,6 +40,7 @@
 <script>
     import Modal from './Modal.vue'
     import * as alerts from '../../utils/alerts'
+    import { youtubeParser } from '../../utils/youtube'
 
     export default {
 
@@ -62,7 +63,7 @@
 
             addNew(e) {
                 if (e) e.preventDefault();
-                let parse = this.youtubeParser(this.formModel.video_id);
+                let parse = youtubeParser(this.formModel.video_id);
 
                 if (parse) {
                     this.formModel.video_id = parse

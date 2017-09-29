@@ -72,7 +72,6 @@
                     </tr>
                     </tbody>
                 </table>
-
             </div>
 
             <!-- FOOTER -->
@@ -87,6 +86,7 @@
 <script>
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
+    import { youtubeParser } from '../../utils/youtube'
 
     export default{
 
@@ -106,7 +106,7 @@
             addNew(e) {
                 if (e) e.preventDefault();
 
-                let parse = this.youtubeParser(this.formModel.video_id);
+                let parse = youtubeParser(this.formModel.video_id);
 
                 if (parse) {
                     this.formModel.video_id = parse
@@ -132,12 +132,6 @@
 
                     this.clearFields();
                 });
-            },
-
-            youtubeParser(url) {
-                let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-                let match = url.match(regExp);
-                return (match && match[7].length === 11) ? match[7] : false;
             },
 
             clearFields() {
