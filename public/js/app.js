@@ -40433,7 +40433,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40447,6 +40447,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_youtube__ = __webpack_require__(134);
 //
 //
 //
@@ -40532,7 +40533,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
+
 
 
 
@@ -40558,7 +40559,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             if (e) e.preventDefault();
 
-            var parse = this.youtubeParser(this.formModel.video_id);
+            var parse = Object(__WEBPACK_IMPORTED_MODULE_2__utils_youtube__["a" /* youtubeParser */])(this.formModel.video_id);
 
             if (parse) {
                 this.formModel.video_id = parse;
@@ -40583,11 +40584,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.clearFields();
             });
-        },
-        youtubeParser: function youtubeParser(url) {
-            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            return match && match[7].length === 11 ? match[7] : false;
         },
         clearFields: function clearFields() {
             for (var item in this.formModel) {
@@ -40639,7 +40635,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "widget-body-toolbar" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-xs-9 col-sm-5 col-md-5 col-lg-5" }, [
+          _c("div", { staticClass: "col-xs-9 col-sm-8 col-md-8 col-lg-8" }, [
             _c("div", { staticClass: "input-group" }, [
               _c("span", { staticClass: "input-group-addon" }, [
                 _c("i", { staticClass: "fa fa-youtube" })
@@ -40671,7 +40667,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right" },
+            { staticClass: "col-xs-3 col-sm-4 col-md-4 col-lg-4 text-right" },
             [
               _vm.formModel.video_id != ""
                 ? _c(
@@ -40842,6 +40838,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_youtube__ = __webpack_require__(134);
 //
 //
 //
@@ -40881,6 +40878,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -40908,7 +40906,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             if (e) e.preventDefault();
-            var parse = this.youtubeParser(this.formModel.video_id);
+            var parse = Object(__WEBPACK_IMPORTED_MODULE_2__utils_youtube__["a" /* youtubeParser */])(this.formModel.video_id);
 
             if (parse) {
                 this.formModel.video_id = parse;
@@ -43915,6 +43913,31 @@ var TwitchPubSub = function () {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = youtubeParser;
+function youtubeParser(url) {
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return match && match[7].length === 11 ? match[7] : false;
+}
 
 /***/ })
 /******/ ]);
