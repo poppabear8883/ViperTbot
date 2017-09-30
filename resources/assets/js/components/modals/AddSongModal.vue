@@ -76,13 +76,7 @@
                     }
                 }).then((response) => {
 
-                    $.smallBox({
-                        title: 'Success',
-                        content: 'You have successfully added a new song to playlist!',
-                        color: '#739E73',
-                        iconSmall: 'fa fa-thumbs-up bounce animated',
-                        timeout: 4000
-                    });
+                    alerts.success('You have successfully added a new song to playlist!');
 
                     this.$store.commit('ADD_SONG', response.data);
 
@@ -97,12 +91,6 @@
                     this.$emit('closed', this.show);
                     this.clearFields();
                 });
-            },
-
-            youtubeParser(url) {
-                let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-                let match = url.match(regExp);
-                return (match && match[7].length === 11) ? match[7] : false;
             },
 
             cancelNew(e) {

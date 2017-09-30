@@ -57,11 +57,11 @@
             </div>
             <div v-if="listEmpty" class="text-center">
                 <h1>Playlist is empty</h1>
-                <button class="btn btn-labeled btn-success" data-toggle="modal" data-target="#AddSongModal">
+                <button class="btn btn-labeled btn-primary" @click="showAddSongModal()">
                     <span class="btn-label">
                         <i class="fa fa-plus"></i>
                     </span>
-                    Add First Song
+                    Add Song
                 </button>
             </div>
         </div>
@@ -109,40 +109,12 @@
                 return this.$store.getters.getReqSongs;
             }
         },
-        watch: {
-            /**
-             * Watch the Playlist for changes and update or playlist items.
-             *
-             * We use this to let the player know when to stop playing!
-             *
-             * @param playlist
-             *
-             * todo: is this all necessary ?
-             */
-            playlist: (playlist) => {
-                this.listCopy = [];
-
-                _(playlist).forEach((item) => {
-                    this.listCopy.push(item)
-                });
-
-                if (this.listEmpty) {
-                    this.listEmpty = false;
-                    this.listReady = true;
-                    let item = this.getRandomItem();
-                    this.updateVideo(item)
-                } else if (playlist.length <= 0) {
-                    this.listEmpty = true;
-                    this.listReady = false
-                }
-            }
-        },
         components: {
             Widget
         },
         methods: {
             /**
-             * This fires when the this component is ready!
+             * This fires when the the player is ready!
              *
              * @param player
              */
@@ -249,7 +221,20 @@
                     item = this.getReqItem();
                 }
 
-                this.updateVideo(item);
+                if (!item) {
+
+                    this.listEmpty = true;
+                    this.listReady = false;
+                    this.listItem = null;
+                    this.listCopy = [];
+                    this.isReq = false;
+                    this.title = '';
+                    this.videoId = '';
+                    this.progress = 0;
+
+                } else {
+                    this.updateVideo(item);
+                }
             },
 
             /**
@@ -340,17 +325,23 @@
             getRandomItem() {
                 this.isReq = false;
 
+                if (this.playlist.length <= 0) {
+                    return false;
+                }
+
                 if (this.listCopy.length <= 0) {
-                    _(this.playlist).forEach(function (item) {
+
+                    _(this.playlist).forEach((item) => {
                         this.listCopy.push(item)
-                    }.bind(this));
+                    });
+
                 }
 
                 this.listItem = _.sample(_.shuffle(this.listCopy));
 
-                _.remove(this.listCopy, function (Obj) {
+                _.remove(this.listCopy, (Obj) => {
                     return Obj === this.listItem;
-                }.bind(this));
+                });
 
                 return this.listItem
             },
@@ -365,6 +356,10 @@
                 this.videoId = item.video_id;
                 this.title = item.title;
             },
+
+            showAddSongModal() {
+                this.$root.showAddSongModal = true;
+            }
         },
 
         /**
@@ -375,17 +370,19 @@
             /**
              * If we have songs, lets go ahead and process a song to be played.
              */
-            setTimeout(() => {
+            let intervalHandle = setInterval(() => {
                 if (this.playlist) {
                     if (this.playlist.length > 0) {
                         this.listReady = true;
+                        this.listEmpty = false;
                         let item = this.getRandomItem();
-                        this.updateVideo(item)
+                        this.updateVideo(item);
+                        clearInterval(intervalHandle)
                     } else {
                         this.listEmpty = true
                     }
                 }
-            }, 1000); // end timeout
+            }, 5000); // end timeout
 
         }
     }
