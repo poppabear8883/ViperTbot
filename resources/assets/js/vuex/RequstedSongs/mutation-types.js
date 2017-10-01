@@ -1,4 +1,0 @@
-export const SET_REQSONGS = 'SET_REQSONGS';
-export const ADD_REQSONG = 'ADD_REQSONG';
-export const UPDATE_REQSONG = 'UPDATE_REQSONG';
-export const DELETE_REQSONG = 'DELETE_REQSONG';

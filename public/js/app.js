@@ -41858,9 +41858,7 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(107);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Songs_index__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__ = __webpack_require__(112);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Account_index__ = __webpack_require__(116);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Account_index__ = __webpack_require__(116);
 
 
 
@@ -41873,8 +41871,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     modules: {
         songs: __WEBPACK_IMPORTED_MODULE_2__Songs_index__["a" /* default */],
-        reqsongs: __WEBPACK_IMPORTED_MODULE_3__RequstedSongs_index__["a" /* default */],
-        account: __WEBPACK_IMPORTED_MODULE_4__Account_index__["a" /* default */]
+        account: __WEBPACK_IMPORTED_MODULE_3__Account_index__["a" /* default */]
     }
 }));
 
@@ -42807,18 +42804,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["a"] = ({
 
     state: {
-        songs: []
+        songs: [],
+        reqsongs: []
     },
 
     getters: __WEBPACK_IMPORTED_MODULE_1__getters__,
 
     actions: __WEBPACK_IMPORTED_MODULE_2__actions__,
 
-    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["c" /* SET_SONGS */], function (state, song) {
+    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["f" /* SET_SONGS */], function (state, song) {
         state.songs = song;
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["a" /* ADD_SONG */], function (state, song) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["b" /* ADD_SONG */], function (state, song) {
         state.songs.push(song);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["d" /* UPDATE_SONG */], function (state, song) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["h" /* UPDATE_SONG */], function (state, song) {
         if (song) {
             for (var i in state.songs) {
                 if (state.songs[i].video_id === song.video_id) {
@@ -42827,10 +42825,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }
             }
         }
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["b" /* DELETE_SONG */], function (state, video_id) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["d" /* DELETE_SONG */], function (state, video_id) {
         for (var i in state.songs) {
             if (state.songs[i].video_id === video_id) {
                 state.songs.splice(i, 1);
+                break;
+            }
+        }
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["e" /* SET_REQSONGS */], function (state, song) {
+        state.reqsongs = song;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["a" /* ADD_REQSONG */], function (state, song) {
+        state.reqsongs.push(song);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["g" /* UPDATE_REQSONG */], function (state, song) {
+        if (song) {
+            for (var i in state.reqsongs) {
+                if (state.reqsongs[i].video_id === song.video_id) {
+                    state.reqsongs.splice(i, 1, song);
+                    break;
+                }
+            }
+        }
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["c" /* DELETE_REQSONG */], function (state, video_id) {
+        for (var i in state.reqsongs) {
+            if (state.reqsongs[i].video_id === video_id) {
+                state.reqsongs.splice(i, 1);
                 break;
             }
         }
@@ -42842,14 +42860,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SET_SONGS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADD_SONG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return UPDATE_SONG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DELETE_SONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SET_SONGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ADD_SONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return UPDATE_SONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_SONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SET_REQSONGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADD_REQSONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return UPDATE_REQSONG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_REQSONG; });
 var SET_SONGS = 'SET_SONGS';
 var ADD_SONG = 'ADD_SONG';
 var UPDATE_SONG = 'UPDATE_SONG';
 var DELETE_SONG = 'DELETE_SONG';
+
+/**
+ * Requested Songs
+ */
+
+var SET_REQSONGS = 'SET_REQSONGS';
+var ADD_REQSONG = 'ADD_REQSONG';
+var UPDATE_REQSONG = 'UPDATE_REQSONG';
+var DELETE_REQSONG = 'DELETE_REQSONG';
 
 /***/ }),
 /* 110 */
@@ -42858,8 +42889,13 @@ var DELETE_SONG = 'DELETE_SONG';
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["getSongs"] = getSongs;
+/* harmony export (immutable) */ __webpack_exports__["getReqSongs"] = getReqSongs;
 function getSongs(state) {
     return state.songs;
+}
+
+function getReqSongs(state) {
+    return state.reqsongs;
 }
 
 /***/ }),
@@ -42872,6 +42908,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["addSong"] = addSong;
 /* harmony export (immutable) */ __webpack_exports__["updateSong"] = updateSong;
 /* harmony export (immutable) */ __webpack_exports__["deleteSong"] = deleteSong;
+/* harmony export (immutable) */ __webpack_exports__["setReqSongs"] = setReqSongs;
+/* harmony export (immutable) */ __webpack_exports__["addReqSong"] = addReqSong;
+/* harmony export (immutable) */ __webpack_exports__["updateReqSong"] = updateReqSong;
+/* harmony export (immutable) */ __webpack_exports__["deleteReqSong"] = deleteReqSong;
 
 function setSongs(context, songs) {
     context.commit('SET_SONGS', songs);
@@ -42889,90 +42929,9 @@ function deleteSong(context, id) {
     context.commit('DELETE_SONG', id);
 }
 
-/***/ }),
-/* 112 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mutation_types__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getters__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(115);
-var _mutations;
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-
-    state: {
-        reqsongs: []
-    },
-
-    getters: __WEBPACK_IMPORTED_MODULE_1__getters__,
-
-    actions: __WEBPACK_IMPORTED_MODULE_2__actions__,
-
-    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["c" /* SET_REQSONGS */], function (state, song) {
-        state.reqsongs = song;
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["a" /* ADD_REQSONG */], function (state, song) {
-        state.reqsongs.push(song);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["d" /* UPDATE_REQSONG */], function (state, song) {
-        if (song) {
-            for (var i in state.reqsongs) {
-                if (state.reqsongs[i].video_id === song.video_id) {
-                    state.reqsongs.splice(i, 1, song);
-                    break;
-                }
-            }
-        }
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_0__mutation_types__["b" /* DELETE_REQSONG */], function (state, video_id) {
-        for (var i in state.reqsongs) {
-            if (state.reqsongs[i].video_id === video_id) {
-                state.reqsongs.splice(i, 1);
-                break;
-            }
-        }
-    }), _mutations)
-});
-
-/***/ }),
-/* 113 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SET_REQSONGS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ADD_REQSONG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return UPDATE_REQSONG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DELETE_REQSONG; });
-var SET_REQSONGS = 'SET_REQSONGS';
-var ADD_REQSONG = 'ADD_REQSONG';
-var UPDATE_REQSONG = 'UPDATE_REQSONG';
-var DELETE_REQSONG = 'DELETE_REQSONG';
-
-/***/ }),
-/* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["getReqSongs"] = getReqSongs;
-function getReqSongs(state) {
-    return state.reqsongs;
-}
-
-/***/ }),
-/* 115 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["setReqSongs"] = setReqSongs;
-/* harmony export (immutable) */ __webpack_exports__["addReqSong"] = addReqSong;
-/* harmony export (immutable) */ __webpack_exports__["updateReqSong"] = updateReqSong;
-/* harmony export (immutable) */ __webpack_exports__["deleteReqSong"] = deleteReqSong;
+/**
+ * Requested Songs
+ */
 
 function setReqSongs(context, songs) {
     context.commit('SET_REQSONGS', songs);
@@ -42991,6 +42950,10 @@ function deleteReqSong(context, id) {
 }
 
 /***/ }),
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
 /* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
