@@ -82,7 +82,7 @@
                     title : "Warning!",
                     content : `Are you sure you wish to remove ${song.title} ?`,
                     buttons : '[No][Yes]'
-                }, function(ButtonPressed) {
+                }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
 
                         axios.delete('/api/playlist', {
@@ -109,7 +109,7 @@
                         alerts.canceled();
                     }
 
-                }.bind(this));
+                });
             }
         }
     }
