@@ -40004,7 +40004,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40163,6 +40163,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         showPlaylist: function showPlaylist() {
             this.$root.showPlaylistModal = true;
+        },
+        confirmDelete: function confirmDelete(song) {
+            var _this2 = this;
+
+            $.SmartMessageBox({
+                title: "Warning!",
+                content: 'Are you sure you wish to remove ' + song.title + ' ?',
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+
+                    axios.delete('/api/playlist', {
+                        data: {
+                            'action': 'remove',
+                            'params': {
+                                'video_id': song.video_id
+                            }
+                        }
+                    }).then(function (response) {
+
+                        _this2.$store.commit('DELETE_SONG', song.video_id);
+
+                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('You successfully removed the song ' + song.title);
+                    }, function (response) {
+                        console.error('!Error!');
+                        console.log(response);
+                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+                    });
+                }
+                if (ButtonPressed === "No") {
+                    __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["a" /* canceled */]();
+                }
+            });
         }
     },
     computed: {
@@ -40259,7 +40292,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "table table-bordered table-striped"
   }, [_c('thead', [_c('tr', [_c('th', [_vm._v("Title")]), _vm._v(" "), _c('th')])]), _vm._v(" "), _c('tbody', _vm._l((_vm.songs), function(song) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(song.title))]), _vm._v(" "), _c('td', [_c('button', {
-      staticClass: "btn btn-danger btn-xs"
+      staticClass: "btn btn-danger btn-xs",
+      on: {
+        "click": function($event) {
+          _vm.confirmDelete(song)
+        }
+      }
     }, [_vm._v("x")])])])
   }))])]), _vm._v(" "), _c('footer')])])
 },staticRenderFns: []}
@@ -41164,13 +41202,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         confirmDelete: function confirmDelete(song) {
+            var _this = this;
+
             $.SmartMessageBox({
                 title: "Warning!",
                 content: 'Are you sure you wish to remove ' + song.title + ' ?',
                 buttons: '[No][Yes]'
             }, function (ButtonPressed) {
-                var _this = this;
-
                 if (ButtonPressed === "Yes") {
 
                     axios.delete('/api/playlist', {
@@ -41195,7 +41233,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (ButtonPressed === "No") {
                     __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["a" /* canceled */]();
                 }
-            }.bind(this));
+            });
         }
     }
 });

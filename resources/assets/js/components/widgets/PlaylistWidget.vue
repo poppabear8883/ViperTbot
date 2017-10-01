@@ -67,7 +67,7 @@
                     <tr v-for="song in songs">
                         <td>{{song.title}}</td>
                         <td>
-                            <button class="btn btn-danger btn-xs">x</button>
+                            <button @click="confirmDelete(song)" class="btn btn-danger btn-xs">x</button>
                         </td>
                     </tr>
                     </tbody>
@@ -142,6 +142,40 @@
 
             showPlaylist() {
                 this.$root.showPlaylistModal = true;
+            },
+
+            confirmDelete(song) {
+                $.SmartMessageBox({
+                    title : "Warning!",
+                    content : `Are you sure you wish to remove ${song.title} ?`,
+                    buttons : '[No][Yes]'
+                }, (ButtonPressed) => {
+                    if (ButtonPressed === "Yes") {
+
+                        axios.delete('/api/playlist', {
+                            data: {
+                                'action': 'remove',
+                                'params': {
+                                    'video_id': song.video_id,
+                                }
+                            }
+                        }).then((response) => {
+
+                            this.$store.commit('DELETE_SONG', song.video_id);
+
+                            alerts.success(`You successfully removed the song ${song.title}`);
+
+                        }, (response) => {
+                            console.error('!Error!');
+                            console.log(response);
+                            alerts.error(response);
+                        });
+                    }
+                    if (ButtonPressed === "No") {
+                        alerts.canceled();
+                    }
+
+                });
             }
 
         },
