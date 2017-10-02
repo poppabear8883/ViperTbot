@@ -1,6 +1,7 @@
 <?php namespace App\Authentication;
 
 use App\Contracts\AuthenticateUserListener;
+use App\Playlist;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;
@@ -36,6 +37,11 @@ class AuthenticateUser
         $user = $this->user->findByUsernameOrCreate($this->getTwitchUser());
 
         Auth::login($user, true);
+
+        Playlist::create([
+            'name' => 'Default',
+            'user_id' => $user->id
+        ]);
 
         TwitchApi::setToken($user->access_token);
 

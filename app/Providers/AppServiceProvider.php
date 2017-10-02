@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\PivotMigrationMakeCommand;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('command.migrate.pivot', function ($app) {
+            return $app[PivotMigrationMakeCommand::class];
+        });
+        $this->commands('command.migrate.pivot');
     }
 }

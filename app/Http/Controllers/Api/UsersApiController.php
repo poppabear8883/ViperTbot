@@ -60,7 +60,8 @@ class UsersApiController extends Controller
     {
         $relationships = [
             'songs',
-            'requestedsongs'
+            'requestedsongs',
+            'playlists'
         ];
 
         return response(Auth::user()->with($relationships)->first(), 200);
