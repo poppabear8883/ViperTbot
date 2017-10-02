@@ -6,7 +6,7 @@ use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class ReqPlaylistApiController extends Controller
+class RequestedSongsAdiController extends Controller
 {
     use HandlesApiRequests;
 

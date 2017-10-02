@@ -37,11 +37,11 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
     });
 
     Route::prefix('playlist')->group(function() {
-        Route::any('', 'PlaylistApiController@api');
+        Route::any('', 'SongsApiController@api');
     });
 
     Route::prefix('reqplaylist')->group(function() {
-        Route::any('', 'ReqPlaylistApiController@api');
+        Route::any('', 'RequestedSongsAdiController@api');
     });
 
     Route::prefix('livechannels')->group(function() {
