@@ -6,7 +6,8 @@ export default {
 
     state: {
         songs: [],
-        reqsongs: []
+        reqsongs: [],
+        playlists: []
     },
 
     getters,
@@ -70,6 +71,38 @@ export default {
             for (let i in state.reqsongs) {
                 if (state.reqsongs[i].video_id === video_id) {
                     state.reqsongs.splice(i, 1);
+                    break
+                }
+
+            }
+        },
+
+        /**
+         * Playlists
+         */
+        [types.SET_PLAYLISTS] (state, playlists) {
+            state.playlists =playlists
+        },
+
+        [types.ADD_PLAYLIST] (state, playlist) {
+            state.playlists.push(playlist)
+        },
+
+        [types.UPDATE_PLAYLIST] (state, playlist) {
+            if (playlist) {
+                for (let i in state.playlists) {
+                    if (state.playlists[i].id === playlist.id) {
+                        state.playlists.splice(i, 1, playlist);
+                        break
+                    }
+                }
+            }
+        },
+
+        [types.DELETE_PLAYLIST] (state, id) {
+            for (let i in state.playlists) {
+                if (state.playlists[i].id === id) {
+                    state.playlists.splice(i, 1);
                     break
                 }
 

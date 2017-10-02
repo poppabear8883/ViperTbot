@@ -39,32 +39,24 @@ const app = new Vue({
         showAddRegularModal: false
     },
     methods: {
-        getChannelData() {
-            axios.get('/api/twitch', {
-                params: {
-                    action: 'myChannel'
-                }
-            }).then((response) => {
-                this.$store.commit('SET_CHANNEL', response.data);
-            }).catch((response) => {
-                console.log('-- Error --' + response);
-                return null
-            });
-        },
         getUser() {
             axios.get('/api/users', {
                 params: {
                     action: 'getAuthUser'
                 }
             }).then((response) => {
-                this.$store.commit('SET_USER', response.data);
-                this.$store.commit('SET_SONGS', response.data.songs);
-                this.$store.commit('SET_REQSONGS', response.data.requestedsongs);
+                console.log(response.data);
+                this.$store.commit('SET_USER', response.data.account);
+                this.$store.commit('SET_CHANNEL', response.data.channel);
+                this.$store.commit('SET_REQSONGS', response.data.reqsongs);
+                this.$store.commit('SET_PLAYLISTS', response.data.playlists);
+                this.$store.commit('SET_SONGS', response.data.playlists[0].songs);
             }).catch((error) => {
                 console.log(error);
                 return null
             });
         },
+
         pubSubConnect() {
             let topics = [
                 'whispers'
@@ -88,7 +80,6 @@ const app = new Vue({
 
     mounted() {
         this.getUser();
-        this.getChannelData();
         this.pubSubConnect();
     }
 });

@@ -27,7 +27,30 @@
 
                 <div class="row">
 
-                    <div class="col-xs-9 col-sm-8 col-md-8 col-lg-8">
+                    <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
+                        <select class="form-control" v-model="formModel.playlist">
+                            <option v-for="playlist in playlists"
+                                    :value="playlist">
+                                {{ playlist.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-music"></i>
+                            </span>
+
+                            <input type="text"
+                                   class="form-control"
+                                   @keydown.enter.prevent="addNewPlaylist()"
+                                   v-model="formModel.new_playlist"
+                                   placeholder="Add New Playlist ...">
+                        </div>
+                    </div>
+
+                    <div class="col-xs-9 col-sm-12 col-md-12 col-lg-12 padding-top-10">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-youtube"></i>
@@ -35,19 +58,10 @@
 
                             <input type="text"
                                    class="form-control"
+                                   @keydown.enter.prevent="addNew()"
                                    v-model="formModel.video_id"
-                                   placeholder="YouTube ID or URL ...">                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-4 col-md-4 col-lg-4 text-right">
-
-                        <button v-if="formModel.video_id != ''"
-                                @click.prevent="addNew()"
-                                class="btn btn-success">
-
-                            <i class="fa fa-plus"></i>
-                            <span class="hidden-mobile">Add Song</span>
-                        </button>
-
+                                   placeholder="YouTube ID or URL ...">
+                        </div>
                     </div>
 
                 </div>
@@ -102,7 +116,9 @@
             return {
                 formModel: {
                     title: '',
-                    video_id: ''
+                    video_id: '',
+                    playlist: {},
+                    new_playlist: ''
                 }
             }
         },
@@ -127,10 +143,11 @@
                     }
                 }
 
-                axios.post('/api/playlist', {
+                axios.post('/api/songs', {
                     'action': 'create',
                     'params': {
                         'video_id': this.formModel.video_id,
+                        'playlist_id': this.formModel.playlist.id
                     }
                 }).then((response) => {
 
@@ -152,13 +169,24 @@
                 });
 
 
-                this.clearFields();
+                this.formModel.video_id = '';
             },
 
-            clearFields() {
-                for (let item in this.formModel) {
-                    this.formModel[item] = ''
-                }
+            addNewPlaylist() {
+                axios.post('/api/playlists', {
+                    'action': 'create',
+                    'params': {
+                        'name': this.formModel.playlist.name
+                    }
+                }).then((response) => {
+                    this.$store.commit('ADD_PLAYLIST', response.data);
+                    this.formModel.playlist = response.data;
+                    alerts.success('Successfully added a new Playlist');
+                }).catch((error) => {
+                    alerts.error(error);
+                });
+
+                this.formModel.new_playlist = '';
             },
 
             showPlaylist() {
@@ -173,7 +201,7 @@
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
 
-                        axios.delete('/api/playlist', {
+                        axios.delete('/api/songs', {
                             data: {
                                 'action': 'remove',
                                 'params': {
@@ -201,12 +229,18 @@
 
         },
         computed: {
+            playlists() {
+                return this.$store.getters.getPlaylists;
+            },
+
             songs() {
-                return this.$store.getters.getSongs;
+                return this.formModel.playlist.songs;
             }
         },
         created() {
-
+            setTimeout(() => {
+                this.formModel.playlist = this.playlists[0];
+            }, 1000);
         }
     }
 </script>

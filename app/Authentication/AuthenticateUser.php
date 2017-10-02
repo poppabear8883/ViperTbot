@@ -39,7 +39,7 @@ class AuthenticateUser
         Auth::login($user, true);
 
         Playlist::create([
-            'name' => 'Default',
+            'name' => 'Default Playlist',
             'user_id' => $user->id
         ]);
 

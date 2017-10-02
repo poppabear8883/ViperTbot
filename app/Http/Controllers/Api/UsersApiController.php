@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Traits\HandlesApiRequests;
+use App\Twitch\TwitchApi;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -35,20 +36,20 @@ class UsersApiController extends Controller
     ];
 
     /**
-     * The User instance
+     * The TwitchApi instance
      *
-     * @var User
+     * @var TwitchApi
      */
-    private $user;
+    private $twitch;
 
     /**
      * Injects User dependency.
      *
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(TwitchApi $twitch)
     {
-        $this->user = $user;
+        $this->twitch = $twitch;
     }
 
     /**
@@ -58,13 +59,13 @@ class UsersApiController extends Controller
      */
     protected function getAuthUser()
     {
-        $relationships = [
-            'songs',
-            'requestedsongs',
-            'playlists'
-        ];
-
-        return response(Auth::user()->with($relationships)->first(), 200);
+        return response([
+            'account' => Auth::user()->first(),
+            'channel' => $this->twitch->authChannel($this->token()),
+            'playlists' => Auth::user()->playlists()->with('songs')->get(),
+            'reqsongs' => Auth::user()->requestedSongs,
+            'regulars' => Auth::user()->regulars
+        ], 200);
     }
 
 

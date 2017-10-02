@@ -2,9 +2,9 @@
 
 use Alaouy\Youtube\Facades\Youtube;
 use App\Http\Controllers\Controller;
+use App\Playlist;
 use App\Song;
 use App\Traits\HandlesApiRequests;
-use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class SongsApiController extends Controller
@@ -13,6 +13,7 @@ class SongsApiController extends Controller
 
     protected $rules = [
         'video_id' => 'required|string',
+        'playlist_id' => 'required|integer',
         'title' => 'string'
     ];
 
@@ -42,16 +43,21 @@ class SongsApiController extends Controller
      * @var Song
      */
     private $song;
+    /**
+     * @var Playlist
+     */
+    private $playlist;
 
 
     /**
      * Injects Playlist dependency.
      *
-     * @param Song $playlist
+     * @param Song $song
      */
-    public function __construct(Song $song)
+    public function __construct(Song $song, Playlist $playlist)
     {
         $this->song = $song;
+        $this->playlist = $playlist;
     }
 
     /**
@@ -84,7 +90,7 @@ class SongsApiController extends Controller
                 $song = $this->song->create([
                     'video_id' => $id,
                     'title' => $video->snippet->title,
-                    'user_id' => Auth::user()->id
+                    'playlist_id' => $params['playlist_id']
                 ]);
 
                 array_push($songs, $song);
@@ -95,7 +101,7 @@ class SongsApiController extends Controller
             try {
                 $videos = Youtube::getPlaylistItemsByPlaylistId($id)['results'];
 
-                $songs = $this->import($videos);
+                $songs = $this->import($videos, $params['playlist_id']);
 
             } catch (\Exception $msg) {
                 return response($msg, 422);
@@ -181,7 +187,7 @@ class SongsApiController extends Controller
      * @param $videos
      * @return mixed
      */
-    private function import($videos)
+    private function import($videos, $playlist_id)
     {
         $songs = [];
 
@@ -192,7 +198,7 @@ class SongsApiController extends Controller
                 $song = $this->song->create([
                     'video_id' => $v->snippet->resourceId->videoId,
                     'title' => $v->snippet->title,
-                    'user_id' => Auth::user()->id
+                    'playlist_id' => $playlist_id
                 ]);
 
                 array_push($songs, $song);

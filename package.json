@@ -20,6 +20,7 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "js-video-url-parser": "^0.2.4",
     "vue-multiselect": "^2.0.2",
     "vue-youtube-embed": "^2.1.2",
     "vuex": "^2.4.0"

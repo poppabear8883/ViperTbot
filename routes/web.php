@@ -36,7 +36,7 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
         Route::any('', 'TwitchApiController@api');
     });
 
-    Route::prefix('playlist')->group(function() {
+    Route::prefix('songs')->group(function() {
         Route::any('', 'SongsApiController@api');
     });
 
@@ -50,5 +50,9 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
 
     Route::prefix('regulars')->group(function() {
         Route::any('', 'RegularsApiController@api');
+    });
+
+    Route::prefix('playlists')->group(function() {
+        Route::any('', 'PlaylistsApiController@api');
     });
 });

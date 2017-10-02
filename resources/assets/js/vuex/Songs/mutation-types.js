@@ -11,3 +11,12 @@ export const SET_REQSONGS = 'SET_REQSONGS';
 export const ADD_REQSONG = 'ADD_REQSONG';
 export const UPDATE_REQSONG = 'UPDATE_REQSONG';
 export const DELETE_REQSONG = 'DELETE_REQSONG';
+
+/**
+ * Playlists
+ */
+
+export const SET_PLAYLISTS = 'SET_PLAYLISTS';
+export const ADD_PLAYLIST = 'ADD_PLAYLIST';
+export const UPDATE_PLAYLIST = 'UPDATE_PLAYLIST';
+export const DELETE_PLAYLIST = 'DELETE_PLAYLIST';

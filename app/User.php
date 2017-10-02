@@ -32,11 +32,6 @@ class User extends Authenticatable
         'remember_token'
     ];
 
-    public function songs()
-    {
-        return $this->hasMany(Song::class);
-    }
-
     public function requestedSongs()
     {
         return $this->hasMany(RequestedSong::class);
@@ -45,5 +40,15 @@ class User extends Authenticatable
     public function regulars()
     {
         return $this->hasMany(Regular::class);
+    }
+
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
+
+    public function songs()
+    {
+        return $this->hasManyThrough(Song::class, Playlist::class);
     }
 }

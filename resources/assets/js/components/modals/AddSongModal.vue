@@ -69,7 +69,7 @@
                     this.formModel.video_id = parse
                 }
 
-                axios.post('/api/playlist', {
+                axios.post('/api/songs', {
                     'action': 'create',
                     'params': {
                         'video_id': this.formModel.video_id,

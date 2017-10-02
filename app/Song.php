@@ -8,17 +8,13 @@ class Song extends Model
 {
 
     protected $fillable = [
-        'user_id',
+        'playlist_id',
         'title',
         'video_id'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
     public function playlists()
     {
-        return $this->hasMany(Playlist::class);
+        return $this->belongsToMany(Playlist::class);
     }
 }

@@ -35,3 +35,24 @@ export function deleteReqSong(context, id) {
     context.commit('DELETE_REQSONG', id)
 }
 
+/**
+ * Playlists
+ */
+
+export function setPlaylists(context, playlists) {
+    context.commit('SET_PLAYLISTS')
+}
+
+export function addPlaylist(context, playlist) {
+    context.commit('ADD_PLAYLIST')
+}
+
+export function updatePlaylist(context, playlist) {
+    context.commit('UPDATE_PLAYLIST')
+}
+
+export function deletePlaylist(context, playlist) {
+    context.commit('DELETE_PLAYLIST')
+}
+
+
