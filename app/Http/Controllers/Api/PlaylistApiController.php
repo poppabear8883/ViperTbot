@@ -73,28 +73,37 @@ class PlaylistApiController extends Controller
     protected function create($params = [])
     {
         $this->isValid($params);
+        $id = $params['video_id'];
+        $songs = [];
 
-        if ($this->songExists($params['video_id'])) {
-            return response([
-                'errors' => 'Song ' . $params['video_id'] . ' already exists!'
-            ], 422);
+        try {
+
+            $video = Youtube::getVideoInfo($id);
+
+            if (!$this->songExists($id)) {
+                $song = $this->song->create([
+                    'video_id' => $id,
+                    'title' => $video->snippet->title,
+                    'user_id' => Auth::user()->id
+                ]);
+
+                array_push($songs, $song);
+            }
+
+        } catch (\Exception $msg) {
+
+            try {
+                $videos = Youtube::getPlaylistItemsByPlaylistId($id)['results'];
+
+                $songs = $this->import($videos);
+
+            } catch (\Exception $msg) {
+                return response($msg, 422);
+            }
+
         }
 
-        $video = Youtube::getVideoInfo($params['video_id']);
-
-        if (!$video) {
-            return response([
-                'errors' => 'Invalid video id: ' . $params['video_id']
-            ], 422);
-        }
-
-        $song = $this->song->create([
-            'video_id' => $params['video_id'],
-            'title' => $video->snippet->title,
-            'user_id' => Auth::user()->id
-        ]);
-
-        return response($song, 200);
+        return response($songs, 200);
     }
 
     /**
@@ -166,6 +175,32 @@ class PlaylistApiController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * @param $videos
+     * @return mixed
+     */
+    private function import($videos)
+    {
+        $songs = [];
+
+        foreach ($videos as $v) {
+
+            if (!$this->songExists($v->snippet->resourceId->videoId)) {
+
+                $song = $this->song->create([
+                    'video_id' => $v->snippet->resourceId->videoId,
+                    'title' => $v->snippet->title,
+                    'user_id' => Auth::user()->id
+                ]);
+
+                array_push($songs, $song);
+            }
+
+        }
+
+        return $songs;
     }
 
 }

@@ -36,7 +36,7 @@ class InterfaceController extends Controller
      */
     public function index()
     {
-        //dd(\Youtube::getVideoInfo('bbEoRnaOIbs'));
+        //dd(\Youtube::getPlaylistItemsByPlaylistId('PL3485902CC4FB6C67'));
         return view('pages.interface.index', $this->data());
     }
 

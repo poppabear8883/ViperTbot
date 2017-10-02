@@ -9,6 +9,17 @@ export function success(msg)
     });
 }
 
+export function warning(msg)
+{
+    $.smallBox({
+        title : "Warning",
+        content : msg,
+        color : "#c4c336",
+        iconSmall : "fa fa-warning fa-2x fadeInRight animated",
+        timeout : 4000
+    });
+}
+
 export function canceled()
 {
     $.smallBox({

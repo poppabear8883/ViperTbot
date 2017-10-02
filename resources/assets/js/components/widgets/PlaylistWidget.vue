@@ -84,9 +84,13 @@
 </template>
 
 <script>
+    // https://www.youtube.com/watch?v=8SbUC-UaAxE&list=PL3485902CC4FB6C67
+
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
     import { youtubeParser } from '../../utils/youtube'
+    import * as urlParser from 'js-video-url-parser'
+
 
     export default{
 
@@ -106,10 +110,21 @@
             addNew(e) {
                 if (e) e.preventDefault();
 
-                let parse = youtubeParser(this.formModel.video_id);
+                let parse = urlParser.parse(this.formModel.video_id);
 
+                //let parse = youtubeParser(this.formModel.video_id);
+
+                console.log(parse);
+
+                /**
+                 * Handle the URL
+                 */
                 if (parse) {
-                    this.formModel.video_id = parse
+                    if(parse.list) {
+                        this.formModel.video_id = parse.list;
+                    } else {
+                        this.formModel.video_id = parse.id
+                    }
                 }
 
                 axios.post('/api/playlist', {
@@ -119,19 +134,25 @@
                     }
                 }).then((response) => {
 
-                    this.$store.commit('ADD_SONG', response.data);
+                    if (response.data.length > 0) {
 
-                    this.clearFields();
+                        _.forEach(response.data, (song) => {
+                            this.$store.commit('ADD_SONG', song);
+                        });
 
-                    alerts.success('You have successfully added a new song to playlist!');
+                        alerts.success('You have successfully added new songs to playlist!');
+                    } else {
+                        alerts.warning('You already have all these added to the playlist. No songs added!')
+                    }
 
                 }, (response) => {
                     console.error('-- ERROR -- ');
                     console.log(response);
                     alerts.error(response);
-
-                    this.clearFields();
                 });
+
+
+                this.clearFields();
             },
 
             clearFields() {
