@@ -779,10 +779,10 @@ module.exports = function normalizeComponent (
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["c"] = success;
-/* harmony export (immutable) */ __webpack_exports__["d"] = warning;
+/* unused harmony export warning */
 /* harmony export (immutable) */ __webpack_exports__["a"] = canceled;
 /* harmony export (immutable) */ __webpack_exports__["b"] = error;
-/* harmony export (immutable) */ __webpack_exports__["e"] = whisper;
+/* harmony export (immutable) */ __webpack_exports__["d"] = whisper;
 function success(msg) {
     $.smallBox({
         title: "Success",
@@ -40439,7 +40439,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40645,13 +40645,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     });
 
                     __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('You have successfully added new songs to playlist!');
-                } else {
-                    __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["d" /* warning */]('You already have all these added to the playlist. No songs added!');
                 }
-            }, function (response) {
-                console.error('-- ERROR -- ');
-                console.log(response);
-                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+            }).catch(function (error) {
+                console.log(error.response);
+                __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](error.response.data);
             });
 
             this.video_id = '';
@@ -40704,10 +40701,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         });
 
                         __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('You successfully removed the song ' + song.title);
-                    }, function (response) {
-                        console.error('!Error!');
-                        console.log(response);
-                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+                    }).catch(function (error) {
+                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](error.response.data);
                     });
                 }
                 if (ButtonPressed === "No") {
@@ -40744,10 +40739,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         _this4.playlist = _this4.playlists[0];
 
                         __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["c" /* success */]('You successfully removed the playlist ' + playlist.name);
-                    }, function (response) {
-                        console.error('!Error!');
-                        console.log(response);
-                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](response);
+                    }).catch(function (error) {
+                        __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["b" /* error */](error.response.data);
                     });
                 }
                 if (ButtonPressed === "No") {
@@ -45036,7 +45029,7 @@ var TwitchPubSub = function () {
             var msg = this.getDataObj().body;
             var from = this.getDataObj().tags.display_name;
 
-            __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["e" /* whisper */](from, msg);
+            __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["d" /* whisper */](from, msg);
         }
     }, {
         key: "getMessageData",

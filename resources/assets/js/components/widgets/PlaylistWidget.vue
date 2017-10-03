@@ -186,14 +186,11 @@
                         });
 
                         alerts.success('You have successfully added new songs to playlist!');
-                    } else {
-                        alerts.warning('You already have all these added to the playlist. No songs added!')
                     }
 
-                }, (response) => {
-                    console.error('-- ERROR -- ');
-                    console.log(response);
-                    alerts.error(response);
+                }).catch((error) => {
+                    console.log(error.response);
+                    alerts.error(error.response.data);
                 });
 
 
@@ -246,10 +243,8 @@
 
                             alerts.success(`You successfully removed the song ${song.title}`);
 
-                        }, (response) => {
-                            console.error('!Error!');
-                            console.log(response);
-                            alerts.error(response);
+                        }).catch((error) => {
+                            alerts.error(error.response.data);
                         });
                     }
                     if (ButtonPressed === "No") {
@@ -287,10 +282,8 @@
 
                             alerts.success(`You successfully removed the playlist ${playlist.name}`);
 
-                        }, (response) => {
-                            console.error('!Error!');
-                            console.log(response);
-                            alerts.error(response);
+                        }).catch((error) => {
+                            alerts.error(error.response.data);
                         });
                     }
                     if (ButtonPressed === "No") {

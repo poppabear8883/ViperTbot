@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Playlist;
 use App\Song;
 use App\Traits\HandlesApiRequests;
+use Illuminate\Support\Facades\Response;
 use Validator;
 
 class SongsApiController extends Controller
@@ -80,20 +81,23 @@ class SongsApiController extends Controller
     {
         $this->isValid($params);
         $id = $params['video_id'];
+        $playlist_id = $params['playlist_id'];
         $songs = [];
 
         try {
 
             $video = Youtube::getVideoInfo($id);
 
-            if (!$this->songExists($id)) {
+            if (!$this->songExists($id, $playlist_id)) {
                 $song = $this->song->create([
                     'video_id' => $id,
                     'title' => $video->snippet->title,
-                    'playlist_id' => $params['playlist_id']
+                    'playlist_id' => $playlist_id
                 ]);
 
                 array_push($songs, $song);
+            } else {
+                return response('The song already exists!', 422);
             }
 
         } catch (\Exception $msg) {
@@ -102,6 +106,10 @@ class SongsApiController extends Controller
                 $videos = Youtube::getPlaylistItemsByPlaylistId($id)['results'];
 
                 $songs = $this->import($videos, $params['playlist_id']);
+
+                if (empty($songs)) {
+                    return response('Playlist already contains these songs!', 422);
+                }
 
             } catch (\Exception $msg) {
                 return response($msg, 422);
@@ -150,9 +158,12 @@ class SongsApiController extends Controller
      * @param $video_id
      * @return bool
      */
-    private function songExists($video_id)
+    private function songExists($video_id, $playlist_id)
     {
-        return !$this->song->where('video_id', $video_id)->get()->isEmpty();
+        return !$this->song
+            ->where('video_id', $video_id)
+            ->where('playlist_id', $playlist_id)
+            ->get()->isEmpty();
     }
 
     /**
@@ -193,7 +204,7 @@ class SongsApiController extends Controller
 
         foreach ($videos as $v) {
 
-            if (!$this->songExists($v->snippet->resourceId->videoId)) {
+            if (!$this->songExists($v->snippet->resourceId->videoId, $playlist_id)) {
 
                 $song = $this->song->create([
                     'video_id' => $v->snippet->resourceId->videoId,
