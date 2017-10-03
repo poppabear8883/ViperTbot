@@ -9,7 +9,18 @@
         </div>
 
         <div slot="toolbars">
-            <!-- all your toolbars can go here -->
+            <div class="widget-toolbar" role="menu">
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle btn-xs btn-primary" data-toggle="dropdown">
+                        Actions <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="#" @click.prevent="confirmPlaylistDelete(playlist)">Remove Playlist</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <!-- end toolbars -->
 
@@ -28,7 +39,7 @@
                 <div class="row">
 
                     <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
-                        <select class="form-control" v-model="formModel.playlist">
+                        <select class="form-control" v-model="playlist">
                             <option v-for="playlist in playlists"
                                     :value="playlist">
                                 {{ playlist.name }}
@@ -45,7 +56,7 @@
                             <input type="text"
                                    class="form-control"
                                    @keydown.enter.prevent="addNewPlaylist()"
-                                   v-model="formModel.new_playlist"
+                                   v-model="new_playlist"
                                    placeholder="Add New Playlist ...">
                         </div>
                     </div>
@@ -59,7 +70,7 @@
                             <input type="text"
                                    class="form-control"
                                    @keydown.enter.prevent="addNew()"
-                                   v-model="formModel.video_id"
+                                   v-model="video_id"
                                    placeholder="YouTube ID or URL ...">
                         </div>
                     </div>
@@ -114,40 +125,42 @@
 
         data() {
             return {
-                formModel: {
-                    title: '',
-                    video_id: '',
-                    playlist: {},
-                    new_playlist: ''
-                }
+                title: '',
+                video_id: '',
+                playlist: {
+                    id: 1,
+                    name: 'Default Playlist',
+                    songs: []
+                },
+                new_playlist: ''
             }
         },
         methods: {
             addNew(e) {
                 if (e) e.preventDefault();
 
-                let parse = urlParser.parse(this.formModel.video_id);
+                let parse = urlParser.parse(this.video_id);
 
-                //let parse = youtubeParser(this.formModel.video_id);
+                //let parse = youtubeParser(this.video_id);
 
-                console.log(parse);
+                //console.log(parse);
 
                 /**
                  * Handle the URL
                  */
                 if (parse) {
                     if(parse.list) {
-                        this.formModel.video_id = parse.list;
+                        this.video_id = parse.list;
                     } else {
-                        this.formModel.video_id = parse.id
+                        this.video_id = parse.id
                     }
                 }
 
                 axios.post('/api/songs', {
                     'action': 'create',
                     'params': {
-                        'video_id': this.formModel.video_id,
-                        'playlist_id': this.formModel.playlist.id
+                        'video_id': this.video_id,
+                        'playlist_id': this.playlist.id
                     }
                 }).then((response) => {
 
@@ -169,28 +182,29 @@
                 });
 
 
-                this.formModel.video_id = '';
+                this.video_id = '';
             },
 
             addNewPlaylist() {
                 axios.post('/api/playlists', {
                     'action': 'create',
                     'params': {
-                        'name': this.formModel.playlist.name
+                        'name': this.new_playlist
                     }
                 }).then((response) => {
+
+                    console.log(response);
+
                     this.$store.commit('ADD_PLAYLIST', response.data);
-                    this.formModel.playlist = response.data;
+
+                    this.playlist = response.data;
+
                     alerts.success('Successfully added a new Playlist');
                 }).catch((error) => {
                     alerts.error(error);
                 });
 
-                this.formModel.new_playlist = '';
-            },
-
-            showPlaylist() {
-                this.$root.showPlaylistModal = true;
+                this.new_playlist = '';
             },
 
             confirmDelete(song) {
@@ -225,6 +239,47 @@
                     }
 
                 });
+            },
+
+            confirmPlaylistDelete(playlist) {
+                if (playlist.id === 1) {
+                    alerts.error('You cannot remove the Default Playlist!')
+                    return false;
+                }
+
+                $.SmartMessageBox({
+                    title : "Warning!",
+                    content : `Are you sure you wish to remove ${playlist.name} ?`,
+                    buttons : '[No][Yes]'
+                }, (ButtonPressed) => {
+                    if (ButtonPressed === "Yes") {
+
+                        axios.delete('/api/playlists', {
+                            data: {
+                                'action': 'remove',
+                                'params': {
+                                    'id': playlist.id,
+                                }
+                            }
+                        }).then((response) => {
+
+                            this.$store.commit('DELETE_PLAYLIST', playlist.id);
+
+                            this.playlist = this.playlists[0];
+
+                            alerts.success(`You successfully removed the playlist ${playlist.name}`);
+
+                        }, (response) => {
+                            console.error('!Error!');
+                            console.log(response);
+                            alerts.error(response);
+                        });
+                    }
+                    if (ButtonPressed === "No") {
+                        alerts.canceled();
+                    }
+
+                });
             }
 
         },
@@ -232,15 +287,19 @@
             playlists() {
                 return this.$store.getters.getPlaylists;
             },
-
             songs() {
-                return this.formModel.playlist.songs;
+                if(this.playlist) {
+                    return this.playlist.songs;
+                }
+
+                return [];
             }
         },
         created() {
             setTimeout(() => {
-                this.formModel.playlist = this.playlists[0];
-            }, 1000);
+                console.log('set playlist');
+                this.playlist = this.playlists[0];
+            }, 1500);
         }
     }
 </script>

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Playlist;
 use App\Twitch\TwitchApi;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,7 +40,7 @@ class InterfaceController extends Controller
     {
         //dd(\Youtube::getPlaylistItemsByPlaylistId('PL3485902CC4FB6C67'));
 
-        //dd();
+        //dd(!Playlist::where('name', 'test')->get()->isEmpty());
 
         return view('pages.interface.index', $this->data());
     }

@@ -4,6 +4,7 @@ use Alaouy\Youtube\Facades\Youtube;
 use App\Http\Controllers\Controller;
 use App\Playlist;
 use App\Traits\HandlesApiRequests;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 class PlaylistsApiController extends Controller
@@ -72,20 +73,22 @@ class PlaylistsApiController extends Controller
         $this->isValid($params);
         $name = $params['name'];
 
-        try {
-            $playlist = '';
-
-            if (!$this->playlistExists($name)) {
-                $playlist = $this->playlist->create([
-                    'name' => $name,
-                    'user_id' => Auth::user()->id
-                ]);
-            }
-
-            return response($playlist, 200);
-        } catch (\Exception $e) {
-            return response($e->getMessage(), 422);
+        if ($this->playlistExists($name)) {
+            return response('Playlist already exists', 422);
         }
+
+        $playlist = $this->playlist->create([
+            'name' => $name,
+            'user_id' => Auth::user()->id
+        ])
+            ->with('songs')
+            ->get()
+            ->where('name', $name)
+            ->first();
+
+        //dd($playlist->with('songs')->get());
+
+        return response($playlist, 200);
     }
 
     /**
