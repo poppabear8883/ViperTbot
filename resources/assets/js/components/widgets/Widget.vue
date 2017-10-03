@@ -48,7 +48,10 @@
             </div>
 
             <div class="widget-toolbar" role="menu">
-                <color-picker v-if="colorpicker"></color-picker>
+                <color-picker
+                        v-if="colorpicker"
+                        @changed="colorChanged"
+                ></color-picker>
             </div>
 
             <slot name="toolbars"></slot>
@@ -137,7 +140,9 @@
         },
 
         methods: {
-
+            colorChanged(color) {
+                this.$emit('colorChanged', `bg-color-${color}`)
+            }
         }
     }
 </script>

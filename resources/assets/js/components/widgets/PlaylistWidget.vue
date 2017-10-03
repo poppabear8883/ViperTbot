@@ -1,6 +1,7 @@
 <template>
     <widget wid-id="68244"
-            :fullscreen="true">
+            :fullscreen="true"
+            @colorChanged="colorChanged">
 
         <div slot="title">Playlist</div>
 
@@ -11,7 +12,7 @@
         <div slot="toolbars">
             <div class="widget-toolbar" role="menu">
                 <div class="btn-group">
-                    <button class="btn dropdown-toggle btn-xs btn-primary" data-toggle="dropdown">
+                    <button :class="btnActionClasses" data-toggle="dropdown">
                         Actions <i class="fa fa-caret-down"></i>
                     </button>
                     <ul class="dropdown-menu pull-right">
@@ -138,6 +139,7 @@
 
         data() {
             return {
+                color: '',
                 title: '',
                 video_id: '',
                 playlist: {
@@ -293,6 +295,10 @@
                 });
             },
 
+            colorChanged(color) {
+                this.color = color;
+            }
+
         },
         computed: {
             playlists() {
@@ -313,6 +319,9 @@
                 }
 
                 return [];
+            },
+            btnActionClasses() {
+                return ['btn','dropdown-toggle','btn-xs', 'btn-default'];
             }
         },
         created() {

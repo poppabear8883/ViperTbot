@@ -38344,6 +38344,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -38393,7 +38396,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
 
-    methods: {}
+    methods: {
+        colorChanged: function colorChanged(color) {
+            this.$emit('colorChanged', 'bg-color-' + color);
+        }
+    }
 });
 
 /***/ }),
@@ -38407,7 +38414,7 @@ function injectStyle (ssrContext) {
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(132)
 /* template */
 var __vue_template__ = __webpack_require__(59)
 /* styles */
@@ -38494,259 +38501,67 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "toolbar-colorpicker" }, [
+    _c("a", {
+      staticClass: "dropdown-toggle color-box selector",
+      attrs: { "data-toggle": "dropdown", href: "javascript:void(0);" }
+    }),
+    _vm._v(" "),
+    _c(
+      "ul",
+      {
+        staticClass: "dropdown-menu arrow-box-up-right color-select pull-right"
+      },
+      [
+        _vm._l(_vm.colors, function(color) {
+          return _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  _vm.$emit("changed", color)
+                }
+              }
+            },
+            [
+              _c("span", {
+                class: "bg-color-" + color,
+                attrs: {
+                  "data-widget-setstyle": "jarviswidget-color-" + color,
+                  rel: "tooltip",
+                  "data-placement": "top",
+                  "data-original-title": color
+                }
+              })
+            ]
+          )
+        }),
+        _vm._v(" "),
+        _vm._m(0)
+      ],
+      2
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "toolbar-colorpicker" }, [
-      _c("a", {
-        staticClass: "dropdown-toggle color-box selector",
-        attrs: { "data-toggle": "dropdown", href: "javascript:void(0);" }
-      }),
-      _vm._v(" "),
+    return _c("li", [
       _c(
-        "ul",
+        "a",
         {
-          staticClass:
-            "dropdown-menu arrow-box-up-right color-select pull-right"
+          staticClass: "jarviswidget-remove-colors",
+          attrs: {
+            href: "javascript:void(0);",
+            "data-widget-setstyle": "",
+            rel: "tooltip",
+            "data-placement": "bottom",
+            "data-original-title": "Reset widget color to default"
+          }
         },
-        [
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-green",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-green",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Green Grass"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-greenDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-greenDark",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Dark Green"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-greenLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-greenLight",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Light Green"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-purple",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-purple",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Purple"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-magenta",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-magenta",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Magenta"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-pink",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-pink",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Pink"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-pinkDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-pinkDark",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Fade Pink"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blueLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blueLight",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Light Blue"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-teal",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-teal",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Teal"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blue",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blue",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Ocean Blue"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-blueDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-blueDark",
-                rel: "tooltip",
-                "data-placement": "top",
-                "data-original-title": "Night Sky"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-darken",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-darken",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Night"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-yellow",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-yellow",
-                rel: "tooltip",
-                "data-placement": "left",
-                "data-original-title": "Day Light"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-orange",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-orange",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Orange"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-orangeDark",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-orangeDark",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Dark Orange"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-red",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-red",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Red Rose"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-redLight",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-redLight",
-                rel: "tooltip",
-                "data-placement": "bottom",
-                "data-original-title": "Light Red"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", {
-              staticClass: "bg-color-white",
-              attrs: {
-                "data-widget-setstyle": "jarviswidget-color-white",
-                rel: "tooltip",
-                "data-placement": "right",
-                "data-original-title": "Purity"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              {
-                staticClass: "jarviswidget-remove-colors",
-                attrs: {
-                  href: "javascript:void(0);",
-                  "data-widget-setstyle": "",
-                  rel: "tooltip",
-                  "data-placement": "bottom",
-                  "data-original-title": "Reset widget color to default"
-                }
-              },
-              [_vm._v("Remove")]
-            )
-          ])
-        ]
+        [_vm._v("Remove")]
       )
     ])
   }
@@ -38847,7 +38662,11 @@ var render = function() {
           _c(
             "div",
             { staticClass: "widget-toolbar", attrs: { role: "menu" } },
-            [_vm.colorpicker ? _c("color-picker") : _vm._e()],
+            [
+              _vm.colorpicker
+                ? _c("color-picker", { on: { changed: _vm.colorChanged } })
+                : _vm._e()
+            ],
             1
           ),
           _vm._v(" "),
@@ -40439,7 +40258,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -40579,6 +40398,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 // https://www.youtube.com/watch?v=8SbUC-UaAxE&list=PL3485902CC4FB6C67
 
@@ -40595,6 +40415,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
+            color: '',
             title: '',
             video_id: '',
             playlist: {
@@ -40747,6 +40568,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     __WEBPACK_IMPORTED_MODULE_1__utils_alerts__["a" /* canceled */]();
                 }
             });
+        },
+        colorChanged: function colorChanged(color) {
+            this.color = color;
         }
     },
     computed: {
@@ -40769,6 +40593,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             return [];
+        },
+        btnActionClasses: function btnActionClasses() {
+            return ['btn', 'dropdown-toggle', 'btn-xs', 'btn-default'];
         }
     },
     created: function created() {
@@ -41566,156 +41393,116 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("widget", { attrs: { "wid-id": "68244", fullscreen: true } }, [
-    _c("div", { attrs: { slot: "title" }, slot: "title" }, [
-      _vm._v("Playlist")
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
-      _c("i", { staticClass: "fa fa-music txt-color-white" })
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }, [
-      _c("div", { staticClass: "widget-toolbar", attrs: { role: "menu" } }, [
-        _c("div", { staticClass: "btn-group" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn dropdown-toggle btn-xs btn-primary",
-              attrs: { "data-toggle": "dropdown" }
-            },
-            [
-              _vm._v("\n                    Actions "),
-              _c("i", { staticClass: "fa fa-caret-down" })
-            ]
-          ),
-          _vm._v(" "),
-          _c("ul", { staticClass: "dropdown-menu pull-right" }, [
-            _c("li", [
-              _c(
-                "a",
-                {
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.confirmPlaylistDelete(_vm.playlist)
+  return _c(
+    "widget",
+    {
+      attrs: { "wid-id": "68244", fullscreen: true },
+      on: { colorChanged: _vm.colorChanged }
+    },
+    [
+      _c("div", { attrs: { slot: "title" }, slot: "title" }, [
+        _vm._v("Playlist")
+      ]),
+      _vm._v(" "),
+      _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+        _c("i", { staticClass: "fa fa-music txt-color-white" })
+      ]),
+      _vm._v(" "),
+      _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }, [
+        _c("div", { staticClass: "widget-toolbar", attrs: { role: "menu" } }, [
+          _c("div", { staticClass: "btn-group" }, [
+            _c(
+              "button",
+              {
+                class: _vm.btnActionClasses,
+                attrs: { "data-toggle": "dropdown" }
+              },
+              [
+                _vm._v("\n                    Actions "),
+                _c("i", { staticClass: "fa fa-caret-down" })
+              ]
+            ),
+            _vm._v(" "),
+            _c("ul", { staticClass: "dropdown-menu pull-right" }, [
+              _c("li", [
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.confirmPlaylistDelete(_vm.playlist)
+                      }
                     }
-                  }
-                },
-                [_vm._v("Remove Playlist")]
-              )
+                  },
+                  [_vm._v("Remove Playlist")]
+                )
+              ])
             ])
           ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { slot: "body" }, slot: "body" }, [
-      _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
-        _c(
-          "button",
-          { staticClass: "close", attrs: { "data-dismiss": "alert" } },
-          [_vm._v("\n                ×\n            ")]
-        ),
-        _vm._v(" "),
-        _c("i", { staticClass: "fa-fw fa fa-info" }),
-        _vm._v("\n            Playlist Widget v1.0 Beta\n        ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "widget-body-toolbar" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-xs-2 col-sm-6 col-md-6 col-lg-6" }, [
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.playlist,
-                    expression: "playlist"
-                  }
-                ],
-                staticClass: "form-control",
-                on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.playlist = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  }
-                }
-              },
-              _vm._l(_vm.playlists, function(playlist) {
-                return _c("option", { domProps: { value: playlist } }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(playlist.name) +
-                      "\n                        "
-                  )
-                ])
-              })
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-xs-2 col-sm-6 col-md-6 col-lg-6" }, [
-            _c("div", { staticClass: "input-group" }, [
-              _c("span", { staticClass: "input-group-addon" }, [
-                _c("i", { staticClass: "fa fa-music" })
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.new_playlist,
-                    expression: "new_playlist"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Add New Playlist ..." },
-                domProps: { value: _vm.new_playlist },
-                on: {
-                  keydown: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "enter", 13)
-                    ) {
-                      return null
-                    }
-                    $event.preventDefault()
-                    _vm.addNewPlaylist()
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.new_playlist = $event.target.value
-                  }
-                }
-              })
-            ])
-          ]),
-          _vm._v(" "),
+      _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+        _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
           _c(
-            "div",
-            {
-              staticClass:
-                "col-xs-9 col-sm-12 col-md-12 col-lg-12 padding-top-10"
-            },
-            [
+            "button",
+            { staticClass: "close", attrs: { "data-dismiss": "alert" } },
+            [_vm._v("\n                ×\n            ")]
+          ),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa-fw fa fa-info" }),
+          _vm._v("\n            Playlist Widget v1.0 Beta\n        ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "widget-body-toolbar" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-xs-2 col-sm-6 col-md-6 col-lg-6" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.playlist,
+                      expression: "playlist"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.playlist = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.playlists, function(playlist) {
+                  return _c("option", { domProps: { value: playlist } }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(playlist.name) +
+                        "\n                        "
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-2 col-sm-6 col-md-6 col-lg-6" }, [
               _c("div", { staticClass: "input-group" }, [
                 _c("span", { staticClass: "input-group-addon" }, [
-                  _c("i", { staticClass: "fa fa-youtube" })
+                  _c("i", { staticClass: "fa fa-music" })
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -41723,13 +41510,13 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.video_id,
-                      expression: "video_id"
+                      value: _vm.new_playlist,
+                      expression: "new_playlist"
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "YouTube ID or URL ..." },
-                  domProps: { value: _vm.video_id },
+                  attrs: { type: "text", placeholder: "Add New Playlist ..." },
+                  domProps: { value: _vm.new_playlist },
                   on: {
                     keydown: function($event) {
                       if (
@@ -41739,100 +41526,151 @@ var render = function() {
                         return null
                       }
                       $event.preventDefault()
-                      _vm.addNew()
+                      _vm.addNewPlaylist()
                     },
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.video_id = $event.target.value
+                      _vm.new_playlist = $event.target.value
                     }
                   }
                 })
               ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "col-xs-9 col-sm-6 col-md-6 col-lg-6 padding-top-10"
-            },
-            [
-              _c("div", { staticClass: "input-group" }, [
-                _c("span", { staticClass: "input-group-addon" }, [
-                  _c("i", { staticClass: "fa fa-search" })
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.searchTerm,
-                      expression: "searchTerm"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "Search ..." },
-                  domProps: { value: _vm.searchTerm },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.searchTerm = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "custom-scroll table-responsive",
-          staticStyle: { height: "200px", "overflow-y": "scroll" }
-        },
-        [
-          _c("table", { staticClass: "table table-bordered table-striped" }, [
-            _c("thead", [
-              _c("tr", [_c("th", [_vm._v("Title")]), _vm._v(" "), _c("th")])
             ]),
             _vm._v(" "),
             _c(
-              "tbody",
-              _vm._l(_vm.songs, function(song) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(song.title))]),
+              "div",
+              {
+                staticClass:
+                  "col-xs-9 col-sm-12 col-md-12 col-lg-12 padding-top-10"
+              },
+              [
+                _c("div", { staticClass: "input-group" }, [
+                  _c("span", { staticClass: "input-group-addon" }, [
+                    _c("i", { staticClass: "fa fa-youtube" })
+                  ]),
                   _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
+                  _c("input", {
+                    directives: [
                       {
-                        staticClass: "btn btn-danger btn-xs",
-                        on: {
-                          click: function($event) {
-                            _vm.confirmDelete(song)
-                          }
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.video_id,
+                        expression: "video_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "YouTube ID or URL ..."
+                    },
+                    domProps: { value: _vm.video_id },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !("button" in $event) &&
+                          _vm._k($event.keyCode, "enter", 13)
+                        ) {
+                          return null
                         }
+                        $event.preventDefault()
+                        _vm.addNew()
                       },
-                      [_vm._v("x")]
-                    )
-                  ])
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.video_id = $event.target.value
+                      }
+                    }
+                  })
                 ])
-              })
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "col-xs-9 col-sm-6 col-md-6 col-lg-6 padding-top-10"
+              },
+              [
+                _c("div", { staticClass: "input-group" }, [
+                  _c("span", { staticClass: "input-group-addon" }, [
+                    _c("i", { staticClass: "fa fa-search" })
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.searchTerm,
+                        expression: "searchTerm"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Search ..." },
+                    domProps: { value: _vm.searchTerm },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.searchTerm = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ]
             )
           ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("footer")
-    ])
-  ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "custom-scroll table-responsive",
+            staticStyle: { height: "200px", "overflow-y": "scroll" }
+          },
+          [
+            _c("table", { staticClass: "table table-bordered table-striped" }, [
+              _c("thead", [
+                _c("tr", [_c("th", [_vm._v("Title")]), _vm._v(" "), _c("th")])
+              ]),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.songs, function(song) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(song.title))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-xs",
+                          on: {
+                            click: function($event) {
+                              _vm.confirmDelete(song)
+                            }
+                          }
+                        },
+                        [_vm._v("x")]
+                      )
+                    ])
+                  ])
+                })
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("footer")
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45061,6 +44899,59 @@ var TwitchPubSub = function () {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            colors: ['green', 'greenDark', 'greenLight', 'purple', 'magenta', 'pink', 'pinkDark', 'blueLight', 'teal', 'blue', 'blueDark', 'darken', 'yellow', 'orange', 'orangeDark', 'red', 'redLight', 'white']
+        };
+    },
+
+
+    methods: {}
+});
 
 /***/ })
 /******/ ]);
