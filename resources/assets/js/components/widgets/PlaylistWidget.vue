@@ -75,6 +75,19 @@
                         </div>
                     </div>
 
+                    <div class="col-xs-9 col-sm-6 col-md-6 col-lg-6 padding-top-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+
+                            <input type="text"
+                                   class="form-control"
+                                   v-model="searchTerm"
+                                   placeholder="Search ...">
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -132,7 +145,8 @@
                     name: 'Default Playlist',
                     songs: []
                 },
-                new_playlist: ''
+                new_playlist: '',
+                searchTerm: ''
             }
         },
         methods: {
@@ -140,10 +154,6 @@
                 if (e) e.preventDefault();
 
                 let parse = urlParser.parse(this.video_id);
-
-                //let parse = youtubeParser(this.video_id);
-
-                //console.log(parse);
 
                 /**
                  * Handle the URL
@@ -167,7 +177,12 @@
                     if (response.data.length > 0) {
 
                         _.forEach(response.data, (song) => {
-                            this.$store.commit('ADD_SONG', song);
+
+                            this.$store.commit('ADD_SONG', {
+                                song: song,
+                                playlist_id: this.playlist.id
+                            });
+
                         });
 
                         alerts.success('You have successfully added new songs to playlist!');
@@ -224,7 +239,10 @@
                             }
                         }).then((response) => {
 
-                            this.$store.commit('DELETE_SONG', song.video_id);
+                            this.$store.commit('DELETE_SONG', {
+                                playlist_id: this.playlist.id,
+                                video_id: song.video_id
+                            });
 
                             alerts.success(`You successfully removed the song ${song.title}`);
 
@@ -243,7 +261,7 @@
 
             confirmPlaylistDelete(playlist) {
                 if (playlist.id === 1) {
-                    alerts.error('You cannot remove the Default Playlist!')
+                    alerts.error('You cannot remove the Default Playlist!');
                     return false;
                 }
 
@@ -280,7 +298,7 @@
                     }
 
                 });
-            }
+            },
 
         },
         computed: {
@@ -288,7 +306,16 @@
                 return this.$store.getters.getPlaylists;
             },
             songs() {
+
                 if(this.playlist) {
+                    if (this.searchTerm !== '') {
+                        return this.playlist.songs.filter((row) => {
+                            return Object.keys(row).some((key) => {
+                                return String(row[key]).toLowerCase().indexOf(this.searchTerm) > -1
+                            })
+                        })
+                    }
+
                     return this.playlist.songs;
                 }
 

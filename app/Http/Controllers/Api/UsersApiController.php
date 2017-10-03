@@ -64,7 +64,8 @@ class UsersApiController extends Controller
             'channel' => $this->twitch->authChannel($this->token()),
             'playlists' => Auth::user()->playlists()->with('songs')->get(),
             'reqsongs' => Auth::user()->requestedSongs,
-            'regulars' => Auth::user()->regulars
+            'regulars' => Auth::user()->regulars,
+            'songs' => Auth::user()->songs
         ], 200);
     }
 

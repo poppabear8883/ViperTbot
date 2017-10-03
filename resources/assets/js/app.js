@@ -50,7 +50,7 @@ const app = new Vue({
                 this.$store.commit('SET_CHANNEL', response.data.channel);
                 this.$store.commit('SET_REQSONGS', response.data.reqsongs);
                 this.$store.commit('SET_PLAYLISTS', response.data.playlists);
-                this.$store.commit('SET_SONGS', response.data.playlists[0].songs);
+                this.$store.commit('SET_SONGS', response.data.songs);
             }).catch((error) => {
                 console.log(error);
                 return null
