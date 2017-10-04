@@ -15,32 +15,13 @@ class RegularsApiController extends Controller
         'name' => 'required|string',
     ];
 
-    protected $get_methods = [
-        'all'
-    ];
-
-    protected $post_methods = [
-        'create'
-    ];
-
-    protected $patch_methods = [
-        'update'
-    ];
-
-    protected $put_methods = [
-        'update'
-    ];
-
-    protected $delete_methods = [
-        'remove'
-    ];
-
     /**
      * The Regular instance
      *
      * @var Regular
      */
     private $regular;
+
     /**
      * @var TwitchApi
      */

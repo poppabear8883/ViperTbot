@@ -15,26 +15,6 @@ class UsersApiController extends Controller
 
     ];
 
-    protected $get_methods = [
-        'getAuthUser'
-    ];
-
-    protected $post_methods = [
-
-    ];
-
-    protected $patch_methods = [
-
-    ];
-
-    protected $put_methods = [
-
-    ];
-
-    protected $delete_methods = [
-
-    ];
-
     /**
      * The TwitchApi instance
      *

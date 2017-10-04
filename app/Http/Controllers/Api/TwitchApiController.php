@@ -14,27 +14,6 @@ class TwitchApiController extends Controller
 
     ];
 
-    protected $get_methods = [
-        'all',
-        'myChannel'
-    ];
-
-    protected $post_methods = [
-
-    ];
-
-    protected $patch_methods = [
-
-    ];
-
-    protected $put_methods = [
-        'updateChannel'
-    ];
-
-    protected $delete_methods = [
-
-    ];
-
     /**
      * The Api instance
      *

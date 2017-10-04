@@ -1,63 +1,64 @@
 <?php namespace App\Http\Controllers\Api\Playlists;
 
-use App\Playlist;
+use App\Contracts\ApiControllerInterface;
+use App\Http\Controllers\Controller;
+use App\Playlist\Contracts\PlaylistInterface;
+use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class PlaylistsApiController extends API
+class PlaylistsApiController extends Controller implements ApiControllerInterface
 {
+    use HandlesApiRequests;
+
+    protected $rules = [
+        'name' => 'required|string',
+    ];
+
     /**
-     * Gets all songs
-     *
-     * @return Response
+     * @var PlaylistInterface
      */
-    protected function all()
+    protected $playlist;
+
+
+    /**
+     * Injects Playlist dependency.
+     *
+     * @param PlaylistInterface $playlist
+     */
+    public function __construct(PlaylistInterface $playlist)
     {
-        return response($this->playlist->all(), 200);
+        $this->playlist = $playlist;
     }
 
     /**
-     * Creates a song
+     * Gets all playlists
+     *
+     * @return Response
+     */
+    public function all()
+    {
+        return response($this->playlist->getAll(), 200);
+    }
+
+    /**
+     * Creates a playlist
      *
      * @param array $params
      * @return Response
      */
-    protected function create($params = [])
+    public function create($params = [])
     {
         $this->isValid($params);
         $name = $params['name'];
 
-        if ($this->playlistExists($name)) {
+        if ($this->playlist->existsByName($name)) {
             return response('Playlist already exists', 422);
         }
 
-        $playlist = $this->playlist->create([
-            'name' => $name,
-            'user_id' => Auth::user()->id
-        ])
-            ->with('songs')
-            ->get()
-            ->where('name', $name)
-            ->first();
-
-        //dd($playlist->with('songs')->get());
+        $playlist = $this->playlist->create($name, Auth::user()->id);
 
         return response($playlist, 200);
-    }
-
-    /**
-     * Removes a song
-     *
-     * @param array $params
-     * @return Response
-     */
-    public function remove($params = [])
-    {
-        $this->isValid($params);
-
-        $song = $this->getPlaylistById($params['id']);
-
-        return response($song->delete(), 200);
     }
 
     /**
@@ -70,50 +71,25 @@ class PlaylistsApiController extends API
     {
         $this->isValid($params);
 
-        $playlist = $this->getPlaylistById($params['id']);
-        $playlist->update($params);
+        $playlist = $this->playlist->update($params['id'], $params);
 
-        return response($playlist->get(), 200);
+        return response($playlist, 200);
 
     }
 
     /**
-     * Checks if a playlist already exists
-     *
-     * @param $name
-     * @return bool
-     */
-    private function playlistExists($name)
-    {
-        return !$this->playlist->where('name', $name)->get()->isEmpty();
-    }
-
-    /**
-     * Get the Playlist object by id
-     *
-     * @param $id
-     * @return Playlist
-     */
-    private function getPlaylistById($id)
-    {
-        return $this->playlist->where('id', $id);
-    }
-
-    /**
-     * Checks the validation rules for the request
+     * Removes a playlist
      *
      * @param array $params
-     * @return Response|bool
+     * @return Response
      */
-    private function isValid($params)
+    public function remove($params = [])
     {
-        $validator = Validator::make($params, $this->rules);
+        $this->isValid($params);
 
-        if ($validator->fails()) {
-            return response(['errors' => $validator->failed()], 422);
-        }
+        $playlist = $this->playlist->remove($params['id']);
 
-        return true;
+        return response($playlist, 200);
     }
 
 }

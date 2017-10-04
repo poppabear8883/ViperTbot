@@ -178,9 +178,9 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
+        App\Playlist\PlaylistServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        //App\IGDB\IGDBServiceProvider::class,
         App\Twitch\Providers\ApiServiceProvider::class
 
     ],

@@ -93,7 +93,7 @@
 
             </div>
 
-            <div class="custom-scroll table-responsive" style="height:200px; overflow-y: scroll;">
+            <div class="custom-scroll table-responsive" style="max-height:400px; overflow-y: scroll;">
 
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -103,11 +103,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="song in songs">
+                    <tr v-if="songs.length > 0" v-for="song in songs">
                         <td>{{song.title}}</td>
                         <td>
                             <button @click="confirmDelete(song)" class="btn btn-danger btn-xs">x</button>
                         </td>
+                    </tr>
+                    <tr v-if="songs.length <= 0">
+                        <td colspan="2" class="text-center">No songs in <strong>{{ playlist.name }}</strong>.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -233,7 +236,8 @@
                             data: {
                                 'action': 'remove',
                                 'params': {
-                                    'video_id': song.video_id,
+                                    'playlist_id': this.playlist.id,
+                                    'video_id': song.video_id
                                 }
                             }
                         }).then((response) => {

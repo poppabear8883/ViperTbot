@@ -9,6 +9,11 @@ trait HandlesApiRequests {
         'GET', 'POST', 'PUT', 'PATCH', 'DELETE'
     ];
 
+    protected $functions = [
+        'all', 'create', 'update', 'remove',
+        'myChannel', 'updateChannel', 'getAuthUser'
+    ];
+
     protected $errors = [];
 
     /**
@@ -50,7 +55,7 @@ trait HandlesApiRequests {
 
         $func = $request->input('action');
 
-        if (!$this->valid_function($func, $method))
+        if (!$this->valid_function($func))
             return false;
 
         return true;
@@ -61,20 +66,13 @@ trait HandlesApiRequests {
         return in_array($method, $this->request_methods);
     }
 
-    protected function valid_function($func, $type)
+    protected function valid_function($func)
     {
-        $type = strtolower($type);
-        $types = $this->{$type . '_methods'};
-
-        if (in_array($func, $types)) {
+        if (in_array($func, $this->functions)) {
             if (!method_exists($this, $func)) {
                 array_push($this->errors, '\'' . $func . '\' is invalid. Refer to the Api documentation for a list of available actions');
                 return false;
             }
-        } else {
-            $type = strtoupper($type);
-            array_push($this->errors, '\'' . $func . '\' is invalid for ' . $type . ' requests. Refer to the Api documentation for a list of available ' . $type . ' actions');
-            return false;
         }
 
         return true;

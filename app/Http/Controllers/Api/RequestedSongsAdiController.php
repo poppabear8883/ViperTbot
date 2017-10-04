@@ -16,26 +16,6 @@ class RequestedSongsAdiController extends Controller
         'title' => 'string'
     ];
 
-    protected $get_methods = [
-        'all'
-    ];
-
-    protected $post_methods = [
-        'create'
-    ];
-
-    protected $patch_methods = [
-        'updateTitle'
-    ];
-
-    protected $put_methods = [
-        'updateTitle'
-    ];
-
-    protected $delete_methods = [
-        'remove'
-    ];
-
     /**
      * The Playlist instance
      *
@@ -140,23 +120,6 @@ class RequestedSongsAdiController extends Controller
     private function getSongByVideoId($video_id)
     {
         return $this->song->where('video_id', $video_id);
-    }
-
-    /**
-     * Checks the validation rules for the request
-     *
-     * @param array $params
-     * @return Response|bool
-     */
-    private function isValid($params)
-    {
-        $validator = Validator::make($params, $this->rules);
-
-        if ($validator->fails()) {
-            return response(['errors' => $validator->failed()], 422);
-        }
-
-        return true;
     }
 
 }

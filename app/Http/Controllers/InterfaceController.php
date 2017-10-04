@@ -40,7 +40,7 @@ class InterfaceController extends Controller
     {
         //dd(\Youtube::getPlaylistItemsByPlaylistId('PL3485902CC4FB6C67'));
 
-        //dd(!Playlist::where('name', 'test')->get()->isEmpty());
+        //dd(Playlist::with('songs')->get());
 
         return view('pages.interface.index', $this->data());
     }

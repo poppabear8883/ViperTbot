@@ -51,7 +51,7 @@
                         client-id="{{env('TWITCH_KEY')}}"
                 ></stream-setup-widget>
 
-                <twitch-chat-widget></twitch-chat-widget>
+                {{--<twitch-chat-widget></twitch-chat-widget>--}}
 
 
             </article><!-- END GRID -->
