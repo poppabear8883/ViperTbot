@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Playlist\Playlist;
+use App\Playlist\Song;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

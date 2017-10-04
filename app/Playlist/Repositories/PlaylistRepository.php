@@ -3,7 +3,7 @@
 namespace App\Playlist\Repositories;
 
 use App\Playlist\Contracts\PlaylistInterface;
-use App\Playlist;
+use App\Playlist\Playlist;
 
 class PlaylistRepository implements PlaylistInterface
 {

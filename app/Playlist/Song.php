@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Playlist;
 
 use Illuminate\Database\Eloquent\Model;
 

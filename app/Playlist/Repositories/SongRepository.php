@@ -4,7 +4,7 @@ namespace App\Playlist\Repositories;
 
 use Alaouy\Youtube\Youtube;
 use App\Playlist\Contracts\SongInterface;
-use App\Song;
+use App\Playlist\Song;
 
 class SongRepository implements SongInterface
 {
