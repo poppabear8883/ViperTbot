@@ -53,6 +53,6 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
     });
 
     Route::prefix('playlists')->group(function() {
-        Route::any('', 'PlaylistsApiController@api');
+        Route::any('', 'Playlists\PlaylistsApiController@api');
     });
 });

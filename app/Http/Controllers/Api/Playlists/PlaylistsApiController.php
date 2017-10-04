@@ -1,57 +1,11 @@
-<?php namespace App\Http\Controllers\Api;
+<?php namespace App\Http\Controllers\Api\Playlists;
 
-use Alaouy\Youtube\Facades\Youtube;
-use App\Http\Controllers\Controller;
 use App\Playlist;
-use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class PlaylistsApiController extends Controller
+class PlaylistsApiController extends API
 {
-    use HandlesApiRequests;
-
-    protected $rules = [
-        'name' => 'required|string',
-    ];
-
-    protected $get_methods = [
-        'all'
-    ];
-
-    protected $post_methods = [
-        'create'
-    ];
-
-    protected $patch_methods = [
-        'update'
-    ];
-
-    protected $put_methods = [
-        'update'
-    ];
-
-    protected $delete_methods = [
-        'remove'
-    ];
-
-
-    /**
-     * @var Playlist
-     */
-    private $playlist;
-
-
-    /**
-     * Injects Playlist dependency.
-     *
-     * @param Playlist $playlist
-     */
-    public function __construct(Playlist $playlist)
-    {
-        $this->playlist = $playlist;
-    }
-
     /**
      * Gets all songs
      *
