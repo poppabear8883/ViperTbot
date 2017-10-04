@@ -41679,7 +41679,7 @@ var render = function() {
             staticStyle: { "max-height": "400px", "overflow-y": "scroll" }
           },
           [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
+            _c("table", { staticClass: "table table-bordered table-hover" }, [
               _c("thead", [
                 _c("tr", [_c("th", [_vm._v("Title")]), _vm._v(" "), _c("th")])
               ]),

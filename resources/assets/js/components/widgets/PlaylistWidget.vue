@@ -95,7 +95,7 @@
 
             <div class="custom-scroll table-responsive" style="max-height:400px; overflow-y: scroll;">
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <th>Title</th>
