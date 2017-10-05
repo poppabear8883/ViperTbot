@@ -2,7 +2,7 @@
 
 use App\Contracts\ApiControllerInterface;
 use App\Http\Controllers\Controller;
-use App\Playlist\Contracts\PlaylistInterface;
+use App\Playlists\Contracts\PlaylistInterface;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;

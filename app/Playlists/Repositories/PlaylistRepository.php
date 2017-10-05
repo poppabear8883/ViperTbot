@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Playlist\Repositories;
+namespace App\Playlists\Repositories;
 
-use App\Playlist\Contracts\PlaylistInterface;
-use App\Playlist\Playlist;
+use App\Playlists\Contracts\PlaylistInterface;
+use App\Playlists\Playlist;
 
 class PlaylistRepository implements PlaylistInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Playlist\Repositories;
+namespace App\Playlists\Repositories;
 
 use Alaouy\Youtube\Youtube;
-use App\Playlist\Contracts\SongInterface;
-use App\Playlist\Song;
+use App\Playlists\Contracts\SongInterface;
+use App\Playlists\Song;
 
 class SongRepository implements SongInterface
 {

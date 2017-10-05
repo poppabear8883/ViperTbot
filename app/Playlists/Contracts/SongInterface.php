@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Playlist\Contracts;
+namespace App\Playlists\Contracts;
 
 interface SongInterface
 {

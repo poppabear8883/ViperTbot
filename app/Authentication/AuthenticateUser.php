@@ -1,7 +1,7 @@
 <?php namespace App\Authentication;
 
 use App\Contracts\AuthenticateUserListener;
-use App\Playlist\Contracts\PlaylistInterface;
+use App\Playlists\Contracts\PlaylistInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;

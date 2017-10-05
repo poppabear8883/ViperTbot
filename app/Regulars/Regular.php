@@ -1,16 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Regulars;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class RequestedSong extends Model
+class Regular extends Model
 {
     protected $fillable = [
+        'name',
+        'display_name',
+        'channel_id',
         'user_id',
-        'title',
-        'video_id',
-        'requested_by'
+        'logo'
     ];
 
     public function user()

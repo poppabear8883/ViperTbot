@@ -2,8 +2,10 @@
 
 namespace App;
 
-use App\Playlist\Playlist;
-use App\Playlist\Song;
+use App\Playlists\Playlist;
+use App\Playlists\RequestedSong;
+use App\Playlists\Song;
+use App\Regulars\Regular;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
