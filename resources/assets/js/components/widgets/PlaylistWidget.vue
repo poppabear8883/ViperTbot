@@ -110,7 +110,7 @@
                         </td>
                     </tr>
                     <tr v-if="songs.length <= 0">
-                        <td colspan="2" class="text-center">No songs in <strong>{{ playlist.name }}</strong>.</td>
+                        <td colspan="2" class="text-center">No songs in <strong>{{ playlistName }}</strong>.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -307,6 +307,13 @@
         computed: {
             playlists() {
                 return this.$store.getters.getPlaylists;
+            },
+            playlistName() {
+                if (this.playlist) {
+                    return this.playlist.name
+                }
+
+                return '';
             },
             songs() {
 
