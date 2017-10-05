@@ -58,7 +58,7 @@ class PlaylistRepository implements PlaylistInterface
 
     public function existsById($id)
     {
-        return !$this->getById($id)->isEmpty();
+        return !$this->model->where('id', $id)->get()->isEmpty();
     }
 
     public function getSongs($playlist_id = 0)
