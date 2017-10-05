@@ -36,6 +36,20 @@
                 <i class="fa-fw fa fa-info"></i>
                 Media Player Widget v1.0 Beta
             </div>
+
+            <div class="widget-body-toolbar">
+                <div class="row">
+                    <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
+                        <select class="form-control" v-model="playlist">
+                            <option v-for="playlist in playlists"
+                                    :value="playlist">
+                                {{ playlist.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div v-if="player" class="alert alert-default no-margin fade in text-center">
                 <i class="fa-fw fa fa-music"></i>
                 Current Song: {{ title }}
@@ -54,15 +68,6 @@
                          @paused="paused"
                          @queued="queued"
                 ></youtube>
-            </div>
-            <div v-if="listEmpty" class="text-center">
-                <h1>Playlist is empty</h1>
-                <button class="btn btn-labeled btn-primary" @click="showAddSongModal()">
-                    <span class="btn-label">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                    Add Song
-                </button>
             </div>
         </div>
         <!-- end body -->
@@ -90,20 +95,29 @@
                 width: 368,
                 height: 207,
                 firstLoad: true,
-                player: null
+                player: null,
+                playlist: {
+                    id: 1,
+                    name: 'Default Playlist',
+                    songs: []
+                }
+            }
+        },
+        watch: {
+            playlist(newPlaylist) {
+                this.listCopy = [];
             }
         },
         computed: {
-            /**
-             * Vuex Getters
-             *
-             * playlist: '../../vuex/Songs'
-             * reqplaylist: '../../vuex/RequestedSongs'
-             *
-             * todo: combine these 2 modules into a single module
-             */
-            playlist() {
-                return this.$store.getters.getSongs;
+            playlists() {
+                return this.$store.getters.getPlaylists;
+            },
+            songs() {
+                if(this.playlist) {
+                    return this.playlist.songs;
+                }
+
+                return [];
             },
             reqplaylist() {
                 return this.$store.getters.getReqSongs;
@@ -325,13 +339,13 @@
             getRandomItem() {
                 this.isReq = false;
 
-                if (this.playlist.length <= 0) {
+                if (this.songs.length <= 0) {
                     return false;
                 }
 
                 if (this.listCopy.length <= 0) {
 
-                    _(this.playlist).forEach((item) => {
+                    _(this.songs).forEach((item) => {
                         this.listCopy.push(item)
                     });
 
@@ -371,18 +385,22 @@
              * If we have songs, lets go ahead and process a song to be played.
              */
             let intervalHandle = setInterval(() => {
-                if (this.playlist) {
-                    if (this.playlist.length > 0) {
+                if (this.songs) {
+                    if (this.songs.length > 0) {
                         this.listReady = true;
                         this.listEmpty = false;
                         let item = this.getRandomItem();
                         this.updateVideo(item);
-                        clearInterval(intervalHandle)
+                        clearInterval(intervalHandle);
                     } else {
                         this.listEmpty = true
                     }
                 }
-            }, 5000); // end timeout
+            }, 5000);
+
+            setTimeout(() => {
+                this.playlist = this.playlists[0];
+            }, 1500);
 
         }
     }
