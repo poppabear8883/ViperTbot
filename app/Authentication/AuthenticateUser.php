@@ -1,7 +1,7 @@
 <?php namespace App\Authentication;
 
 use App\Contracts\AuthenticateUserListener;
-use App\Playlist\Playlist;
+use App\Playlist\Contracts\PlaylistInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;
@@ -20,11 +20,17 @@ class AuthenticateUser
      */
     private $socialite;
 
+    /**
+     * @var PlaylistInterface
+     */
+    private $playlist;
 
-    public function __construct(UserRepository $user, Socialite $socialite)
+
+    public function __construct(UserRepository $user, Socialite $socialite, PlaylistInterface $playlist)
     {
         $this->user = $user;
         $this->socialite = $socialite;
+        $this->playlist = $playlist;
     }
 
     public function execute(bool $hasCode, AuthenticateUserListener $listener)
@@ -38,10 +44,9 @@ class AuthenticateUser
 
         Auth::login($user, true);
 
-        Playlist::create([
-            'name' => 'Default Playlist',
-            'user_id' => $user->id
-        ]);
+        if (!$this->playlist->existsById(1)) {
+            $this->playlist->create('Default Playlist', $user->id);
+        }
 
         TwitchApi::setToken($user->access_token);
 
