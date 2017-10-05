@@ -124,7 +124,7 @@
 
         },
 
-        data: function() {
+        data() {
             return{
 
             }
