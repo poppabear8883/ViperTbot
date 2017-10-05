@@ -87,9 +87,9 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
     {
         $this->isValid($params);
 
-        $playlist = $this->playlist->remove($params['id']);
+        $this->playlist->remove($params['id']);
 
-        return response($playlist, 200);
+        return response('success', 200);
     }
 
 }
