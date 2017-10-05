@@ -13,6 +13,30 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+// todo: extract component registration to separate files to clean this up
+/*
+ * Passport Components
+ */
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue')
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue')
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue')
+);
+
+
+/*
+ * App Components
+ */
 Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
 
 Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
