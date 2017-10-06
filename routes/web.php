@@ -48,7 +48,7 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
     });
 
     Route::prefix('reqplaylist')->group(function() {
-        Route::any('', 'RequestedSongsAdiController@api');
+        Route::any('', 'RequestedSongsApiController@api');
     });
 
     Route::prefix('livechannels')->group(function() {
