@@ -11,23 +11,30 @@
 |
 */
 
-Route::get('/', 'InterfaceController@index')->middleware('auth');
+Route::middleware(['auth'])->group(function () {
 
-Route::get('login', ['uses' => 'AuthController@login', 'as' => 'login']);
+    Route::get('/', 'InterfaceController@index');
 
-Route::get('authenticate', ['uses' => 'AuthController@authenticate']);
+    Route::get('applications', function() {
+        return view('pages.interface.applications');
+    });
 
-Route::get('applications', function() {
-    return view('pages.interface.applications');
+    Route::get('logout', function() {
+        \Auth::logout();
+        return redirect('login');
+    });
 });
 
-Route::get('logout', function() {
-    \Auth::logout();
-    return redirect('login');
+Route::middleware(['guest'])->group(function () {
+    Route::get('login', ['uses' => 'AuthController@login', 'as' => 'login']);
+
+    Route::get('authenticate', ['uses' => 'AuthController@authenticate']);
 });
 
 /*
  * API ROUTES
+ *
+ * TODO: Currently being refactored (moving to api.php routes)
  */
 
 Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () {
