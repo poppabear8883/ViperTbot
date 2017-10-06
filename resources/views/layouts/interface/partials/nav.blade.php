@@ -4,10 +4,10 @@
 
 @if(!\Auth::guest())
     <!-- User info -->
-    <div class="login-info">
+        <div class="login-info">
         <span> <!-- User image size is adjusted inside CSS, it should stay as it -->
             <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-                <img src="{{ \Auth::user()->avatar }}" alt="ME" class="online" />
+                <img src="{{ \Auth::user()->avatar }}" alt="ME" class="online"/>
 
                 <span>
                     {{ \Auth::user()->display_name }}
@@ -16,11 +16,11 @@
                 <i class="fa fa-angle-down"></i>
             </a>
         </span>
-    </div>
-    <!-- end user info -->
+        </div>
+        <!-- end user info -->
 @endif
 
-    <!-- NAVIGATION : This navigation is also responsive-->
+<!-- NAVIGATION : This navigation is also responsive-->
     <nav>
         <ul>
             {{-- TODO: permissions --}}
@@ -37,8 +37,12 @@
             </li>--}}
             {{-- END IF --}}
 
-            <li class="active">
-                <a id="dashboard" href="#" @click="currentView = 'dashboard'" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+            {{--todo: set class="active" when view is active ??--}}
+            <li>
+                <a id="dashboard" href="/" title="Dashboard">
+                    <i class="fa fa-lg fa-fw fa-home"></i>
+                    <span class="menu-item-parent">Dashboard</span>
+                </a>
             </li>
 
             {{--<li>
@@ -130,6 +134,13 @@
                     </li>
 
                 </ul>
+            </li>
+
+            <li>
+                <a id="applications" href="/applications" title="Applications">
+                    <i class="fa fa-lg fa-fw fa-cubes"></i>
+                    <span class="menu-item-parent">Applications</span>
+                </a>
             </li>
 
         </ul>

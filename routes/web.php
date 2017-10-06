@@ -17,6 +17,10 @@ Route::get('login', ['uses' => 'AuthController@login', 'as' => 'login']);
 
 Route::get('authenticate', ['uses' => 'AuthController@authenticate']);
 
+Route::get('applications', function() {
+    return view('pages.interface.applications');
+});
+
 Route::get('logout', function() {
     \Auth::logout();
     return redirect('login');
