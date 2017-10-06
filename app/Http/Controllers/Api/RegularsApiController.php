@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Regular;
+use App\Regulars\Contracts\RegularsInterface;
 use App\Traits\HandlesApiRequests;
 use App\Twitch\TwitchApi;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +18,9 @@ class RegularsApiController extends Controller
     /**
      * The Regular instance
      *
-     * @var Regular
+     * @var RegularsInterface
      */
-    private $regular;
+    private $regulars;
 
     /**
      * @var TwitchApi
@@ -30,11 +30,11 @@ class RegularsApiController extends Controller
     /**
      * Injects Regular dependency.
      *
-     * @param Regular $playlist
+     * @param RegularsInterface $regulars
      */
-    public function __construct(Regular $regular, TwitchApi $twitch)
+    public function __construct(RegularsInterface $regulars, TwitchApi $twitch)
     {
-        $this->regular = $regular;
+        $this->regulars = $regulars;
         $this->twitch = $twitch;
     }
 
@@ -45,7 +45,7 @@ class RegularsApiController extends Controller
      */
     protected function all()
     {
-        return response($this->regular->all(), 200);
+        return response($this->regulars->all(), 200);
     }
 
     /**
@@ -66,7 +66,7 @@ class RegularsApiController extends Controller
 
         $data = $this->getTwitchDataByName($params['name']);
 
-        $song = $this->regular->create([
+        $song = $this->regulars->create([
             'user_id' => Auth::user()->id,
             'name' => $data->name,
             'display_name' => $data->display_name,
@@ -118,7 +118,7 @@ class RegularsApiController extends Controller
      */
     private function exists($name)
     {
-        return !$this->regular->where('name', $name)->get()->isEmpty();
+        return !$this->regulars->where('name', $name)->get()->isEmpty();
     }
 
     /**
@@ -129,28 +129,11 @@ class RegularsApiController extends Controller
      */
     private function getByName($name)
     {
-        return $this->regular->where('name', $name);
+        return $this->regulars->where('name', $name);
     }
 
     private function getTwitchDataByName($name)
     {
         return (object) $this->twitch->users(['login' => $name])['users'][0];
-    }
-
-    /**
-     * Checks the validation rules for the request
-     *
-     * @param array $params
-     * @return Response|bool
-     */
-    private function isValid($params)
-    {
-        $validator = Validator::make($params, $this->rules);
-
-        if ($validator->fails()) {
-            return response(['errors' => $validator->failed()], 422);
-        }
-
-        return true;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Playlists\Contracts;
 
-interface RequestedSongInterface
+interface PlaylistsInterface
 {
     /**
      * Gets all Playlist Models
@@ -18,17 +18,11 @@ interface RequestedSongInterface
     public function getById($id);
 
     /**
-     * @param $video_id
-     * @return mixed
-     */
-    public function getByVideoId($video_id);
-
-    /**
      * @param $name
      * @param $id
      * @return mixed
      */
-    public function create($title, $video_id, $requested_by, $user_id);
+    public function create($name, $id);
 
     /**
      * @param $id
@@ -38,10 +32,10 @@ interface RequestedSongInterface
     public function update($id, $params);
 
     /**
-     * @param $video_id
+     * @param $id
      * @return mixed
      */
-    public function remove($video_id);
+    public function remove($id);
 
     /**
      * @param $name
@@ -54,12 +48,6 @@ interface RequestedSongInterface
      * @return mixed
      */
     public function existsById($id);
-
-    /**
-     * @param $video_id
-     * @return mixed
-     */
-    public function existsByVideoId($video_id);
 
     /**
      * @param int $playlist_id

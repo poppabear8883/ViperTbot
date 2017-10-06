@@ -3,13 +3,12 @@
 namespace App\Playlists\Providers;
 
 use Alaouy\Youtube\Youtube;
-use App\Playlists\Contracts\PlaylistInterface as PlaylistInterface;
-use App\Playlists\Contracts\RequestedSongInterface;
-use App\Playlists\Contracts\SongInterface;
-use App\Playlists\Repositories\PlaylistRepository;
-use App\Playlists\Repositories\RequestedSongRepository;
-use App\Playlists\Repositories\SongRepository;
-use App\Playlists\RequestedSong;
+use App\Playlists\Contracts\PlaylistsInterface;
+use App\Playlists\Contracts\RequestedSongsInterface;
+use App\Playlists\Contracts\SongsInterface;
+use App\Playlists\Repositories\PlaylistsRepository;
+use App\Playlists\Repositories\RequestedSongsRepository;
+use App\Playlists\Repositories\SongsRepository;
 use Illuminate\Support\ServiceProvider;
 
 class PlaylistsServiceProvider extends ServiceProvider
@@ -33,18 +32,18 @@ class PlaylistsServiceProvider extends ServiceProvider
     {
 
         $this->app->singleton(
-            PlaylistInterface::class,
-            PlaylistRepository::class
+            PlaylistsInterface::class,
+            PlaylistsRepository::class
         );
 
         $this->app->singleton(
-            SongInterface::class, 
-            SongRepository::class
+            SongsInterface::class,
+            SongsRepository::class
         );
 
         $this->app->singleton(
-            RequestedSongInterface::class,
-            RequestedSongRepository::class
+            RequestedSongsInterface::class,
+            RequestedSongsRepository::class
         );
 
 

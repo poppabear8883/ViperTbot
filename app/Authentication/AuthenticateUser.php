@@ -1,8 +1,8 @@
 <?php namespace App\Authentication;
 
-use App\Contracts\AuthenticateUserListener;
-use App\Playlists\Contracts\PlaylistInterface;
-use App\Repositories\UserRepository;
+use App\Authentication\Contracts\AuthenticateUserInterface;
+use App\Playlists\Contracts\PlaylistsInterface;
+use App\Users\Contracts\UsersInterface;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 use Zarlach\TwitchApi\Facades\TwitchApiServiceFacade as TwitchApi;
@@ -11,7 +11,7 @@ class AuthenticateUser
 {
 
     /**
-     * @var UserRepository
+     * @var UsersInterface
      */
     private $user;
 
@@ -21,19 +21,19 @@ class AuthenticateUser
     private $socialite;
 
     /**
-     * @var PlaylistInterface
+     * @var PlaylistsInterface
      */
     private $playlist;
 
 
-    public function __construct(UserRepository $user, Socialite $socialite, PlaylistInterface $playlist)
+    public function __construct(UsersInterface $user, Socialite $socialite, PlaylistsInterface $playlist)
     {
         $this->user = $user;
         $this->socialite = $socialite;
         $this->playlist = $playlist;
     }
 
-    public function execute(bool $hasCode, AuthenticateUserListener $listener)
+    public function execute(bool $hasCode, AuthenticateUserInterface $listener)
     {
 
         if (!$hasCode) return $this->getAuthorizationFirst();

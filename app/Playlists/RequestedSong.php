@@ -2,7 +2,7 @@
 
 namespace App\Playlists;
 
-use App\User;
+use App\Users\User;
 use Illuminate\Database\Eloquent\Model;
 
 class RequestedSong extends Model

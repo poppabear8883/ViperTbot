@@ -21,6 +21,7 @@
 
         {{-- Main Content --}}
         <div id="content">
+            @if(!Auth::guest())
             <div class="row">
 
                 <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -60,6 +61,7 @@
                     </ul>
                 </div>
             </div>
+            @endif
 
             @yield('content')
         </div>

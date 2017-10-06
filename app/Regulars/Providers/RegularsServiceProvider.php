@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Regulars;
+namespace App\Regulars\Providers;
 
 use App\Regulars\Contracts\RegularsInterface;
 use App\Regulars\Repositories\RegularsRepository;

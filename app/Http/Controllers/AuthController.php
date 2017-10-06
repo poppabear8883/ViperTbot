@@ -1,10 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use App\Authentication\AuthenticateUser;
-use App\Contracts\AuthenticateUserListener;
+use App\Authentication\Contracts\AuthenticateUserInterface;
 use Illuminate\Http\Request;
 
-class AuthController extends Controller implements AuthenticateUserListener
+class AuthController extends Controller implements AuthenticateUserInterface
 {
 
     public function index()

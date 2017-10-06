@@ -2,17 +2,17 @@
 
 namespace App\Playlists\Repositories;
 
-use App\Playlists\Contracts\RequestedSongInterface;
-use App\Playlists\RequestedSong;
+use App\Playlists\Contracts\PlaylistsInterface;
+use App\Playlists\Playlist;
 
-class RequestedSongRepository implements RequestedSongInterface
+class PlaylistsRepository implements PlaylistsInterface
 {
     /**
-     * @var RequestedSong
+     * @var Playlist
      */
     private $model;
 
-    public function __construct(RequestedSong $model)
+    public function __construct(Playlist $model)
     {
         $this->model = $model;
     }
@@ -22,14 +22,15 @@ class RequestedSongRepository implements RequestedSongInterface
         return $this->model->all();
     }
 
-    public function create($title, $video_id, $requested_by, $user_id)
+    public function create($name, $user_id)
     {
         return $this->model->create([
-            'title' => $title,
-            'video_id' => $video_id,
-            'requested_by' => $requested_by,
+            'name' => $name,
             'user_id' => $user_id
-        ]);
+        ])->with('songs')
+            ->get()
+            ->where('name', $name)
+            ->first();
     }
 
     public function update($id, $params)
@@ -40,24 +41,14 @@ class RequestedSongRepository implements RequestedSongInterface
         return $playlist->get();
     }
 
-    public function remove($video_id)
+    public function remove($id)
     {
-        return $this->getByVideoId($video_id)->delete();
+        return $this->getById($id)->delete();
     }
 
     public function getById($id)
     {
         return $this->model->find($id);
-    }
-
-    public function getByVideoId($video_id)
-    {
-        return $this->model->where('video_id', $video_id)->first();
-    }
-
-    public function existsByVideoId($video_id)
-    {
-        return !$this->model->where('video_id', $video_id)->get()->isEmpty();
     }
 
     public function existsByName($name)

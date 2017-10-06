@@ -3,10 +3,10 @@
 namespace App\Playlists\Repositories;
 
 use Alaouy\Youtube\Youtube;
-use App\Playlists\Contracts\SongInterface;
+use App\Playlists\Contracts\SongsInterface;
 use App\Playlists\Song;
 
-class SongRepository implements SongInterface
+class SongsRepository implements SongsInterface
 {
     /**
      * @var Song

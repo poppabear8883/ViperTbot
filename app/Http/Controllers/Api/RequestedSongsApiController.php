@@ -1,8 +1,8 @@
 <?php namespace App\Http\Controllers\Api;
 
-use App\Contracts\ApiControllerInterface;
+use App\Api\v1\Contracts\ApiControllerInterface;
 use App\Http\Controllers\Controller;
-use App\Playlists\Contracts\RequestedSongInterface;
+use App\Playlists\Contracts\RequestedSongsInterface;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -21,16 +21,16 @@ class RequestedSongsApiController extends Controller implements ApiControllerInt
     /**
      * The RequestedSong instance
      *
-     * @var RequestedSongInterface
+     * @var RequestedSongsInterface
      */
     private $song;
 
     /**
      * Injects Playlist dependency.
      *
-     * @param RequestedSongInterface $song
+     * @param RequestedSongsInterface $song
      */
-    public function __construct(RequestedSongInterface $song)
+    public function __construct(RequestedSongsInterface $song)
     {
         $this->song = $song;
     }

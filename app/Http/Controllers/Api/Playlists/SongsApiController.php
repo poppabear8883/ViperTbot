@@ -1,8 +1,8 @@
 <?php namespace App\Http\Controllers\Api\Playlists;
 
-use App\Contracts\ApiControllerInterface;
+use App\Api\v1\Contracts\ApiControllerInterface;
 use App\Http\Controllers\Controller;
-use App\Playlist\Contracts\SongInterface;
+use App\Playlists\Contracts\SongsInterface;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Response;
 use Validator;
@@ -20,18 +20,18 @@ class SongsApiController extends Controller implements ApiControllerInterface
     /**
      * The Song instance
      *
-     * @var Song
+     * @var SongsInterface
      */
-    private $song;
+    private $songs;
 
     /**
      * Injects Playlist dependency.
      *
-     * @param SongInterface $song
+     * @param SongsInterface $songs
      */
-    public function __construct(SongInterface $song)
+    public function __construct(SongsInterface $songs)
     {
-        $this->song = $song;
+        $this->songs = $songs;
     }
 
     /**
@@ -41,7 +41,7 @@ class SongsApiController extends Controller implements ApiControllerInterface
      */
     public function all()
     {
-        return response($this->song->getAll(), 200);
+        return response($this->songs->getAll(), 200);
     }
 
     /**
@@ -54,7 +54,7 @@ class SongsApiController extends Controller implements ApiControllerInterface
     {
         $this->isValid($params);
 
-        $songs = $this->song->create($params['playlist_id'], $params['video_id']);
+        $songs = $this->songs->create($params['playlist_id'], $params['video_id']);
 
         if (empty($songs)) {
             return response('No songs to add!', 422);
@@ -73,7 +73,7 @@ class SongsApiController extends Controller implements ApiControllerInterface
     {
         $this->isValid($params);
 
-        $song = $this->song->remove($params['playlist_id'], $params['video_id']);
+        $song = $this->songs->remove($params['playlist_id'], $params['video_id']);
 
         return response($song, 200);
     }

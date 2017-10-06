@@ -3,7 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Traits\HandlesApiRequests;
 use App\Twitch\TwitchApi;
-use App\User;
+use App\Users\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 

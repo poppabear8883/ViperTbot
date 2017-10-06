@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Api\v1\Contracts;
 
 use App\Http\Controllers\Api\Playlists\Response;
 

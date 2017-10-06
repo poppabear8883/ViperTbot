@@ -175,15 +175,17 @@ return [
         /*
          * Application Service Providers...
          */
+
+        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
 
         App\Playlists\Providers\PlaylistsServiceProvider::class,
-        App\Regulars\RegularsServiceProvider::class,
+        App\Regulars\Providers\RegularsServiceProvider::class,
+        App\Users\Providers\UsersServiceProvider::class,
         App\Twitch\Providers\ApiServiceProvider::class
 
     ],

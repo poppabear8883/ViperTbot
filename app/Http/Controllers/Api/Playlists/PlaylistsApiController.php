@@ -1,8 +1,8 @@
 <?php namespace App\Http\Controllers\Api\Playlists;
 
-use App\Contracts\ApiControllerInterface;
+use App\Api\v1\Contracts\ApiControllerInterface;
 use App\Http\Controllers\Controller;
-use App\Playlists\Contracts\PlaylistInterface;
+use App\Playlists\Contracts\PlaylistsInterface;
 use App\Traits\HandlesApiRequests;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -16,19 +16,19 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
     ];
 
     /**
-     * @var PlaylistInterface
+     * @var PlaylistsInterface
      */
-    protected $playlist;
+    protected $playlists;
 
 
     /**
      * Injects Playlist dependency.
      *
-     * @param PlaylistInterface $playlist
+     * @param PlaylistsInterface $playlist
      */
-    public function __construct(PlaylistInterface $playlist)
+    public function __construct(PlaylistsInterface $playlists)
     {
-        $this->playlist = $playlist;
+        $this->playlists = $playlists;
     }
 
     /**
@@ -38,7 +38,7 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
      */
     public function all()
     {
-        return response($this->playlist->getAll(), 200);
+        return response($this->playlists->getAll(), 200);
     }
 
     /**
@@ -52,11 +52,11 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
         $this->isValid($params);
         $name = $params['name'];
 
-        if ($this->playlist->existsByName($name)) {
+        if ($this->playlists->existsByName($name)) {
             return response('Playlist already exists', 422);
         }
 
-        $playlist = $this->playlist->create($name, Auth::user()->id);
+        $playlist = $this->playlists->create($name, Auth::user()->id);
 
         return response($playlist, 200);
     }
@@ -71,7 +71,7 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
     {
         $this->isValid($params);
 
-        $playlist = $this->playlist->update($params['id'], $params);
+        $playlist = $this->playlists->update($params['id'], $params);
 
         return response($playlist, 200);
 
@@ -87,7 +87,7 @@ class PlaylistsApiController extends Controller implements ApiControllerInterfac
     {
         $this->isValid($params);
 
-        $this->playlist->remove($params['id']);
+        $this->playlists->remove($params['id']);
 
         return response('success', 200);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Users;
 
 use App\Playlists\Playlist;
 use App\Playlists\RequestedSong;

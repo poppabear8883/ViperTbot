@@ -2,7 +2,7 @@
 
 namespace App\Regulars;
 
-use App\User;
+use App\Users\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Regular extends Model

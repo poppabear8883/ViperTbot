@@ -2,7 +2,7 @@
 
 namespace App\Playlists\Contracts;
 
-interface SongInterface
+interface SongsInterface
 {
     /**
      * @return mixed
