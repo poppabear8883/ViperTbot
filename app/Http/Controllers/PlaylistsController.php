@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Playlists\Contracts\PlaylistsInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlaylistsController extends Controller
 {
@@ -23,9 +24,12 @@ class PlaylistsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response($this->playlists->getAll(), 200);
+        if($request->ajax())
+            return response($this->playlists->getAll(), 200);
+
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -35,7 +39,7 @@ class PlaylistsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -46,7 +50,15 @@ class PlaylistsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request->input('name');
+
+        if ($this->playlists->existsByName($name)) {
+            return response('Playlist already exists', 422);
+        }
+
+        $playlist = $this->playlists->create($name, Auth::user()->id);
+
+        return response($playlist, 200);
     }
 
     /**
@@ -55,9 +67,12 @@ class PlaylistsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        if($request->ajax())
+            return response($this->playlists->find($id)->first(), 200);
+
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -68,7 +83,7 @@ class PlaylistsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -80,7 +95,9 @@ class PlaylistsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $playlist = $this->playlists->update($id, $request->all());
+
+        return response($playlist, 200);
     }
 
     /**
@@ -91,6 +108,8 @@ class PlaylistsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->playlists->remove($id);
+
+        return response('success', 200);
     }
 }
