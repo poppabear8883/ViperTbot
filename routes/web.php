@@ -13,11 +13,9 @@
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', 'InterfaceController@index');
+    Route::get('/', 'PagesController@dashboard');
 
-    Route::get('applications', function() {
-        return view('pages.interface.applications');
-    });
+    Route::get('applications', 'PagesController@applications');
 
     Route::get('logout', function() {
         \Auth::logout();
@@ -39,9 +37,9 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () {
 
-    Route::prefix('users')->group(function() {
+    /*Route::prefix('users')->group(function() {
         Route::any('', 'UsersApiController@api');
-    });
+    });*/
 
     Route::prefix('twitch')->group(function() {
         Route::any('', 'TwitchApiController@api');
@@ -59,11 +57,11 @@ Route::middleware(['auth'])->prefix('api')->namespace('Api')->group(function () 
         Route::any('', 'RegularsApiController@api');
     });
 
-    Route::prefix('playlists')->group(function() {
+    /*Route::prefix('playlists')->group(function() {
         Route::any('', 'Playlists\PlaylistsApiController@api');
     });
 
     Route::prefix('songs')->group(function() {
         Route::any('', 'Playlists\SongsApiController@api');
-    });
+    });*/
 });

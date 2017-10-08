@@ -93,7 +93,7 @@
 
             </div>
 
-            <div class="custom-scroll table-responsive" style="max-height:400px; overflow-y: scroll;">
+            <div class="custom-scroll table-responsive" :style="`max-height:${maxHeight}; overflow-y: scroll;`">
 
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -126,7 +126,6 @@
 </template>
 
 <script>
-    // https://www.youtube.com/watch?v=8SbUC-UaAxE&list=PL3485902CC4FB6C67
 
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
@@ -134,7 +133,12 @@
     import * as urlParser from 'js-video-url-parser'
 
 
-    export default{
+    export default {
+        props: {
+            maxHeight: {
+                default: '400px'
+            }
+        },
 
         components:{
             Widget
@@ -171,12 +175,9 @@
                     }
                 }
 
-                axios.post('/api/songs', {
-                    'action': 'create',
-                    'params': {
-                        'video_id': this.video_id,
-                        'playlist_id': this.playlist.id
-                    }
+                axios.post('/api/v2/songs', {
+                    'video_id': this.video_id,
+                    'playlist_id': this.playlist.id
                 }).then((response) => {
 
                     if (response.data.length > 0) {
@@ -203,14 +204,9 @@
             },
 
             addNewPlaylist() {
-                axios.post('/api/playlists', {
-                    'action': 'create',
-                    'params': {
-                        'name': this.new_playlist
-                    }
+                axios.post('/api/v2/playlists', {
+                    'name': this.new_playlist
                 }).then((response) => {
-
-                    console.log(response);
 
                     this.$store.commit('ADD_PLAYLIST', response.data);
 
@@ -273,24 +269,18 @@
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
 
-                        axios.delete('/api/playlists', {
-                            data: {
-                                'action': 'remove',
-                                'params': {
-                                    'id': playlist.id,
-                                }
-                            }
-                        }).then((response) => {
+                        axios.delete(`/api/v2/playlists/${playlist.id}`)
+                            .then((response) => {
 
-                            this.$store.commit('DELETE_PLAYLIST', playlist.id);
+                                this.$store.commit('DELETE_PLAYLIST', playlist.id);
 
-                            this.playlist = this.playlists[0];
+                                this.playlist = this.playlists[0];
 
-                            alerts.success(`You successfully removed the playlist ${playlist.name}`);
+                                alerts.success(`You successfully removed the playlist ${playlist.name}`);
 
-                        }).catch((error) => {
-                            alerts.error(error.response.data);
-                        });
+                            }).catch((error) => {
+                                alerts.error(error.response.data);
+                            });
                     }
                     if (ButtonPressed === "No") {
                         alerts.canceled();
@@ -336,10 +326,12 @@
             }
         },
         created() {
-            setTimeout(() => {
-                console.log('set playlist');
-                this.playlist = this.playlists[0];
-            }, 1500);
+            let setup = setInterval(() => {
+                if(this.playlists[0]) {
+                    this.playlist = this.playlists[0];
+                    clearInterval(setup);
+                }
+            }, 500);
         }
     }
 </script>

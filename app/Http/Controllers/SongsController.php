@@ -23,9 +23,12 @@ class SongsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response($this->songs->getAll(), 200);
+        if($request->ajax())
+            return response($this->songs->getAll(), 200);
+
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -35,7 +38,7 @@ class SongsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -46,7 +49,12 @@ class SongsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pid = $request->input('playlist_id', null);
+        $vid = $request->input('video_id', null);
+
+        $songs = $this->songs->create($pid, $vid);
+
+        return response($songs, 200);
     }
 
     /**
@@ -55,9 +63,12 @@ class SongsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        if($request->ajax())
+            return response($this->songs->getById($request->input('playlist_id'), $id)->first(), 200);
+
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -68,7 +79,7 @@ class SongsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('pages.interface.playlists');
     }
 
     /**
@@ -80,7 +91,7 @@ class SongsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return response('Not Yet Implemented', 501);
     }
 
     /**
@@ -89,8 +100,12 @@ class SongsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $vid)
     {
-        //
+        $pid = $request->input('playlist_id', null);
+
+        $song = $this->songs->remove($pid, $vid);
+
+        return response($song, 200);
     }
 }

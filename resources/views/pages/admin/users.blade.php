@@ -7,17 +7,13 @@
         <div class="row">
 
             <!-- SINGLE GRID -->
-            <article class="col-md-8">
-
-                <passport-clients></passport-clients>
-
-                <passport-personal-access-tokens></passport-personal-access-tokens>
+            <article class="col-md-6">
 
             </article><!-- END GRID -->
 
             <!-- SINGLE GRID -->
-            <article class="col-md-4">
-                <passport-authorized-clients></passport-authorized-clients>
+            <article class="col-md-6">
+
             </article><!-- END GRID -->
 
         </div><!-- end row -->

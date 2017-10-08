@@ -41,9 +41,6 @@
                     </section>
 
                     <section>
-                        <label>
-                            Current: <strong>{{current_game}}</strong>
-                        </label>
                         <multiselect v-model="game"
                                      open-direction="bottom"
                                      :searchable="true"
@@ -121,13 +118,10 @@
             updateStream() {
                 if(this.title && this.game)
                 {
-                    axios.put('/api/twitch', {
-                        action: 'updateChannel',
-                        params: {
+                    axios.put('/api/v2/twitch/updatechannel', {
                             status: this.title,
                             game: this.game.name,
                             delay: this.delay
-                        }
                     }).then((response) => {
                         this.$store.commit('SET_CHANNEL', response.data);
                         alerts.success('Channel was successfully updated!')
@@ -153,7 +147,14 @@
             }
         },
         created() {
-
+            let setup = setInterval(() => {
+                if(this.channel.status) {
+                    this.title = this.channel.status;
+                    this.games.push({name: this.channel.game});
+                    this.game = {name: this.channel.game};
+                    clearInterval(setup)
+                }
+            }, 1000);
         }
     }
 </script>

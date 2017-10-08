@@ -65,17 +65,15 @@
         },
         methods: {
             getLiveChannels() {
-                axios.get('/api/livechannels', {
-                    'params': {
-                        'action': 'all'
-                    }
-                }).then((response) => {
-                    this.total = response.data._total;
-                    this.streams = response.data.streams;
-                    this.updated_time = new Date().toLocaleTimeString();
-                }, (response) => {
-                    console.log('-- Error --' + response);
-                });
+                axios.get('/api/v2/twitch/livechannels')
+                    .then((response) => {
+                        this.total = response.data._total;
+                        this.streams = response.data.streams;
+                        this.updated_time = new Date().toLocaleTimeString();
+                    }, (response) => {
+                        console.error('-- Error --');
+                        console.log(response);
+                    });
             }
         },
         created() {
@@ -83,7 +81,7 @@
 
             setInterval((e) => {
                 this.getLiveChannels();
-            }, 60000);
+            }, 60000 * 3);
         }
     }
 </script>

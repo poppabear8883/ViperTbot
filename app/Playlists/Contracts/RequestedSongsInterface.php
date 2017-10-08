@@ -28,7 +28,7 @@ interface RequestedSongsInterface
      * @param $id
      * @return mixed
      */
-    public function create($title, $video_id, $requested_by, $user_id);
+    public function create($params);
 
     /**
      * @param $id

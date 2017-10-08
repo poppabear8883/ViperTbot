@@ -41,6 +41,9 @@
                 <div class="row">
                     <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
                         <select class="form-control" v-model="playlist">
+                            <option :value="all">
+                                All
+                            </option>
                             <option v-for="playlist in playlists"
                                     :value="playlist">
                                 {{ playlist.name }}
@@ -112,12 +115,31 @@
             playlists() {
                 return this.$store.getters.getPlaylists;
             },
+            allsongs() {
+
+                let arr = [];
+
+                _.each(this.playlists, (playlist) => {
+                    _.each(playlist.songs, (song) => {
+                        arr.push(song);
+                    });
+                });
+
+                return arr;
+            },
             songs() {
                 if(this.playlist) {
                     return this.playlist.songs;
                 }
 
                 return [];
+            },
+            all() {
+                return {
+                    id: 0,
+                    name: 'All',
+                    songs: this.allsongs
+                }
             },
             reqplaylist() {
                 return this.$store.getters.getReqSongs;
@@ -270,18 +292,12 @@
              * Removes the song from the requested playlist
              */
             removeReq() {
-                axios.delete('/api/reqplaylist', {
-                    data: {
-                        'action': 'remove',
-                        'params': {
-                            'video_id': this.videoId
-                        }
-                    }
-                }).then(function (response) {
-                    this.$store.commit('DELETE_REQSONG', this.videoId);
-                }.bind(this)).catch(function (response) {
-                    alerts.error(response)
-                });
+                axios.delete(`/api/v2/requestedsongs/${this.videoId}`)
+                    .then((response) => {
+                        this.$store.commit('DELETE_REQSONG', this.videoId);
+                    }).catch((error) => {
+                        alerts.error(error.response);
+                    });
             },
 
             /**
@@ -325,7 +341,6 @@
              * @returns {*}
              */
             getReqItem() {
-                console.log('Is Request');
                 this.isReq = true;
                 this.listItem = this.reqplaylist[0];
                 return this.listItem
@@ -381,26 +396,29 @@
          */
         created() {
 
+            let setupPlaylist = setInterval(() => {
+                if(this.playlists[0]) {
+                    this.playlist = this.playlists[0];
+                    clearInterval(setupPlaylist)
+                }
+            }, 500);
+
             /**
              * If we have songs, lets go ahead and process a song to be played.
              */
-            let intervalHandle = setInterval(() => {
+            let setupList = setInterval(() => {
                 if (this.songs) {
                     if (this.songs.length > 0) {
                         this.listReady = true;
                         this.listEmpty = false;
                         let item = this.getRandomItem();
                         this.updateVideo(item);
-                        clearInterval(intervalHandle);
+                        clearInterval(setupList);
                     } else {
                         this.listEmpty = true
                     }
                 }
-            }, 5000);
-
-            setTimeout(() => {
-                this.playlist = this.playlists[0];
-            }, 1500);
+            }, 1000);
 
         }
     }

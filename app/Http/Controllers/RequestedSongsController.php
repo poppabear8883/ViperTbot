@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Playlists\Contracts\PlaylistsInterface;
+use App\Playlists\Contracts\RequestedSongsInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class PlaylistsController extends Controller
+class RequestedSongsController extends Controller
 {
 
     /**
-     * @var PlaylistsInterface
+     * @var RequestedSongsInterface
      */
-    private $playlists;
+    private $requested;
 
-    public function __construct(PlaylistsInterface $playlists)
+    public function __construct(RequestedSongsInterface $requested)
     {
-        $this->playlists = $playlists;
+        $this->requested = $requested;
     }
 
     /**
@@ -26,8 +25,8 @@ class PlaylistsController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax())
-            return response($this->playlists->getAll(), 200);
+        if ($request->ajax())
+            return response($this->requested->getAll(), 200);
 
         return view('pages.interface.playlists');
     }
@@ -50,15 +49,15 @@ class PlaylistsController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->input('name');
+        $vid = $request->input('video_id');
 
-        if ($this->playlists->existsByName($name)) {
-            return response('Playlist already exists', 422);
+        if ($this->requested->existsByVideoId($vid)) {
+            return response('Song ' . $vid . ' already exists!', 422);
         }
 
-        $playlist = $this->playlists->create($name, Auth::user()->id);
+        $song = $this->requested->create($request->all());
 
-        return response($playlist, 200);
+        return response($song, 200);
     }
 
     /**
@@ -67,10 +66,10 @@ class PlaylistsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $video_id)
     {
         if($request->ajax())
-            return response($this->playlists->getById($id)->first(), 200);
+            return response($this->requested->getByVideoId($video_id)->first(), 200);
 
         return view('pages.interface.playlists');
     }
@@ -93,9 +92,9 @@ class PlaylistsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $video_id)
     {
-        $playlist = $this->playlists->update($id, $request->all());
+        $playlist = $this->requested->update($video_id, $request->all());
 
         return response($playlist, 200);
     }
@@ -106,9 +105,9 @@ class PlaylistsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($video_id)
     {
-        $this->playlists->remove($id);
+        $this->requested->remove($video_id);
 
         return response('success', 200);
     }

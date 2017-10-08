@@ -64,21 +64,17 @@ const app = new Vue({
     },
     methods: {
         getUser() {
-            axios.get('/api/users', {
-                params: {
-                    action: 'getAuthUser'
-                }
-            }).then((response) => {
-                console.log(response.data);
-                this.$store.commit('SET_USER', response.data.account);
-                this.$store.commit('SET_CHANNEL', response.data.channel);
-                this.$store.commit('SET_REQSONGS', response.data.reqsongs);
-                this.$store.commit('SET_PLAYLISTS', response.data.playlists);
-                this.$store.commit('SET_SONGS', response.data.songs);
-            }).catch((error) => {
-                console.log(error);
-                return null
-            });
+            axios.get('/api/v2/user')
+                .then((response) => {
+                    this.$store.commit('SET_USER', response.data.account);
+                    this.$store.commit('SET_CHANNEL', response.data.channel);
+                    this.$store.commit('SET_REQSONGS', response.data.reqsongs);
+                    this.$store.commit('SET_PLAYLISTS', response.data.playlists);
+                    this.$store.commit('SET_SONGS', response.data.songs);
+                }).catch((error) => {
+                    console.log(error.response);
+                    return null
+                });
         },
 
         pubSubConnect() {
@@ -104,6 +100,6 @@ const app = new Vue({
 
     mounted() {
         this.getUser();
-        this.pubSubConnect();
+        // this.pubSubConnect();
     }
 });

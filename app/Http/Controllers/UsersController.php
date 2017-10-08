@@ -22,9 +22,12 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response($this->users->getAll(), 200);
+        if ($request->ajax())
+            return response($this->users->getAll(), 200);
+
+        return view('pages.admin.users');
     }
 
     /**
@@ -34,7 +37,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('users');
     }
 
     /**
@@ -74,7 +77,7 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $id0
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -91,5 +94,15 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Get the data associated with the authenticated user
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function user()
+    {
+        return response($this->users->data(), 200);
     }
 }

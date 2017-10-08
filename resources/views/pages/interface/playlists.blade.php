@@ -13,7 +13,7 @@
 
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
-                <playlist-widget></playlist-widget>
+                <playlist-widget max-height="800px"></playlist-widget>
             </article><!-- END GRID -->
 
         </div><!-- end row -->

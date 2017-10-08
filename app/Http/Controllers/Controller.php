@@ -21,4 +21,5 @@ class Controller extends BaseController
     {
         return Auth::user()->channel_id;
     }
+
 }

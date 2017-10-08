@@ -45,16 +45,6 @@ class AllViewsComposer
         }
     }
 
-    private function token()
-    {
-        return Auth::user()->access_token;
-    }
-
-    private function channel_id()
-    {
-        return Auth::user()->channel_id;
-    }
-
     /**
      * @return \Zarlach\TwitchApi\API\JSON
      */
@@ -77,5 +67,15 @@ class AllViewsComposer
     private function liveChannels()
     {
         return $this->twitch->liveChannels($this->token());
+    }
+
+    private function token()
+    {
+        return Auth::user()->access_token;
+    }
+
+    private function channel_id()
+    {
+        return Auth::user()->channel_id;
     }
 }

@@ -1,12 +1,17 @@
 <?php namespace App\Http\Controllers;
 
-class InterfaceController extends Controller
+class PagesController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function dashboard()
     {
         return view('pages.interface.index');
+    }
+
+    public function applications()
+    {
+        return view('pages.interface.applications');
     }
 }
