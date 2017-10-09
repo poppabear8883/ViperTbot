@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\Playlists\Song;
+
 class PagesController extends Controller
 {
     /**
@@ -7,6 +9,7 @@ class PagesController extends Controller
      */
     public function dashboard()
     {
+        //dd(Song::where('playlist_id', 1)->where('video_id', '_IhhtEX9WvA')->delete());
         return view('pages.interface.index');
     }
 

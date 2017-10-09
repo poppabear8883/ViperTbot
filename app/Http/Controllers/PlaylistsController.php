@@ -112,4 +112,13 @@ class PlaylistsController extends Controller
 
         return response('success', 200);
     }
+
+    public function searchYoutube(Request $request)
+    {
+        $term = $request->input('term');
+        $type = $request->input('type');
+
+        $results = $this->playlists->searchYoutube($term, $type);
+        return response($results, 200);
+    }
 }

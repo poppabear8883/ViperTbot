@@ -59,4 +59,11 @@ interface PlaylistsInterface
      * @return mixed
      */
     public function getAllSongs();
+
+    /**
+     * @param $term
+     * @param $type
+     * @return mixed
+     */
+    public function searchYoutube($term, $type);
 }

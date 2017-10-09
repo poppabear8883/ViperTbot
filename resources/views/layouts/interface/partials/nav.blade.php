@@ -85,6 +85,9 @@
                 </a>
                 <ul>
                     <li>
+                        <a href="/regulars">Manage</a>
+                    </li>
+                    <li>
                         <a href="#" @click.prevent="showAddRegularModal = true">Add New</a>
                     </li>
                 </ul>
@@ -97,40 +100,25 @@
                         <a href="#">Built In</a>
                     </li>
                     <li>
-                        <a href="#" data-toggle="modal" data-target="#CommandsModal">Custom Commands</a>
-                    </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#AddCommandModal">Add New</a>
+                        <a href="/commands">Custom Commands</a>
                     </li>
                 </ul>
             </li>
 
             <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-music"></i> <span class="menu-item-parent">Songs</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-music"></i> <span class="menu-item-parent">Playlists</span></a>
                 <ul>
                     <li>
-                        <a href="#" @click.prevent="showPlaylistModal = true">Playlist</a>
-                    </li>
-                    <li>
-                        <a href="#" @click.prevent="showReqPlaylistModal = true">Requests</a>
-                    </li>
-                    <li>
-                        <a href="#" @click.prevent="showAddSongModal = true">Add Song</a>
+                        <a href="/playlists">Manage</a>
                     </li>
                 </ul>
             </li>
 
             <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-trophy"></i> <span class="menu-item-parent">Royalties</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-usd"></i> <span class="menu-item-parent">Currency</span></a>
                 <ul>
                     <li>
-                        <a href="#">Rewards</a>
-                    </li>
-                    <li>
-                        <a href="#">Usage</a>
-                    </li>
-                    <li>
-                        <a href="#">Add New</a>
+                        <a href="/currency">Manage</a>
                     </li>
 
                 </ul>

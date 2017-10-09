@@ -2,6 +2,7 @@
 
 namespace App\Playlists\Repositories;
 
+use Alaouy\Youtube\Youtube;
 use App\Playlists\Contracts\PlaylistsInterface;
 use App\Playlists\Playlist;
 
@@ -11,10 +12,20 @@ class PlaylistsRepository implements PlaylistsInterface
      * @var Playlist
      */
     private $model;
+    /**
+     * @var Youtube
+     */
+    private $youtube;
 
-    public function __construct(Playlist $model)
+    /**
+     * PlaylistsRepository constructor.
+     * @param Playlist $model
+     * @param Youtube $youtube
+     */
+    public function __construct(Playlist $model, Youtube $youtube)
     {
         $this->model = $model;
+        $this->youtube = $youtube;
     }
 
     public function getAll()
@@ -78,5 +89,21 @@ class PlaylistsRepository implements PlaylistsInterface
         }
 
         return $songs;
+    }
+
+    public function searchYoutube($term, $type = 'video')
+    {
+        $params = [
+            'q'             => $term,
+            'type'          => $type,
+            'part'          => 'id, snippet',
+            'maxResults'    => 5
+        ];
+
+        if ($type == 'video') {
+            $params['videoCategoryId'] = 10;
+        }
+
+        return $this->youtube->searchAdvanced($params);
     }
 }

@@ -228,13 +228,9 @@
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
 
-                        axios.delete('/api/songs', {
-                            data: {
-                                'action': 'remove',
-                                'params': {
-                                    'playlist_id': this.playlist.id,
-                                    'video_id': song.video_id
-                                }
+                        axios.delete(`/api/v2/songs/${song.video_id}`, {
+                            params: {
+                                'playlist_id': this.playlist.id
                             }
                         }).then((response) => {
 
