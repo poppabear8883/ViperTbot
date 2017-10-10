@@ -1,7 +1,6 @@
 <template>
     <widget wid-id="6843244"
-            :fullscreen="true"
-            @colorChanged="colorChanged">
+            :fullscreen="true">
 
         <div slot="title">Requested Songs</div>
 
