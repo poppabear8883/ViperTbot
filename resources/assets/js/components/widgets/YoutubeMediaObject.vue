@@ -1,47 +1,55 @@
 <template>
-    <div id="youtube-media-object">
-        <div class="media">
-            <div class="media-left">
-                <a href="#">
-                    <img class="media-object"
-                         :src="video.snippet.thumbnails.default.url"
-                         :alt="video.snippet.title">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">{{video.snippet.title}}</h4>
-                {{video.snippet.description}}
+    <div class="row">
 
-                <h5 v-if="itemCount > 0">{{itemCount}} Video's</h5>
-            </div>
-        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <select class="form-control" v-model="playlist">
+                        <option v-for="playlist in playlists"
+                                :value="playlist">
+                            {{ playlist.name }}
+                        </option>
+                    </select>
 
-        <div class="padding-top-10"></div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <select class="form-control pull-right" v-model="playlist">
-                            <option v-for="playlist in playlists"
-                                    :value="playlist">
-                                {{ playlist.name }}
-                            </option>
-                        </select>
-
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary" @click.prevent="add()">
-                                <i class="fa fa-plus"></i>
-                                <span class="hidden-mobile">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" @click="add()">
+                            <i class="fa fa-plus"></i>
+                            <span class="hidden-mobile">
                                     Add
                                 </span>
-                            </button>
-                        </div>
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
+
+        <div class="col-md-8">
+            <button class="btn btn-default btn-sm pull-right" @click="request()">
+                <i class="fa fa-plus"></i>
+                <span class="hidden-mobile">
+                        Request
+                    </span>
+            </button>
+        </div>
+
+        <div class="col-md-12">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object"
+                             :src="video.snippet.thumbnails.default.url"
+                             :alt="video.snippet.title">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{video.snippet.title}}</h4>
+                    {{video.snippet.description}}
+
+                    <h5 v-if="itemCount > 0">{{itemCount}} Video's</h5>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
@@ -70,14 +78,14 @@
         methods: {
             add() {
                 $.SmartMessageBox({
-                    title : "Warning!",
-                    content : `Add to the ${this.playlist.name} playlist ?`,
-                    buttons : '[No][Yes]'
+                    title: "Warning!",
+                    content: `Add to the ${this.playlist.name} playlist ?`,
+                    buttons: '[No][Yes]'
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
                         let _id = '';
 
-                        if(this.video.id.playlistId) {
+                        if (this.video.id.playlistId) {
                             _id = this.video.id.playlistId;
                         } else {
                             _id = this.video.id.videoId
@@ -116,7 +124,7 @@
             },
 
             getItemCount() {
-                if(this.video.id.playlistId) {
+                if (this.video.id.playlistId) {
                     axios.get('/api/v2/playlists/youtube/playlist', {
                         params: {
                             id: this.video.id.playlistId
