@@ -44322,6 +44322,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         playlists: function playlists() {
             return this.$store.getters.getPlaylists;
+        },
+        user: function user() {
+            return this.$store.getters.getUser;
         }
     },
     methods: {
@@ -44370,8 +44373,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             });
         },
-        getItemCount: function getItemCount() {
+        request: function request() {
             var _this2 = this;
+
+            $.SmartMessageBox({
+                title: "Warning!",
+                content: 'Add to Requested Songs ?',
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+
+                    if (_this2.video.id.playlistId) {
+                        __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */]('You cannot add a playlist to the requested songs');
+                        return;
+                    }
+
+                    axios.post('/api/v2/requestedsongs', {
+                        'video_id': _this2.video.id.videoId,
+                        'title': _this2.video.snippet.title,
+                        'requested_by': _this2.user.username
+                    }).then(function (response) {
+                        console.log(response.data);
+
+                        _this2.$store.commit('ADD_REQSONG', response.data);
+
+                        __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["c" /* success */]('Successfully added requested song!');
+                        _this2.$emit('added');
+                    }).catch(function (error) {
+                        console.log(error);
+                        __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error.response);
+                    });
+                }
+                if (ButtonPressed === "No") {
+                    __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["a" /* canceled */]();
+                }
+            });
+        },
+        getItemCount: function getItemCount() {
+            var _this3 = this;
 
             if (this.video.id.playlistId) {
                 axios.get('/api/v2/playlists/youtube/playlist', {
@@ -44379,7 +44418,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         id: this.video.id.playlistId
                     }
                 }).then(function (response) {
-                    _this2.itemCount = response.data.contentDetails.itemCount;
+                    _this3.itemCount = response.data.contentDetails.itemCount;
                 }).catch(function (error) {
                     console.error(error.response);
                     __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["b" /* error */](error.response);
@@ -44388,11 +44427,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     created: function created() {
-        var _this3 = this;
+        var _this4 = this;
 
         var setup = setInterval(function () {
-            if (_this3.playlists[0]) {
-                _this3.playlist = _this3.playlists[0];
+            if (_this4.playlists[0]) {
+                _this4.playlist = _this4.playlists[0];
                 clearInterval(setup);
             }
         }, 1000);
@@ -44876,7 +44915,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -44890,9 +44929,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_alerts__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_youtube__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_video_url_parser__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_js_video_url_parser___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_js_video_url_parser__);
 //
 //
 //
@@ -44969,8 +45005,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
 
 
 
@@ -44989,7 +45023,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            color: '',
             searchTerm: ''
         };
     },

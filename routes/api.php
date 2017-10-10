@@ -6,6 +6,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('playlists', 'PlaylistsController');
     Route::resource('regulars', 'RegularsController');
     Route::resource('songs', 'SongsController');
+    Route::resource('requestedsongs', 'RequestedSongsController');
 
     Route::prefix('twitch')->group(function () {
         Route::get('livechannels', 'TwitchController@liveChannels');

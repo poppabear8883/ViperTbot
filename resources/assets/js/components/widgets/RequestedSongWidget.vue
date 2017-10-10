@@ -78,8 +78,6 @@
 
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
-    import { youtubeParser } from '../../utils/youtube'
-    import * as urlParser from 'js-video-url-parser'
 
 
     export default {
@@ -95,7 +93,6 @@
 
         data() {
             return {
-                color: '',
                 searchTerm: ''
             }
         },

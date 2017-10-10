@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Playlists\Contracts\RequestedSongsInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RequestedSongsController extends Controller
 {
@@ -50,7 +51,10 @@ class RequestedSongsController extends Controller
             return response('Song ' . $vid . ' already exists!', 422);
         }
 
-        $song = $this->requested->create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+
+        $song = $this->requested->create($data);
 
         return response($song, 200);
     }

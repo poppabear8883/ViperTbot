@@ -73,6 +73,9 @@
         computed: {
             playlists() {
                 return this.$store.getters.getPlaylists;
+            },
+            user() {
+                return this.$store.getters.getUser;
             }
         },
         methods: {
@@ -110,6 +113,44 @@
                                 alerts.success('You have successfully added new songs to playlist!');
                                 this.$emit('added');
                             }
+
+                        }).catch((error) => {
+                            console.log(error);
+                            alerts.error(error.response);
+                        });
+                    }
+                    if (ButtonPressed === "No") {
+                        alerts.canceled();
+                    }
+
+                });
+            },
+
+            request() {
+                $.SmartMessageBox({
+                    title: "Warning!",
+                    content: `Add to Requested Songs ?`,
+                    buttons: '[No][Yes]'
+                }, (ButtonPressed) => {
+                    if (ButtonPressed === "Yes") {
+
+                        if (this.video.id.playlistId) {
+                            alerts.error('You cannot add a playlist to the requested songs');
+                            return;
+                        }
+
+                        axios.post('/api/v2/requestedsongs', {
+                            'video_id': this.video.id.videoId,
+                            'title': this.video.snippet.title,
+                            'requested_by': this.user.username
+                        }).then((response) => {
+                            console.log(response.data);
+
+                            this.$store.commit('ADD_REQSONG', response.data);
+
+
+                            alerts.success('Successfully added requested song!');
+                            this.$emit('added');
 
                         }).catch((error) => {
                             console.log(error);
