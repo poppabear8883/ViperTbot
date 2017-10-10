@@ -44,6 +44,7 @@ Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWi
 Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
 Vue.component('playlist-widget', require('./components/widgets/PlaylistWidget.vue'));
 Vue.component('youtube-search-widget', require('./components/widgets/YoutubeSearchWidget.vue'));
+Vue.component('requested-songs-widget', require('./components/widgets/RequestedSongWidget.vue'));
 
 Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
 Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));

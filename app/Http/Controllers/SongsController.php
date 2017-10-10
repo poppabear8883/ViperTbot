@@ -97,15 +97,16 @@ class SongsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $vid
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function destroy(Request $request, $vid)
     {
-        $pid = $request->input('playlist_id', null);
+        $pid = $request->input('playlist_id');
 
-        $song = $this->songs->remove($pid, $vid);
+        $this->songs->remove($pid, $vid);
 
-        return response($song, 200);
+        return response('success', 200);
     }
 }

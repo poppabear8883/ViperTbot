@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alaouy\Youtube\Facades\Youtube;
 use App\Playlists\Contracts\PlaylistsInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,8 @@ class PlaylistsController extends Controller
      */
     public function index(Request $request)
     {
+
+        //dd(Youtube::getPlaylistById('PL3485902CC4FB6C67'));
         if($request->ajax())
             return response($this->playlists->getAll(), 200);
 
@@ -115,10 +118,21 @@ class PlaylistsController extends Controller
 
     public function searchYoutube(Request $request)
     {
-        $term = $request->input('term');
-        $type = $request->input('type');
+        $term = $request->input('term', '');
+        $type = $request->input('type', 'video');
+        $limit = $request->input('limit', 5);
 
-        $results = $this->playlists->searchYoutube($term, $type);
+        $results = $this->playlists->searchYoutube($term, $type, $limit);
+
         return response($results, 200);
+    }
+
+    public function playlistContent(Request $request)
+    {
+        $id = $request->input('id', null);
+
+        $results = $this->playlists->playlistContent($id);
+
+        return response()->json($results, 200);
     }
 }

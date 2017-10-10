@@ -91,13 +91,13 @@ class PlaylistsRepository implements PlaylistsInterface
         return $songs;
     }
 
-    public function searchYoutube($term, $type = 'video')
+    public function searchYoutube($term, $type = 'video', $limit = 5)
     {
         $params = [
-            'q'             => $term,
-            'type'          => $type,
-            'part'          => 'id, snippet',
-            'maxResults'    => 5
+            'q' => $term,
+            'type' => $type,
+            'part' => 'id, snippet',
+            'maxResults' => $limit
         ];
 
         if ($type == 'video') {
@@ -105,5 +105,10 @@ class PlaylistsRepository implements PlaylistsInterface
         }
 
         return $this->youtube->searchAdvanced($params);
+    }
+
+    public function playlistContent($id)
+    {
+        return $this->youtube->getPlaylistById($id, ['contentDetails']);
     }
 }

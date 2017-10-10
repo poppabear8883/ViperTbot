@@ -20,7 +20,7 @@ export default {
          * Playlists
          */
         [types.SET_PLAYLISTS] (state, playlists) {
-            state.playlists =playlists
+            state.playlists = playlists
         },
 
         [types.ADD_PLAYLIST] (state, playlist) {
@@ -57,28 +57,33 @@ export default {
         },
 
         [types.ADD_SONG] (state, payload) {
-            let index = payload.playlist_id -1;
             let song = payload.song;
 
-            if (index !== null) {
-                state.playlists[index].songs.push(song)
+            for (let i in state.playlists) {
+                if (state.playlists[i].id === payload.playlist_id) {
+                    state.playlists[i].songs.push(song);
+                    break
+                }
             }
 
             state.songs.push(song);
         },
 
         [types.UPDATE_SONG] (state, payload) {
-            let index = payload.playlist_id -1;
             let song = payload.song;
 
             if (song) {
 
-                if (index !== null) {
-                    for (let i in state.playlists[index].songs) {
-                        if (state.playlists[index].songs[i].video_id === song.video_id) {
-                            state.playlists[index].songs.splice(i, 1, song);
-                            break
+                for (let i in state.playlists) {
+                    if (state.playlists[i].id === payload.playlist_id) {
+                        for (let x in state.playlists[i].songs) {
+                            if (state.playlists[i].songs[x].video_id === song.video_id) {
+                                state.playlists[i].songs.splice(x, 1, song);
+                                break
+                            }
                         }
+
+                        break
                     }
                 }
 
@@ -92,16 +97,19 @@ export default {
         },
 
         [types.DELETE_SONG] (state, payload) {
-            let index = payload.playlist_id -1;
             let video_id = payload.video_id;
+            let playlist_id = payload.playlist_id;
 
-            if (index !== null) {
-                for (let i in state.playlists[index].songs) {
-                    if (state.playlists[index].songs[i].video_id === video_id) {
-                        state.playlists[index].songs.splice(i, 1);
-                        break
+            for (let i in state.playlists) {
+                if (state.playlists[i].id === playlist_id) {
+                    for (let x in state.playlists[i].songs) {
+                        if (state.playlists[i].songs[x].video_id === video_id) {
+                            state.playlists[i].songs.splice(x, 1);
+                            break
+                        }
                     }
 
+                    break
                 }
             }
 

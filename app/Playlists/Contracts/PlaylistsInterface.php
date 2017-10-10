@@ -66,4 +66,10 @@ interface PlaylistsInterface
      * @return mixed
      */
     public function searchYoutube($term, $type);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function playlistContent($id);
 }

@@ -19,4 +19,9 @@ Route::middleware('auth:api')->group(function () {
         'playlists/youtube/search',
         'PlaylistsController@searchYoutube'
     );
+
+    Route::get(
+        'playlists/youtube/playlist',
+        'PlaylistsController@playlistContent'
+    );
 });

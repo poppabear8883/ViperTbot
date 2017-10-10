@@ -17,11 +17,11 @@ interface SongsInterface
     public function getById($playlist_id, $video_id);
 
     /**
-     * @param $playlist_id
+     * @param $playlist
      * @param $video_id
      * @return mixed
      */
-    public function create($playlist_id, $video_id);
+    public function create($playlist, $video_id);
 
     /**
      * @param $playlist_id

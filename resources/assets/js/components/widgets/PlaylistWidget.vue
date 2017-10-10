@@ -158,6 +158,13 @@
                 searchTerm: ''
             }
         },
+        watch: {
+            playlist() {
+                this.video_id = '';
+                this.new_playlist = '';
+                this.searchTerm = '';
+            }
+        },
         methods: {
             addNew(e) {
                 if (e) e.preventDefault();
@@ -233,16 +240,18 @@
                                 'playlist_id': this.playlist.id
                             }
                         }).then((response) => {
+                            console.log('testing');
 
                             this.$store.commit('DELETE_SONG', {
                                 playlist_id: this.playlist.id,
-                                video_id: song.video_id
+                                video_id: song.video_id,
                             });
 
                             alerts.success(`You successfully removed the song ${song.title}`);
 
                         }).catch((error) => {
-                            alerts.error(error.response.data);
+                            console.log(error);
+                            alerts.error(error.response);
                         });
                     }
                     if (ButtonPressed === "No") {
