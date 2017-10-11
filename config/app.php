@@ -171,6 +171,7 @@ return [
         \SocialiteProviders\Manager\ServiceProvider::class,
         //Zarlach\TwitchApi\Providers\TwitchApiServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
+        Appointer\Swaggervel\SwaggervelServiceProvider::class,
 
         /*
          * Application Service Providers...

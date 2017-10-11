@@ -16,6 +16,7 @@
         "zarlach/laravel-twitch-api": "^1.5"
     },
     "require-dev": {
+        "appointer/swaggervel": "^2.1",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",

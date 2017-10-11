@@ -21,9 +21,35 @@ class PlaylistsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     *  Returns all playlists
      *
-     * @return \Illuminate\Http\Response
+     *   @SWG\Get(
+     *     path="/api/v2/playlists",
+     *     summary="Display a listing of the resource.",
+     *     tags={"playlists"},
+     *     description="Gets all playlists",
+     *     operationId="index",
+     *
+     *     produces={"application/json"},
+     *
+     *     @SWG\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *             type="array"
+     *         ),
+     *     ),
+     *
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Invalid Request",
+     *     ),
+     *
+     *     security={
+     *
+     *     },
+     *
+     * )
      */
     public function index(Request $request)
     {
