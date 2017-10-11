@@ -15,6 +15,7 @@
                          :style="{width: progress + '%'}"></div>
                 </div>
             </div>
+
             <!-- all your toolbars can go here -->
             <div class="widget-toolbar" role="menu">
                 <div class="btn-group">
@@ -50,6 +51,14 @@
                             </option>
                         </select>
                     </div>
+
+                    <div class="col-xs-2 col-sm-6 col-md-6 col-lg-6">
+                        <strong>Volume {{ volume }}</strong>
+                        <vue-slider v-model="volume"
+                                    tooltip="hover"
+                                    :process-style="processStyle"
+                        ></vue-slider>
+                    </div>
                 </div>
             </div>
 
@@ -78,15 +87,23 @@
 </template>
 
 <script>
-    import VueYoutubeEmbed from 'vue-youtube-embed'
+    import VueYoutubeEmbed from 'vue-youtube-embed';
+    import VueSlider from 'vue-slider-component';
+
     Vue.use(VueYoutubeEmbed);
 
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
 
     export default{
+        components: {
+            Widget,
+            VueSlider
+        },
         data() {
             return {
+                processStyle: {"backgroundColor": "#BA2C38"},
+                volume: 30,
                 listEmpty: false,
                 listReady: false,
                 listItem: null,
@@ -109,6 +126,9 @@
         watch: {
             playlist(newPlaylist) {
                 this.listCopy = [];
+            },
+            volume() {
+                this.player.setVolume(this.volume);
             }
         },
         computed: {
@@ -144,9 +164,6 @@
             reqplaylist() {
                 return this.$store.getters.getReqSongs;
             }
-        },
-        components: {
-            Widget
         },
         methods: {
             /**
@@ -248,29 +265,30 @@
                 let item;
 
                 if (this.isReq && !ended) {
-                    this.removeReq()
+                    this.removeReq();
                 }
 
-                if (this.reqplaylist.length <= 0) {
-                    item = this.getRandomItem();
-                } else {
-                    item = this.getReqItem();
-                }
+                setTimeout(() => {
+                    if (this.reqplaylist[0]) {
+                        item = this.getReqItem();
+                    } else {
+                        item = this.getRandomItem();
+                    }
 
-                if (!item) {
+                    if (!item) {
+                        this.listEmpty = true;
+                        this.listReady = false;
+                        this.listItem = null;
+                        this.listCopy = [];
+                        this.isReq = false;
+                        this.title = '';
+                        this.videoId = '';
+                        this.progress = 0;
+                    } else {
+                        this.updateVideo(item);
+                    }
 
-                    this.listEmpty = true;
-                    this.listReady = false;
-                    this.listItem = null;
-                    this.listCopy = [];
-                    this.isReq = false;
-                    this.title = '';
-                    this.videoId = '';
-                    this.progress = 0;
-
-                } else {
-                    this.updateVideo(item);
-                }
+                }, 1000);
             },
 
             /**
@@ -292,12 +310,12 @@
              * Removes the song from the requested playlist
              */
             removeReq() {
-                axios.delete(`/api/v2/requestedsongs/${this.videoId}`)
-                    .then((response) => {
-                        this.$store.commit('DELETE_REQSONG', this.videoId);
-                    }).catch((error) => {
+                axios.delete(`/api/v2/requestedsongs/${this.videoId}`).then((response) => {
+                    this.$store.commit('DELETE_REQSONG', 0);
+                    this.isReq = false;
+                }).catch((error) => {
                         alerts.error(error.response);
-                    });
+                });
             },
 
             /**
@@ -407,6 +425,10 @@
              * If we have songs, lets go ahead and process a song to be played.
              */
             let setupList = setInterval(() => {
+                if(this.player) {
+                    this.player.setVolume(this.volume);
+                }
+
                 if (this.songs) {
                     if (this.songs.length > 0) {
                         this.listReady = true;

@@ -5,12 +5,10 @@
 
         <!-- row -->
         <div class="row">
-            <article class="col-sm-12">
-                <youtube-search-widget></youtube-search-widget>
-            </article>
 
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
+                <youtube-search-widget></youtube-search-widget>
                 <playlist-widget max-height="400px"></playlist-widget>
             </article><!-- END GRID -->
 

@@ -145,14 +145,8 @@ export default {
             }
         },
 
-        [types.DELETE_REQSONG] (state, video_id) {
-            for (let i in state.reqsongs) {
-                if (state.reqsongs[i].video_id === video_id) {
-                    state.reqsongs.splice(i, 1);
-                    break
-                }
-
-            }
+        [types.DELETE_REQSONG] (state, index) {
+            state.reqsongs.splice(index, 1);
         }
     }
 };
