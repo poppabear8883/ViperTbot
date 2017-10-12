@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Alaouy\Youtube\Facades\Youtube;
 use App\Playlists\Contracts\PlaylistsInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,17 +27,30 @@ class PlaylistsController extends Controller
      *   operationId="index",
      *   produces={"application/json"},
      *   parameters={},
+     *
      *   @SWG\Response(
      *     response=200,
-     *     description="successful operation",
+     *     description="successful response",
      *     @SWG\Schema(
      *       type="object",
      *       @SWG\Items(ref="#/definitions/Playlist")
      *     )
      *   ),
-     *   security={{
-     *     "api_key":{}
-     *   }}
+     *
+     *   @SWG\Response(
+     *     response=400,
+     *     description="error response",
+     *     @SWG\Schema(
+     *       type="object",
+     *       @SWG\Items(
+     *          @SWG\Property(property="error", example="name param is invalid")
+     *       )
+     *     ),
+     * )
+     *
+     *
+     *
+     *
      * )
      */
     public function index(Request $request)

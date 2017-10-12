@@ -6,10 +6,23 @@ use App\Users\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @SWG\Definition(required={"name", "user_id"}, type="object", @SWG\Xml(name="Playlist"))
+ * @SWG\Definition(type="object", @SWG\Xml(name="Playlist"))
  */
 class Playlist extends Model
 {
+    /**
+    * @SWG\Property(example="rap")
+    * @var string
+    */
+    public $name;
+
+    /**
+    * @SWG\Property(format="int64", example=1)
+    * @var integer
+    */
+    public $user_id;
+
+
     protected $fillable = ['user_id', 'name'];
 
     public function user()
