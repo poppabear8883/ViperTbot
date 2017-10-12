@@ -5,24 +5,24 @@ namespace App\Http\Controllers;
 /**
  * @SWG\Swagger(
  *     schemes={"http","https"},
- *     host="api.host.com",
- *     basePath="/",
+ *     host="vtb.site",
+ *     basePath="/api/v2",
  *     @SWG\Info(
- *         version="1.0.0",
- *         title="This is my website cool API",
- *         description="Api description...",
+ *         version="2.0.0",
+ *         title="ViperTbot Web API",
+ *         description="Web Api endpoints",
  *         termsOfService="",
  *         @SWG\Contact(
- *             email="contact@mysite.com"
+ *             email="servnx@gmail.com"
  *         ),
  *         @SWG\License(
  *             name="Private License",
- *             url="URL to the license"
+ *             url="coming soon"
  *         )
  *     ),
  *     @SWG\ExternalDocumentation(
  *         description="Find out more about my website",
- *         url="http..."
+ *         url="http://vtb.site"
  *     )
  * )
  */

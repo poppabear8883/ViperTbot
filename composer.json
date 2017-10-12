@@ -7,6 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "alaouy/youtube": "^2.1",
+        "darkaonline/l5-swagger": "5.5.*",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/passport": "^4.0",
@@ -16,7 +17,6 @@
         "zarlach/laravel-twitch-api": "^1.5"
     },
     "require-dev": {
-        "appointer/swaggervel": "^2.1",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",

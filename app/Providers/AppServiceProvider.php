@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(\L5Swagger\L5SwaggerServiceProvider::class);
+
         $this->app->singleton('command.migrate.pivot', function ($app) {
             return $app[PivotMigrationMakeCommand::class];
         });

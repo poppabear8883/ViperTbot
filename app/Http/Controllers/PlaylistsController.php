@@ -21,34 +21,24 @@ class PlaylistsController extends Controller
     }
 
     /**
-     *  Returns all playlists
-     *
-     *   @SWG\Get(
-     *     path="/api/v2/playlists",
-     *     summary="Display a listing of the resource.",
-     *     tags={"playlists"},
-     *     description="Gets all playlists",
-     *     operationId="index",
-     *
-     *     produces={"application/json"},
-     *
-     *     @SWG\Response(
-     *         response=200,
-     *         description="successful operation",
-     *         @SWG\Schema(
-     *             type="array"
-     *         ),
-     *     ),
-     *
-     *     @SWG\Response(
-     *         response="400",
-     *         description="Invalid Request",
-     *     ),
-     *
-     *     security={
-     *
-     *     },
-     *
+     * @SWG\Get(path="/playlists",
+     *   tags={"Playlist"},
+     *   summary="Returns all playlists",
+     *   description="Returns all playlists",
+     *   operationId="index",
+     *   produces={"application/json"},
+     *   parameters={},
+     *   @SWG\Response(
+     *     response=200,
+     *     description="successful operation",
+     *     @SWG\Schema(
+     *       type="object",
+     *       @SWG\Items(ref="#/definitions/Playlist")
+     *     )
+     *   ),
+     *   security={{
+     *     "api_key":{}
+     *   }}
      * )
      */
     public function index(Request $request)
