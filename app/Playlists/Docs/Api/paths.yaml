@@ -1,0 +1,23 @@
+get:
+
+  tags:
+    - Playlist
+
+  summary: Returns all playlists
+  description: Returns all playlists
+  operationId: index
+
+  produces:
+    - application/json
+
+  parameters: []
+
+  responses:
+    200:
+      description: successful response
+      schema:
+        type: object
+        $ref: './playlist.yaml#Playlist'
+
+    400:
+      description: error response

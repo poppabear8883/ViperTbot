@@ -1,0 +1,25 @@
+Playlist:
+  required:
+    - user_id
+    - name
+
+  properties:
+    id:
+      type: integer
+      example: 1
+
+    user_id:
+      type: integer
+      example: 1
+
+    name:
+      type: string
+      example: "Default Playlist"
+
+    created_at:
+      type: string
+      example: "2017-10-08 02:51:35"
+
+    updated_at:
+      type: string
+      example: "2017-10-08 02:51:35"

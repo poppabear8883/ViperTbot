@@ -20,38 +20,10 @@ class PlaylistsController extends Controller
     }
 
     /**
-     * @SWG\Get(path="/playlists",
-     *   tags={"Playlist"},
-     *   summary="Returns all playlists",
-     *   description="Returns all playlists",
-     *   operationId="index",
-     *   produces={"application/json"},
-     *   parameters={},
+     * Gets all playlists
      *
-     *   @SWG\Response(
-     *     response=200,
-     *     description="successful response",
-     *     @SWG\Schema(
-     *       type="object",
-     *       @SWG\Items(ref="#/definitions/Playlist")
-     *     )
-     *   ),
-     *
-     *   @SWG\Response(
-     *     response=400,
-     *     description="error response",
-     *     @SWG\Schema(
-     *       type="object",
-     *       @SWG\Items(
-     *          @SWG\Property(property="error", example="name param is invalid")
-     *       )
-     *     ),
-     * )
-     *
-     *
-     *
-     *
-     * )
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|\Symfony\Component\HttpFoundation\Response
      */
     public function index(Request $request)
     {
@@ -144,6 +116,12 @@ class PlaylistsController extends Controller
         return response('success', 200);
     }
 
+    /**
+     * Searches Youtube
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function searchYoutube(Request $request)
     {
         $term = $request->input('term', '');
@@ -155,6 +133,12 @@ class PlaylistsController extends Controller
         return response($results, 200);
     }
 
+    /**
+     * Gets the Youtube's playlists content
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function playlistContent(Request $request)
     {
         $id = $request->input('id', null);

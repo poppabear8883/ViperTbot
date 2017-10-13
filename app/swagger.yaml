@@ -1,0 +1,32 @@
+swagger: '2.0'
+
+info:
+  title: ViperTbot Web API
+  description: Web Api endpoints
+  termsOfService: ''
+
+  contact:
+    email: servnx@gmail.com
+
+  license:
+    name: Private License
+    url: http://vtb.site
+
+  version: 2.0.0
+
+host: vtb.site
+basePath: /api/v2
+
+schemes:
+  - http
+  - https
+
+paths:
+  $ref: './Playlists/Docs/Api/paths.yaml'
+
+definitions:
+  $refs: './Playlists/Docs/Api/playlist.yaml#Playlist'
+
+externalDocs:
+  description: Find out more about my website
+  url: http://vtb.site
