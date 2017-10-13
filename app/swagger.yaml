@@ -25,7 +25,7 @@ paths:
   $ref: './Playlists/Docs/Api/paths.yaml'
 
 definitions:
-  $refs: './Playlists/Docs/Api/playlist.yaml#Playlist'
+  $ref: './Playlists/Docs/Api/playlist.yaml#Playlist'
 
 externalDocs:
   description: Find out more about my website
