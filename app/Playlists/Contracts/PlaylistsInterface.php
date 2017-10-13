@@ -41,7 +41,7 @@ interface PlaylistsInterface
      * @param $name
      * @return mixed
      */
-    public function existsByName($name);
+    public function existsByName($name, $user_id);
 
     /**
      * @param $id

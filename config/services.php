@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Users\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
@@ -40,10 +40,5 @@ return [
         'client_secret' => env('TWITCH_SECRET'),
         'redirect' => env('TWITCH_REDIRECT_URI'),
     ],
-
-    'igdb' => [
-        'key' => env('IGDB_KEY'),
-        'url' => 'https://api-2445582011268.apicast.io'
-    ]
 
 ];

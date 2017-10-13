@@ -55,7 +55,7 @@ class PlaylistsController extends Controller
     {
         $name = $request->input('name');
 
-        if ($this->playlists->existsByName($name)) {
+        if ($this->playlists->existsByName($name, Auth::user()->id)) {
             return response('Playlist already exists', 422);
         }
 

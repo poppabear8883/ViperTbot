@@ -12,10 +12,12 @@ class PlaylistsRepository implements PlaylistsInterface
      * @var Playlist
      */
     private $model;
+
     /**
      * @var Youtube
      */
     private $youtube;
+
 
     /**
      * PlaylistsRepository constructor.
@@ -28,11 +30,23 @@ class PlaylistsRepository implements PlaylistsInterface
         $this->youtube = $youtube;
     }
 
+    /**
+     * Gets all playlists
+     *
+     * @return mixed
+     */
     public function getAll()
     {
         return $this->model->all();
     }
 
+    /**
+     * Creates a new Playlist
+     *
+     * @param $name
+     * @param $user_id
+     * @return mixed
+     */
     public function create($name, $user_id)
     {
         return $this->model->create([
@@ -62,14 +76,19 @@ class PlaylistsRepository implements PlaylistsInterface
         return $this->model->find($id);
     }
 
-    public function existsByName($name)
+    public function existsByName($name, $user_id)
     {
-        return !$this->model->where('name', $name)->get()->isEmpty();
+        return !$this->model
+            ->where('name', $name)
+            ->where('user_id', $user_id)
+            ->get()->isEmpty();
     }
 
     public function existsById($id)
     {
-        return !$this->model->where('id', $id)->get()->isEmpty();
+        return !$this->model
+            ->where('id', $id)
+            ->get()->isEmpty();
     }
 
     public function getSongs($playlist_id = 0)
