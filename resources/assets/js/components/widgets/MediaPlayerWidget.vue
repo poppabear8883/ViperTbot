@@ -89,13 +89,18 @@
 <script>
     import VueYoutubeEmbed from 'vue-youtube-embed';
     import VueSlider from 'vue-slider-component';
-
-    Vue.use(VueYoutubeEmbed);
-
     import Widget from './Widget.vue'
     import * as alerts from '../../utils/alerts'
 
+    Vue.use(VueYoutubeEmbed);
+
     export default{
+        props: {
+            playlists: {
+                required: true,
+                type: Array
+            }
+        },
         components: {
             Widget,
             VueSlider
@@ -132,9 +137,9 @@
             }
         },
         computed: {
-            playlists() {
+            /*playlists() {
                 return this.$store.getters.getPlaylists;
-            },
+            },*/
             allsongs() {
 
                 let arr = [];

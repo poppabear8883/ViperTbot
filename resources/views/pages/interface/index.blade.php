@@ -21,7 +21,7 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <media-player-widget></media-player-widget>
+                <media-player-widget :playlists="{{\Auth::user()->playlists()->with('songs')->get()}}"></media-player-widget>
 
                 <playlist-widget></playlist-widget>
 
