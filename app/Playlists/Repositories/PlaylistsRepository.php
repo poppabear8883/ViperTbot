@@ -21,6 +21,7 @@ class PlaylistsRepository implements PlaylistsInterface
 
     /**
      * PlaylistsRepository constructor.
+     *
      * @param Playlist $model
      * @param Youtube $youtube
      */
@@ -33,10 +34,14 @@ class PlaylistsRepository implements PlaylistsInterface
     /**
      * Gets all playlists
      *
+     * @param $user_id integer Optionally get a users playlists
      * @return mixed
      */
-    public function getAll()
+    public function getAll($user_id = null)
     {
+        if($user_id !== null)
+            return $this->model->where('user_id', $user_id)->get();
+
         return $this->model->all();
     }
 
@@ -58,47 +63,100 @@ class PlaylistsRepository implements PlaylistsInterface
             ->first();
     }
 
-    public function update($id, $params)
+    /**
+     * Updates a Playlist with the given params
+     *
+     * @param $playlist_id
+     * @param $params
+     * @return mixed
+     */
+    public function update($playlist_id, $params)
     {
-        $playlist = $this->getById($id);
+        $playlist = $this->getById($playlist_id);
         $playlist->update($params);
 
         return $playlist->get();
     }
 
-    public function remove($id)
+    /**
+     * Removes the playlist by the given id
+     *
+     * @param $playlist_id
+     * @return mixed
+     */
+    public function remove($playlist_id)
     {
-        return $this->getById($id)->delete();
+        return $this->getById($playlist_id)->delete();
     }
 
-    public function getById($id)
+    /**
+     * Get the Playlist model by the given id
+     *
+     * @param $playlist_id
+     * @return mixed
+     */
+    public function getById($playlist_id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($playlist_id);
     }
 
-    public function existsByName($name, $user_id)
+    /**
+     * Checks if the playlist exists by the given name
+     *
+     * @param $name string
+     * @param $user_id integer Optionally check against the user id
+     * @return bool
+     */
+    public function existsByName($name, $user_id = null)
     {
+        if ($user_id !== null)
+            return !$this->model
+                ->where('name', $name)
+                ->where('user_id', $user_id)
+                ->get()
+                ->isEmpty();
+
         return !$this->model
             ->where('name', $name)
-            ->where('user_id', $user_id)
-            ->get()->isEmpty();
+            ->get()
+            ->isEmpty();
+
     }
 
-    public function existsById($id)
+    /**
+     * Checks if the playlist exists by the given id
+     *
+     * @param $playlist_id
+     * @return bool
+     */
+    public function existsById($playlist_id)
     {
         return !$this->model
-            ->where('id', $id)
-            ->get()->isEmpty();
+            ->where('id', $playlist_id)
+            ->get()
+            ->isEmpty();
     }
 
-    public function getSongs($playlist_id = 0)
+    /**
+     * Get all songs
+     *
+     * @param null $playlist_id
+     * @param null $user_id
+     * @return array
+     */
+    public function getAllSongs($playlist_id = null, $user_id = null)
     {
-        return $this->model->with('songs')->find($playlist_id)->get();
-    }
+        if ($playlist_id !== null) {
+            if ($user_id !== null) {
+                $playlists = $this->getPlaylistWithSongs($playlist_id, $user_id);
+            } else {
+                $playlists = $this->getPlaylistWithSongs($playlist_id);
+            }
+        } else {
+            $playlists = $this->model->with('songs')->get();
+        }
 
-    public function getAllSongs()
-    {
-        $playlists = $this->model->with('songs')->get();
+
         $songs = [];
 
         foreach ($playlists as $playlist) {
@@ -110,6 +168,36 @@ class PlaylistsRepository implements PlaylistsInterface
         return $songs;
     }
 
+    /**
+     * Gets the playlist with the songs array
+     *
+     * @param $playlist_id
+     * @param null $user_id
+     * @return mixed
+     */
+    public function getPlaylistWithSongs($playlist_id, $user_id = null)
+    {
+        if($user_id !== null)
+            return $this->model
+                ->where('id', $playlist_id)
+                ->where('user_id', $user_id)
+                ->with('songs')
+                ->get();
+
+        return $this->model
+            ->where('id', $playlist_id)
+            ->with('songs')
+            ->get();
+    }
+
+    /**
+     * @param $term
+     * @param string $type
+     * @param int $limit
+     * @return array
+     *
+     * todo: extract to youtube repository class ?
+     */
     public function searchYoutube($term, $type = 'video', $limit = 5)
     {
         $params = [
@@ -126,6 +214,12 @@ class PlaylistsRepository implements PlaylistsInterface
         return $this->youtube->searchAdvanced($params);
     }
 
+    /**
+     * @param $id
+     * @return \StdClass
+     *
+     * todo: extract to youtube repository class ?
+     */
     public function playlistContent($id)
     {
         return $this->youtube->getPlaylistById($id, ['contentDetails']);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Playlists\Contracts\PlaylistsInterface;
-use Illuminate\Auth\AuthManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ApiPlaylistsController extends Controller
@@ -14,10 +14,6 @@ class ApiPlaylistsController extends Controller
      */
     private $playlists;
 
-    /**
-     * @var AuthManager
-     */
-    private $auth;
 
     /**
      * ApiPlaylistsController constructor.
@@ -37,14 +33,28 @@ class ApiPlaylistsController extends Controller
      *   description="",
      *   operationId="getAll",
      *   produces={"application/json"},
+     *   @SWG\Parameter(
+     *       description="Get the playlists associated with this User ID",
+     *       in="query",
+     *       name="user_id",
+     *       type="integer"
+     *   ),
      *   security={{"OAuth2":{}}},
-     *   @SWG\Response(response=200, description="successful operation", @SWG\Schema(ref="#/definitions/Playlist")),
-     *   @SWG\Response(response=400, description="Response Error")
+     *   @SWG\Response(
+     *     response=200,
+     *     description="Successful Operation",
+     *     @SWG\Schema(ref="#/definitions/Playlist")
+     *   ),
+     *   @SWG\Response(
+     *     response=400,
+     *     description="Error"
+     *   )
      * )
      */
-    public function getAll()
+    public function getAll(Request $request)
     {
-        return response($this->playlists->getAll(), 200);
+        $user_id = $request->input('user_id', null);
+        return response($this->playlists->getAll($user_id), 200);
     }
 
     /**
@@ -68,6 +78,13 @@ class ApiPlaylistsController extends Controller
      *         required=true,
      *         type="string"
      *     ),
+     *     @SWG\Parameter(
+     *         description="The ID of the User that this playlist belongs to",
+     *         in="query",
+     *         name="user_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
      *     @SWG\Response(
      *         response=405,
      *         description="Invalid input",
@@ -87,5 +104,112 @@ class ApiPlaylistsController extends Controller
         $playlist = $this->playlists->create($name, $user_id);
 
         return response($playlist, 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     *
+     * @SWG\Put(
+     *     path="/playlists/{id}",
+     *     tags={"playlists"},
+     *     operationId="updatePlaylist",
+     *     summary="Update an existing playlist",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         type="integer",
+     *         format="int64",
+     *         description="The playlist id to update",
+     *         required=true
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         description="Playlist object that needs to be updated",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/Playlist"),
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid ID supplied",
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Playlist not found",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Validation exception",
+     *     ),
+     *     security={{"OAuth2":{}}}
+     * )
+     */
+    public function updatePlaylist(Request $request, $id)
+    {
+
+        try {
+
+            $playlist = $this->playlists->update($id, $request->all());
+            return response($playlist, 200);
+
+        } catch (ModelNotFoundException $e) {
+            return response($e->getMessage(), 404);
+        }
+
+    }
+
+    /**
+     * Removes the playlist by id
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     *
+     * @SWG\Delete(
+     *     path="/playlists/{id}",
+     *     summary="Deletes a playlist",
+     *     description="",
+     *     operationId="destroyPlaylist",
+     *     produces={"application/json"},
+     *     tags={"playlists"},
+     *     @SWG\Parameter(
+     *         description="Playlist id to delete",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         type="integer",
+     *         format="int64"
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Success"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Playlist not found"
+     *     ),
+     *     security={{"OAuth2":{}}}
+     * )
+     */
+    public function destroyPlaylist($id)
+    {
+        try {
+
+            $this->playlists->remove($id);
+            return response(true, 200);
+
+        } catch (ModelNotFoundException $e) {
+            return response($e->getMessage(), 404);
+        }
     }
 }

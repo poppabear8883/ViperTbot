@@ -9,7 +9,7 @@ interface RequestedSongsInterface
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll();
+    public function getAll($user_id = null);
 
     /**
      * @param $id

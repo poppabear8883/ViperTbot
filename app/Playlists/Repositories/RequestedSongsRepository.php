@@ -17,8 +17,11 @@ class RequestedSongsRepository implements RequestedSongsInterface
         $this->model = $model;
     }
 
-    public function getAll()
+    public function getAll($user_id = null)
     {
+        if($user_id !== null)
+            return $this->model->where('user_id', $user_id)->get();
+
         return $this->model->all();
     }
 

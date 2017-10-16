@@ -21,14 +21,8 @@ class PagesController extends Controller
     public function dashboard()
     {
         return view('pages.interface.index', [
-            'playlists' => $this->getPlaylistsWithSongs()
-        ]);
-    }
-
-    public function playlists()
-    {
-        return view('pages.interface.playlists', [
-            'playlists' => $this->getPlaylistsWithSongs()
+            'playlists' => $this->getPlaylistsWithSongs(),
+            'requested_songs' => $this->getRequestedSongs()
         ]);
     }
 
@@ -43,5 +37,13 @@ class PagesController extends Controller
     private function getPlaylistsWithSongs()
     {
         return $this->auth->user()->playlists()->with('songs')->get();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getRequestedSongs()
+    {
+        return $this->auth->user()->requestedSongs;
     }
 }

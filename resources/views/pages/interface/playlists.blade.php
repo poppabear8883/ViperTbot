@@ -14,7 +14,10 @@
 
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
-                <media-player-widget :playlists="{{\Auth::user()->playlists()->with('songs')->get()}}"></media-player-widget>
+                <media-player-widget
+                        :playlists="{{$playlists}}"
+                        :reqplaylist="{{$requested_songs}}"
+                ></media-player-widget>
                 <requested-songs-widget></requested-songs-widget>
             </article><!-- END GRID -->
 

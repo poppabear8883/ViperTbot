@@ -96,10 +96,8 @@
 
     export default{
         props: {
-            playlists: {
-                required: true,
-                type: Array
-            }
+            playlists: {required: true, type: Array},
+            reqplaylist: {required: true, type: Array}
         },
         components: {
             Widget,
@@ -166,9 +164,9 @@
                     songs: this.allsongs
                 }
             },
-            reqplaylist() {
+            /*reqplaylist() {
                 return this.$store.getters.getReqSongs;
-            }
+            }*/
         },
         methods: {
             /**
