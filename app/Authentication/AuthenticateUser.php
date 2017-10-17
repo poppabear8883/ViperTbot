@@ -1,7 +1,7 @@
 <?php namespace App\Authentication;
 
 use App\Authentication\Contracts\AuthenticateUserInterface;
-use App\Playlists\Contracts\PlaylistsInterface;
+use Modules\Playlists\Contracts\PlaylistsInterface;
 use App\Users\Contracts\UsersInterface;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\Factory as Socialite;
@@ -44,7 +44,7 @@ class AuthenticateUser
 
         Auth::login($user, true);
 
-        if (!$this->playlist->existsById(1)) {
+        if (!$this->playlist->existsByName('Default Playlist', $user->id)) {
             $this->playlist->create('Default Playlist', $user->id);
         }
 

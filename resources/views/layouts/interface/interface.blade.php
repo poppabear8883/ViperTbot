@@ -74,7 +74,7 @@
     @include('layouts.interface.partials.shortcuts')
 
     {{-- MODALS --}}
-    @if(!Auth::guest())
+    {{--@if(!Auth::guest())
         <add-song-modal
                 :show.sync="showAddSongModal"
                 @closed="showAddSongModal = false"
@@ -94,7 +94,7 @@
                 :show.sync="showAddRegularModal"
                 @closed="showAddRegularModal = false"
         ></add-regular-modal>
-    @endif
+    @endif--}}
     {{-- END MODALS --}}
 </div>
 {{-- END #APP --}}

@@ -10,6 +10,15 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            Utilities: path.resolve(__dirname, 'resources/assets/js/utils'),
+            Modules: path.resolve(__dirname, 'Modules'),
+            Widgets: path.resolve(__dirname, 'resources/assets/js/components/widgets')
+        }
+    }
+});
 
 mix.js('resources/assets/js/app.js', 'public/js')
 

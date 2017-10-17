@@ -2,9 +2,9 @@
 
 namespace App\Users;
 
-use App\Playlists\Playlist;
-use App\Playlists\RequestedSong;
-use App\Playlists\Song;
+use Modules\Playlists\Entities\Playlist;
+use Modules\Playlists\Entities\RequestedSong;
+use Modules\Playlists\Entities\Song;
 use App\Regulars\Regular;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;

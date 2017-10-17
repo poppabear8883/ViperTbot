@@ -17,7 +17,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('applications', 'PagesController@applications');
 
-    Route::get('/playlists', 'PlaylistsController@index');
+    //Route::get('/playlists', 'PlaylistsController@index');
 
 
     Route::prefix('users')->group(function () {

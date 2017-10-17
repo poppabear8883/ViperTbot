@@ -184,7 +184,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
 
-        App\Playlists\Providers\PlaylistsServiceProvider::class,
+        //App\Playlists\Providers\PlaylistsServiceProvider::class,
         App\Regulars\Providers\RegularsServiceProvider::class,
         App\Users\Providers\UsersServiceProvider::class,
         App\Twitch\Providers\ApiServiceProvider::class

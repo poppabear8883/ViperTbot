@@ -14,43 +14,15 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// todo: extract component registration to separate files to clean this up
-/*
- * Passport Components
+/**
+ * Module Components
  */
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
+require('Modules/Playlists/Resources/assets/js/components/register');
 
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
-
-
-/*
+/**
  * App Components
  */
-Vue.component('live-channels', require('./components/header/LiveChannels.vue'));
-
-Vue.component('twitch-chat-widget', require('./components/widgets/TwitchChatWidget.vue'));
-Vue.component('media-player-widget', require('./components/widgets/MediaPlayerWidget.vue'));
-Vue.component('stream-setup-widget', require('./components/widgets/StreamSetupWidget.vue'));
-Vue.component('playlist-widget', require('./components/widgets/PlaylistWidget.vue'));
-Vue.component('youtube-search-widget', require('./components/widgets/YoutubeSearchWidget.vue'));
-Vue.component('requested-songs-widget', require('./components/widgets/RequestedSongWidget.vue'));
-
-Vue.component('add-song-modal', require('./components/modals/AddSongModal.vue'));
-Vue.component('playlist-modal', require('./components/modals/PlaylistModal.vue'));
-Vue.component('reqplaylist-modal', require('./components/modals/ReqPlaylistModal.vue'));
-Vue.component('add-regular-modal', require('./components/modals/AddRegularModal.vue'));
-
+require('./components/register');
 
 import store from './vuex/store'
 import {TwitchPubSub} from "./webhooks/TwitchPubSub";
@@ -70,9 +42,6 @@ const app = new Vue({
                 .then((response) => {
                     this.$store.commit('SET_USER', response.data.account);
                     this.$store.commit('SET_CHANNEL', response.data.channel);
-                    this.$store.commit('SET_REQSONGS', response.data.reqsongs);
-                    this.$store.commit('SET_PLAYLISTS', response.data.playlists);
-                    this.$store.commit('SET_SONGS', response.data.songs);
                 }).catch((error) => {
                     console.log(error.response);
                     return null
