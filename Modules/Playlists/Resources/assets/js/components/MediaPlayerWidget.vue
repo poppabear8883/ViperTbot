@@ -91,6 +91,7 @@
     import VueSlider from 'vue-slider-component';
     import Widget from 'Widgets/Widget.vue';
     import * as alerts from 'Utilities/alerts';
+    import { mapActions } from 'vuex';
 
     Vue.use(VueYoutubeEmbed);
 
@@ -134,7 +135,7 @@
         },
         computed: {
             user() {
-                return this.$store.getters.getUser;
+                return this.$parent.user;
             },
             allsongs() {
 
@@ -311,11 +312,10 @@
              * Removes the song from the requested playlist
              */
             removeReq() {
-                axios.delete(`/api/requestedsongs/${this.videoId}`).then((response) => {
-                    this.$store.commit('DELETE_REQSONG', 0);
+                this.deleteReqSong(this.videoId).then((response) => {
                     this.isReq = false;
                 }).catch((error) => {
-                        alerts.error(error.response);
+                    alerts.error(error.response.data);
                 });
             },
 
@@ -409,80 +409,53 @@
                 this.$root.showAddSongModal = true;
             },
 
-            getPlaylists() {
-                axios.get('/api/playlists', {
-                    params: {
-                        'user_id': this.user.id
-                    }
-                }).then((response) => {
-                    this.playlists = response.data;
-                    this.$store.commit('SET_PLAYLISTS', response.data);
-                    this.$store.commit('SET_SONGS', this.allsongs);
-
-                }).catch((error) => {
-                    console.log(error.response);
-                });
-            },
-
-            getReqPlaylist() {
-                axios.get('/api/reqsongs', {
-                    params: {
-                        'user_id': this.user.id
-                    }
-                }).then((response) => {
-                    this.reqplaylist = response.data;
-                    this.$store.commit('SET_REQSONGS', response.data);
-                }).catch((error) => {
-                    alerts.critical(error.response.data.message);
-                    console.log(error.response.data);
-                });
-
-            }
+            ...mapActions([
+                'getPlaylists',
+                'getReqSongs',
+                'deleteReqSong'
+            ]),
         },
 
         /**
          * This fires when the component is created.
          */
         created() {
-            let get = setInterval(() => {
-                if(this.user.id) {
-                    this.getPlaylists();
-                    this.getReqPlaylist();
-                    clearInterval(get);
+
+            let setVolume = setInterval(() => {
+                if(this.player) {
+                    this.player.setVolume(this.volume);
+                    clearInterval(setVolume)
                 }
-            }, 500);
-
-            let setupPlaylist = setInterval(() => {
-
-                if(this.playlists[0]) {
-
-                    this.playlist = this.playlists[0];
-                    clearInterval(setupPlaylist)
-                }
-
             }, 500);
 
             /**
-             * If we have songs, lets go ahead and process a song to be played.
+             * Get the Playlists with songs
              */
-            let setupList = setInterval(() => {
-                if(this.player) {
-                    this.player.setVolume(this.volume);
+            this.getPlaylists(this.user.id).then((response) => {
+                this.playlists = response.data;
+                this.playlist = response.data[0];
+
+                if (this.playlist.songs.length > 0) {
+                    this.listReady = true;
+                    this.listEmpty = false;
+                    let item = this.getRandomItem();
+                    this.updateVideo(item);
+                } else {
+                    this.listEmpty = true
                 }
 
-                if (this.songs) {
-                    if (this.songs.length > 0) {
-                        this.listReady = true;
-                        this.listEmpty = false;
-                        let item = this.getRandomItem();
-                        this.updateVideo(item);
-                        clearInterval(setupList);
-                    } else {
-                        this.listEmpty = true
-                    }
-                }
-            }, 1000);
+            }).catch((error) => {
+                alerts.error(error.response.data)
+            });
 
+            /**
+             * Get the requested songs
+             */
+            this.getReqSongs(this.user.id).then((response) => {
+                this.reqplaylist = response.data;
+            }).catch((error) => {
+                alerts.error(error.response.data)
+            });
         }
     }
 </script>

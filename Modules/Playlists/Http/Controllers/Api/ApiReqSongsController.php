@@ -46,7 +46,7 @@ class ApiReqSongsController extends Controller
      *   @SWG\Response(
      *     response=400,
      *     description="Error"
-     *   )
+     *   ),
      *   @SWG\Response(
      *     response=422,
      *     description="Validation Error"
@@ -63,4 +63,49 @@ class ApiReqSongsController extends Controller
 
         return response($this->reqsong->getAll($user_id), 200);
     }
+
+    /**
+     * Removes the requested song by the video_id
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     *
+     * @SWG\Delete(
+     *     path="/reqsongs/{video_id}",
+     *     summary="Deletes a requested song by the given video id",
+     *     description="",
+     *     operationId="destroyReqSong",
+     *     produces={"application/json"},
+     *     tags={"reqsongs"},
+     *     @SWG\Parameter(
+     *         description="Video ID of the song to delete",
+     *         in="path",
+     *         name="video_id",
+     *         required=true,
+     *         type="integer",
+     *         format="int64"
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Success"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     security={{"OAuth2":{}}}
+     * )
+     */
+    public function destroyReqSong(Request $request)
+    {
+        $request->validate([
+            'video_id' => 'required|string'
+        ]);
+
+        $this->reqsong->remove($request->input('video_id'));
+
+        return response(true, 200);
+    }
+
+
 }

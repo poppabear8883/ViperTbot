@@ -25,7 +25,7 @@ class RequestedSongsController extends Controller
      */
     public function index()
     {
-        return response($this->requested->getAll(), 200);
+        return view('pages.interface.playlists');
     }
 
     /**

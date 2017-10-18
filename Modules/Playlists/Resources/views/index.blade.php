@@ -20,7 +20,7 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <media-player-widget></media-player-widget>
+                <media-player-widget v-if="user.id"></media-player-widget>
 
                 <requested-songs-widget></requested-songs-widget>
 
