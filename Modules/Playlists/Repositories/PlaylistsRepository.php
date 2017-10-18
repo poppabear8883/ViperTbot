@@ -55,11 +55,6 @@ class PlaylistsRepository implements PlaylistsInterface
         return PlaylistResource::collection($this->model->all());
     }
 
-    public function getAllRequests($user_id)
-    {
-        return PlaylistResource::collection($this->requested->where('user_id', $user_id)->get());
-    }
-
     /**
      * Gets all playlists with its songs relationship
      *

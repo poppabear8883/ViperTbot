@@ -132,7 +132,7 @@
         methods: {
             search() {
                 if(this.term.length > 2) {
-                    axios.get(`/api/v2/playlists/youtube/search`, {
+                    axios.get('/api/playlists/youtube/search', {
                         params: {
                             'term': this.term,
                             'type': this.type,

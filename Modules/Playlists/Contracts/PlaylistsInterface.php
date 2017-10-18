@@ -5,7 +5,6 @@ namespace Modules\Playlists\Contracts;
 interface PlaylistsInterface
 {
     public function getAll($user_id = null);
-    public function getAllRequests($user_id);
     public function getAllWithSongs($user_id = null);
     public function getById($playlist_id);
     public function create($name, $id);

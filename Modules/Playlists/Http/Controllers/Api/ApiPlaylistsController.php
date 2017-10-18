@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Modules\Playlists\Contracts\PlaylistsInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Modules\Playlists\Transformers\PlaylistResource;
 
 class ApiPlaylistsController extends Controller
 {
@@ -54,14 +53,12 @@ class ApiPlaylistsController extends Controller
      */
     public function getAll(Request $request)
     {
+        $request->validate([
+            'user_id' => 'integer',
+        ]);
+
         $user_id = $request->input('user_id', null);
         return response($this->playlists->getAll($user_id), 200);
-    }
-
-    public function getAllRequests(Request $request)
-    {
-        $user_id = $request->input('user_id', null);
-        return response($this->playlists->getAllRequests($user_id), 200);
     }
 
     /**

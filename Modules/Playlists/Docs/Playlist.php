@@ -18,27 +18,20 @@ class Playlist
     public $id;
 
     /**
-     * @SWG\Property(format="int64", example="1")
-     * @var int
-     */
-    public $user_id;
-
-    /**
      * @SWG\Property(example="Rock N Roll")
      * @var string
      */
     public $name;
 
     /**
-     * @SWG\Property(example="2017-10-08 02:51:35")
-     * @var string
+     * @SWG\Property()
+     * @var object
      */
-    public $created_at;
+    public $user;
 
     /**
-     * @SWG\Property(example="2017-10-08 02:51:35")
-     * @var string
+     * @SWG\Property()
+     * @var array
      */
-    public $updated_at;
-
+    public $songs;
 }

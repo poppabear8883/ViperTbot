@@ -4,7 +4,7 @@ namespace Modules\Playlists\Transformers;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class PlaylistResource extends Resource
+class ReqSongsResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,9 @@ class PlaylistResource extends Resource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'songs' => $this->songs
+            'title' => $this->title,
+            'video_id' => $this->video_id,
+            'requested_by' => $this->requested_by,
         ];
     }
 

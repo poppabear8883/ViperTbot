@@ -133,9 +133,9 @@
             }
         },
         computed: {
-            /*playlists() {
-                return this.$store.getters.getPlaylists;
-            },*/
+            user() {
+                return this.$store.getters.getUser;
+            },
             allsongs() {
 
                 let arr = [];
@@ -410,7 +410,11 @@
             },
 
             getPlaylists() {
-                axios.get('/api/playlists').then((response) => {
+                axios.get('/api/playlists', {
+                    params: {
+                        'user_id': this.user.id
+                    }
+                }).then((response) => {
                     this.playlists = response.data;
                     this.$store.commit('SET_PLAYLISTS', response.data);
                     this.$store.commit('SET_SONGS', this.allsongs);
@@ -421,11 +425,16 @@
             },
 
             getReqPlaylist() {
-                axios.get('/api/reqsongs').then((response) => {
+                axios.get('/api/reqsongs', {
+                    params: {
+                        'user_id': this.user.id
+                    }
+                }).then((response) => {
                     this.reqplaylist = response.data;
                     this.$store.commit('SET_REQSONGS', response.data);
                 }).catch((error) => {
-                    console.log(error.response);
+                    alerts.critical(error.response.data.message);
+                    console.log(error.response.data);
                 });
 
             }
@@ -435,8 +444,13 @@
          * This fires when the component is created.
          */
         created() {
-            this.getPlaylists();
-            this.getReqPlaylist();
+            let get = setInterval(() => {
+                if(this.user.id) {
+                    this.getPlaylists();
+                    this.getReqPlaylist();
+                    clearInterval(get);
+                }
+            }, 500);
 
             let setupPlaylist = setInterval(() => {
 

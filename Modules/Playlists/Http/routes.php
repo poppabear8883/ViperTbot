@@ -3,7 +3,7 @@
 /**
  * Web Routes
  */
-Route::middleware('web')->prefix('playlists')->namespace('Modules\Playlists\Http\Controllers')->group(function() {
+Route::middleware(['web', 'auth'])->prefix('playlists')->namespace('Modules\Playlists\Http\Controllers')->group(function() {
     Route::get('/', 'PlaylistsController@index');
 });
 
@@ -23,7 +23,7 @@ Route::middleware(['api','auth:api'])->namespace('Modules\Playlists\Http\Control
     });
 
     Route::prefix('api/reqsongs')->group(function() {
-        Route::get('/', 'ApiPlaylistsController@getAllRequests')->name('playlists.getall');
+        Route::get('/', 'ApiReqSongsController@getAll')->name('reqsongs.getall');
     });
 
 
