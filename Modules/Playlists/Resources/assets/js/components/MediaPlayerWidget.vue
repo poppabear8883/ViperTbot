@@ -91,19 +91,21 @@
     import VueSlider from 'vue-slider-component';
     import Widget from 'Widgets/Widget.vue';
     import * as alerts from 'Utilities/alerts';
-    import { mapActions } from 'vuex';
+    import {mapActions} from 'vuex';
 
     Vue.use(VueYoutubeEmbed);
 
-    export default{
+    export default {
+        props: {
+            playlists: {required: true, type: Array},
+            reqplaylist: {required: true, type: Array}
+        },
         components: {
             Widget,
             VueSlider
         },
         data() {
             return {
-                playlists: [],
-                reqplaylist: [],
                 processStyle: {"backgroundColor": "#BA2C38"},
                 volume: 30,
                 listEmpty: false,
@@ -150,7 +152,7 @@
                 return arr;
             },
             songs() {
-                if(this.playlist) {
+                if (this.playlist) {
                     return this.playlist.songs;
                 }
 
@@ -163,9 +165,6 @@
                     songs: this.allsongs
                 }
             },
-            /*reqplaylist() {
-                return this.$store.getters.getReqSongs;
-            }*/
         },
         methods: {
             /**
@@ -348,7 +347,7 @@
             /**
              * Updates the progress bar
              */
-            updateProgressBar(){
+            updateProgressBar() {
                 this.progress = (this.player.getCurrentTime() / this.player.getDuration()) * 100;
             },
 
@@ -410,8 +409,6 @@
             },
 
             ...mapActions([
-                'getPlaylists',
-                'getReqSongs',
                 'deleteReqSong'
             ]),
         },
@@ -422,40 +419,22 @@
         created() {
 
             let setVolume = setInterval(() => {
-                if(this.player) {
+                if (this.player) {
                     this.player.setVolume(this.volume);
                     clearInterval(setVolume)
                 }
             }, 500);
 
-            /**
-             * Get the Playlists with songs
-             */
-            this.getPlaylists(this.user.id).then((response) => {
-                this.playlists = response.data;
-                this.playlist = response.data[0];
+            this.playlist = this.playlists[0];
 
-                if (this.playlist.songs.length > 0) {
-                    this.listReady = true;
-                    this.listEmpty = false;
-                    let item = this.getRandomItem();
-                    this.updateVideo(item);
-                } else {
-                    this.listEmpty = true
-                }
-
-            }).catch((error) => {
-                alerts.error(error.response.data)
-            });
-
-            /**
-             * Get the requested songs
-             */
-            this.getReqSongs(this.user.id).then((response) => {
-                this.reqplaylist = response.data;
-            }).catch((error) => {
-                alerts.error(error.response.data)
-            });
+            if (this.playlist.songs.length > 0) {
+                this.listReady = true;
+                this.listEmpty = false;
+                let item = this.getRandomItem();
+                this.updateVideo(item);
+            } else {
+                this.listEmpty = true
+            }
         }
     }
 </script>

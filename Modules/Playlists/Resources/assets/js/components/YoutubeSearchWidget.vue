@@ -129,9 +129,10 @@
             Widget,
             YoutubeMediaObject
         },
+        computed: {},
         methods: {
             search() {
-                if(this.term.length > 2) {
+                if (this.term.length > 2) {
                     axios.get('/api/playlists/youtube/search', {
                         params: {
                             'term': this.term,

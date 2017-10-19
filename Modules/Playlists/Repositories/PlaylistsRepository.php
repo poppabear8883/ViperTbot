@@ -6,7 +6,6 @@ use Alaouy\Youtube\Youtube;
 use Modules\Playlists\Contracts\PlaylistsInterface;
 use Modules\Playlists\Entities\Playlist;
 use Modules\Playlists\Entities\RequestedSong;
-use Modules\Playlists\Transformers\PlaylistResource;
 
 class PlaylistsRepository implements PlaylistsInterface
 {
@@ -48,11 +47,9 @@ class PlaylistsRepository implements PlaylistsInterface
     public function getAll($user_id = null)
     {
         if($user_id !== null)
-            return PlaylistResource::collection(
-                $this->model->where('user_id', $user_id)->get()
-            );
+            return $this->model->where('user_id', $user_id)->get();
 
-        return PlaylistResource::collection($this->model->all());
+        return $this->model->all();
     }
 
     /**

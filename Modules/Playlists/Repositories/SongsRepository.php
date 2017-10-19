@@ -24,7 +24,7 @@ class SongsRepository implements SongsInterface
         $this->youtube = $youtube;
     }
 
-    public function getAll()
+    public function getAll($user_id)
     {
         return $this->model->all();
     }

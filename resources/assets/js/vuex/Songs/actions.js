@@ -14,16 +14,53 @@ export function getSongs(context, user_id) {
     });
 }
 
-export function addSong(context, data) {
-    context.commit('ADD_SONG', data)
+export function addSong(context, payload) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/songs', {
+            'video_id': payload.id,
+            'playlist_id': payload.playlist_id
+        }).then((response) => {
+
+            if (response.data.length > 0) {
+
+                _.forEach(response.data, (song) => {
+
+                    context.commit('ADD_SONG', {
+                        song: song,
+                        playlist_id: payload.playlist_id
+                    });
+
+                });
+            }
+
+            resolve(response);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 export function updateSong(context, id) {
     context.commit('UPDATE_SONG', id)
 }
 
-export function deleteSong(context, id) {
-    context.commit('DELETE_SONG', id)
+export function deleteSong(context, payload) {
+    return new Promise((resolve, reject) => {
+        axios.delete(`/api/songs/${payload.video_id}`, {
+            params: {
+                playlist_id: payload.playlist_id
+            }
+        }).then((response) => {
+            context.commit('DELETE_SONG', {
+                playlist_id: payload.playlist_id,
+                video_id: payload.video_id,
+            });
+
+            resolve(response);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 /**
@@ -45,8 +82,19 @@ export function getReqSongs(context, user_id) {
     });
 }
 
-export function addReqSong(context, data) {
-    context.commit('ADD_REQSONG', data)
+export function addReqSong(context, payload) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/reqsongs', {
+            'video_id': payload.video.id.videoId,
+            'title': payload.video.snippet.title,
+            'requested_by': payload.username
+        }).then((response) => {
+            context.commit('ADD_REQSONG', response.data);
+            resolve(response);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 export function updateReqSong(context, id) {
@@ -82,8 +130,18 @@ export function getPlaylists(context, user_id) {
     });
 }
 
-export function addPlaylist(context, playlist) {
-    context.commit('ADD_PLAYLIST', playlist)
+export function addPlaylist(context, payload) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/playlists', {
+            name: payload.name,
+            user_id: payload.user_id
+        }).then((response) => {
+            context.commit('ADD_PLAYLIST', response.data);
+            resolve(response);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 export function updatePlaylist(context, playlist) {
@@ -91,7 +149,14 @@ export function updatePlaylist(context, playlist) {
 }
 
 export function deletePlaylist(context, playlist) {
-    context.commit('DELETE_PLAYLIST', playlist)
+    return new Promise((resolve, reject) => {
+        axios.delete(`/api/playlists/${playlist.id}`).then((response) => {
+            context.commit('DELETE_PLAYLIST', playlist.id);
+            resolve(response);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
 }
 
 

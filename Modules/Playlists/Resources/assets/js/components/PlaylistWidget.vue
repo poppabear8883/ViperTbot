@@ -129,18 +129,17 @@
 
     import Widget from 'Widgets/Widget.vue';
     import * as alerts from 'Utilities/alerts';
-    import { youtubeParser } from 'Utilities/youtube';
+    import {youtubeParser} from 'Utilities/youtube';
     import * as urlParser from 'js-video-url-parser';
-
+    import {mapActions} from 'vuex';
 
     export default {
         props: {
-            maxHeight: {
-                default: '400px'
-            }
+            playlists: {required: true, type: Array},
+            maxHeight: {default: '400px'}
         },
 
-        components:{
+        components: {
             Widget
         },
 
@@ -166,6 +165,13 @@
             }
         },
         methods: {
+            ...mapActions([
+                'addSong',
+                'addPlaylist',
+                'deleteSong',
+                'deletePlaylist'
+            ]),
+
             addNew(e) {
                 if (e) e.preventDefault();
 
@@ -175,53 +181,35 @@
                  * Handle the URL
                  */
                 if (parse) {
-                    if(parse.list) {
+                    if (parse.list) {
                         this.video_id = parse.list;
                     } else {
                         this.video_id = parse.id
                     }
                 }
 
-                axios.post('/api/v2/songs', {
-                    'video_id': this.video_id,
-                    'playlist_id': this.playlist.id
+                this.addSong({
+                    video_id: this.video_id,
+                    playlist_id: this.playlist.id
                 }).then((response) => {
-
-                    if (response.data.length > 0) {
-
-                        _.forEach(response.data, (song) => {
-
-                            this.$store.commit('ADD_SONG', {
-                                song: song,
-                                playlist_id: this.playlist.id
-                            });
-
-                        });
-
-                        alerts.success('You have successfully added new songs to playlist!');
-                    }
-
+                    alerts.success('You have successfully added new songs to playlist!');
+                    this.$emit('added');
                 }).catch((error) => {
-                    console.log(error.response);
                     alerts.error(error.response.data);
                 });
-
 
                 this.video_id = '';
             },
 
             addNewPlaylist() {
-                axios.post('/api/v2/playlists', {
-                    'name': this.new_playlist
+                this.addPlaylist({
+                    name: this.new_playlist,
+                    user_id: this.user.id
                 }).then((response) => {
-
-                    this.$store.commit('ADD_PLAYLIST', response.data);
-
                     this.playlist = response.data;
-
                     alerts.success('Successfully added a new Playlist');
                 }).catch((error) => {
-                    alerts.error(error);
+                    alerts.error(error.response.data)
                 });
 
                 this.new_playlist = '';
@@ -229,30 +217,20 @@
 
             confirmDelete(song) {
                 $.SmartMessageBox({
-                    title : "Warning!",
-                    content : `Are you sure you wish to remove ${song.title} ?`,
-                    buttons : '[No][Yes]'
+                    title: "Warning!",
+                    content: `Are you sure you wish to remove ${song.title} ?`,
+                    buttons: '[No][Yes]'
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
-
-                        axios.delete(`/api/v2/songs/${song.video_id}`, {
-                            params: {
-                                'playlist_id': this.playlist.id
-                            }
+                        this.deleteSong({
+                            playlist_id: this.playlist.id,
+                            video_id: this.song.video_id
                         }).then((response) => {
-                            console.log('testing');
-
-                            this.$store.commit('DELETE_SONG', {
-                                playlist_id: this.playlist.id,
-                                video_id: song.video_id,
-                            });
-
                             alerts.success(`You successfully removed the song ${song.title}`);
-
                         }).catch((error) => {
-                            console.log(error);
-                            alerts.error(error.response);
+                            alerts.error(error.response.data);
                         });
+
                     }
                     if (ButtonPressed === "No") {
                         alerts.canceled();
@@ -268,24 +246,17 @@
                 }
 
                 $.SmartMessageBox({
-                    title : "Warning!",
-                    content : `Are you sure you wish to remove ${playlist.name} ?`,
-                    buttons : '[No][Yes]'
+                    title: "Warning!",
+                    content: `Are you sure you wish to remove ${playlist.name} ?`,
+                    buttons: '[No][Yes]'
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
-
-                        axios.delete(`/api/v2/playlists/${playlist.id}`)
-                            .then((response) => {
-
-                                this.$store.commit('DELETE_PLAYLIST', playlist.id);
-
-                                this.playlist = this.playlists[0];
-
-                                alerts.success(`You successfully removed the playlist ${playlist.name}`);
-
-                            }).catch((error) => {
-                                alerts.error(error.response.data);
-                            });
+                        this.deletePlaylist(this.playlist).then((response) => {
+                            this.playlist = this.playlists[0];
+                            alerts.success(`You successfully removed the playlist ${playlist.name}`);
+                        }).catch((error) => {
+                            alerts.error(error.response.data);
+                        });
                     }
                     if (ButtonPressed === "No") {
                         alerts.canceled();
@@ -300,8 +271,8 @@
 
         },
         computed: {
-            playlists() {
-                return this.$store.getters.getPlaylists;
+            user() {
+                return this.$store.getters.getUser;
             },
             playlistName() {
                 if (this.playlist) {
@@ -312,7 +283,7 @@
             },
             songs() {
 
-                if(this.playlist) {
+                if (this.playlist) {
                     if (this.searchTerm !== '') {
                         return this.playlist.songs.filter((row) => {
                             return Object.keys(row).some((key) => {
@@ -327,16 +298,11 @@
                 return [];
             },
             btnActionClasses() {
-                return ['btn','dropdown-toggle','btn-xs', 'btn-default'];
+                return ['btn', 'dropdown-toggle', 'btn-xs', 'btn-default'];
             }
         },
         created() {
-            let setup = setInterval(() => {
-                if(this.playlists[0]) {
-                    this.playlist = this.playlists[0];
-                    clearInterval(setup);
-                }
-            }, 500);
+            this.playlist = this.playlists[0];
         }
     }
 </script>

@@ -4,7 +4,6 @@ namespace Modules\Playlists\Repositories;
 
 use Modules\Playlists\Contracts\RequestedSongsInterface;
 use Modules\Playlists\Entities\RequestedSong;
-use Modules\Playlists\Transformers\ReqSongsResource;
 
 class RequestedSongsRepository implements RequestedSongsInterface
 {
@@ -26,7 +25,7 @@ class RequestedSongsRepository implements RequestedSongsInterface
      */
     public function getAll($user_id)
     {
-        return ReqSongsResource::collection($this->model->where('user_id', $user_id)->get());
+        return $this->model->where('user_id', $user_id)->get();
     }
 
     public function create($params)

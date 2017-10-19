@@ -5,6 +5,7 @@ namespace Modules\Playlists\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Playlists\Contracts\RequestedSongsInterface;
+use Modules\Playlists\Transformers\ReqSongsResource;
 
 class ApiReqSongsController extends Controller
 {
@@ -60,8 +61,113 @@ class ApiReqSongsController extends Controller
         ]);
 
         $user_id = $request->input('user_id');
+        $response = ReqSongsResource::collection($this->reqsong->getAll($user_id));
+        return response($response, 200);
+    }
 
-        return response($this->reqsong->getAll($user_id), 200);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     *
+     * @SWG\Post(
+     *     path="/reqssongs",
+     *     tags={"reqsongs"},
+     *     operationId="addReqSong",
+     *     summary="Add a new requested song to the playlist",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="The Title",
+     *         in="query",
+     *         name="title",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="The ID of the User that this playlist belongs to",
+     *         in="query",
+     *         name="user_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"OAuth2":{}}}
+     * )
+     */
+    public function addReqSong(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $title = $request->input('title');
+        $video_id = $request->input('video_id');
+        $requested_by = $request->input('requested_by');
+
+        if ($this->reqsong->existsByName($name, $user_id)) {
+            return response('Playlist already exists', 422);
+        }
+
+        $response = new PlaylistResource($this->playlists->create($name, $user_id));
+        return response($response, 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     *
+     * @SWG\Put(
+     *     path="/playlists/{id}",
+     *     tags={"playlists"},
+     *     operationId="updatePlaylist",
+     *     summary="Update an existing playlist",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         type="integer",
+     *         format="int64",
+     *         description="The playlist id to update",
+     *         required=true
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         description="Playlist object that needs to be updated",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/Playlist"),
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid ID supplied",
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="Playlist not found",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Validation exception",
+     *     ),
+     *     security={{"OAuth2":{}}}
+     * )
+     */
+    public function updatePlaylist(Request $request, $id)
+    {
+        try {
+            $response = $this->playlists->update($id, $request->all());
+            return response($response, 200);
+        } catch (ModelNotFoundException $e) {
+            return response($e->getMessage(), 404);
+        }
     }
 
     /**

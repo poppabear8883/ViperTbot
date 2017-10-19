@@ -81,12 +81,11 @@
 
     export default {
         props: {
-            maxHeight: {
-                default: '400px'
-            }
+            reqplaylist: {required: true, type: Array},
+            maxHeight: {default: '400px'}
         },
 
-        components:{
+        components: {
             Widget
         },
 
@@ -95,20 +94,18 @@
                 searchTerm: ''
             }
         },
-        methods: {
-
-        },
+        methods: {},
         computed: {
             songs() {
                 if (this.searchTerm !== '') {
-                    return this.$store.getters.getReqSongs.filter((row) => {
+                    return this.reqplaylist.filter((row) => {
                         return Object.keys(row).some((key) => {
                             return String(row[key]).toLowerCase().indexOf(this.searchTerm) > -1
                         })
                     })
                 }
 
-                return this.$store.getters.getReqSongs;
+                return this.reqplaylist;
             }
         },
         created() {

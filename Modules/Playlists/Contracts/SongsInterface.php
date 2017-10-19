@@ -7,7 +7,7 @@ interface SongsInterface
     /**
      * @return mixed
      */
-    public function getAll();
+    public function getAll($user_id);
 
     /**
      * @param $playlist_id

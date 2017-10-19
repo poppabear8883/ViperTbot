@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Modules\Playlists\Contracts\PlaylistsInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Modules\Playlists\Transformers\PlaylistResource;
 
 class ApiPlaylistsController extends Controller
 {
@@ -58,7 +59,8 @@ class ApiPlaylistsController extends Controller
         ]);
 
         $user_id = $request->input('user_id', null);
-        return response($this->playlists->getAll($user_id), 200);
+        $response = PlaylistResource::collection($this->playlists->getAll($user_id));
+        return response($response, 200);
     }
 
     /**
@@ -105,9 +107,8 @@ class ApiPlaylistsController extends Controller
             return response('Playlist already exists', 422);
         }
 
-        $playlist = $this->playlists->create($name, $user_id);
-
-        return response($playlist, 200);
+        $response = new PlaylistResource($this->playlists->create($name, $user_id));
+        return response($response, 200);
     }
 
     /**
@@ -157,16 +158,12 @@ class ApiPlaylistsController extends Controller
      */
     public function updatePlaylist(Request $request, $id)
     {
-
         try {
-
-            $playlist = $this->playlists->update($id, $request->all());
-            return response($playlist, 200);
-
+            $response = $this->playlists->update($id, $request->all());
+            return response($response, 200);
         } catch (ModelNotFoundException $e) {
             return response($e->getMessage(), 404);
         }
-
     }
 
     /**
@@ -208,10 +205,8 @@ class ApiPlaylistsController extends Controller
     public function destroyPlaylist($id)
     {
         try {
-
-            $this->playlists->remove($id);
-            return response(true, 200);
-
+            $response = $this->playlists->remove($id);
+            return response($response, 200);
         } catch (ModelNotFoundException $e) {
             return response($e->getMessage(), 404);
         }

@@ -54,6 +54,7 @@
 </template>
 <script>
     import * as alerts from 'Utilities/alerts';
+    import {mapActions} from 'vuex';
 
     export default {
         props: ['video'],
@@ -79,6 +80,10 @@
             }
         },
         methods: {
+            ...mapActions([
+                'addSong',
+                'addReqSong'
+            ]),
             add() {
                 $.SmartMessageBox({
                     title: "Warning!",
@@ -94,29 +99,14 @@
                             _id = this.video.id.videoId
                         }
 
-                        axios.post('/api/v2/songs', {
-                            'video_id': _id,
-                            'playlist_id': this.playlist.id
+                        this.addSong({
+                            video_id: _id,
+                            playlist_id: this.playlist.id
                         }).then((response) => {
-
-                            if (response.data.length > 0) {
-
-                                _.forEach(response.data, (song) => {
-
-                                    this.$store.commit('ADD_SONG', {
-                                        song: song,
-                                        playlist_id: this.playlist.id
-                                    });
-
-                                });
-
-                                alerts.success('You have successfully added new songs to playlist!');
-                                this.$emit('added');
-                            }
-
+                            alerts.success('You have successfully added new songs to playlist!');
+                            this.$emit('added');
                         }).catch((error) => {
-                            console.log(error);
-                            alerts.error(error.response);
+                            alerts.error(error.response.data);
                         });
                     }
                     if (ButtonPressed === "No") {
@@ -139,22 +129,14 @@
                             return;
                         }
 
-                        axios.post('/api/v2/requestedsongs', {
-                            'video_id': this.video.id.videoId,
-                            'title': this.video.snippet.title,
-                            'requested_by': this.user.username
+                        this.addReqSong({
+                            video: this.video,
+                            username: this.user.username
                         }).then((response) => {
-                            console.log(response.data);
-
-                            this.$store.commit('ADD_REQSONG', response.data);
-
-
                             alerts.success('Successfully added requested song!');
                             this.$emit('added');
-
                         }).catch((error) => {
-                            console.log(error);
-                            alerts.error(error.response);
+                            alerts.error(error.response.data);
                         });
                     }
                     if (ButtonPressed === "No") {
