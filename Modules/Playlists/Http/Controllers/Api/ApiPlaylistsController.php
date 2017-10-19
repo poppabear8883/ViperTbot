@@ -173,15 +173,15 @@ class ApiPlaylistsController extends Controller
      * @return \Illuminate\Http\Response
      *
      * @SWG\Delete(
-     *     path="/playlists/{id}",
+     *     path="/playlists",
      *     summary="Deletes a playlist",
      *     description="",
-     *     operationId="destroyPlaylist",
+     *     operationId="deletePlaylist",
      *     produces={"application/json"},
      *     tags={"playlists"},
      *     @SWG\Parameter(
      *         description="Playlist id to delete",
-     *         in="path",
+     *         in="query",
      *         name="id",
      *         required=true,
      *         type="integer",
@@ -202,14 +202,16 @@ class ApiPlaylistsController extends Controller
      *     security={{"OAuth2":{}}}
      * )
      */
-    public function destroyPlaylist($id)
+    public function deletePlaylist(Request $request)
     {
-        try {
-            $response = $this->playlists->remove($id);
-            return response($response, 200);
-        } catch (ModelNotFoundException $e) {
-            return response($e->getMessage(), 404);
-        }
+        $request->validate([
+            'id' => 'required|integer'
+        ]);
+
+        $id = $request->input('id');
+        $response = [$this->playlists->remove($id)];
+        return response($response, 200);
+
     }
 
     /**

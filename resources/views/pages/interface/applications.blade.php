@@ -1,5 +1,10 @@
 @extends('layouts.interface.interface')
 
+@section('page-title')
+    <i class="fa-fw fa fa-cubes"></i>
+    Applications <span>&gt; My Applications</span>
+@endsection
+
 @section('content')
     <section id="widget-grid">
 

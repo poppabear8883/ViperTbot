@@ -49,24 +49,32 @@ class SongsRepository implements SongsInterface
 
     public function remove($playlist_id, $video_id)
     {
-        return $this->getById($playlist_id, $video_id)->delete();
+        return $this->getByVideoId($playlist_id, $video_id)->delete();
     }
 
-    public function getById($playlist_id, $video_id)
+    public function getById($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    public function getByVideoId($playlist_id, $video_id)
     {
         return $this->model
             ->where('playlist_id', $playlist_id)
-            ->where('video_id', $video_id);
+            ->where('video_id', $video_id)
+            ->first();
     }
 
     public function existsByName($playlist_id, $name)
     {
         return !$this->model
             ->where('playlist_id', $playlist_id)
-            ->where('name', $name)->get()->isEmpty();
+            ->where('name', $name)
+            ->get()
+            ->isEmpty();
     }
 
-    public function existsById($playlist_id, $video_id)
+    public function existsByVideoId($playlist_id, $video_id)
     {
         return !$this->model
             ->where('video_id', $video_id)
@@ -79,12 +87,12 @@ class SongsRepository implements SongsInterface
     {
         $video = $this->youtube->getVideoInfo($video_id);
 
-        if (!$this->existsById($playlist_id, $video_id)) {
+        if (!$this->existsByVideoId($playlist_id, $video_id)) {
 
             return $this->model->create([
                 'video_id' => $video_id,
                 'title' => $video->snippet->title,
-                'playlist_id' => $playlist_id
+                'playlist_id' => $playlist_id,
             ]);
 
         } else {
@@ -110,12 +118,12 @@ class SongsRepository implements SongsInterface
 
         foreach ($videos as $v) {
 
-            if (!$this->existsById($playlist_id, $v->snippet->resourceId->videoId)) {
+            if (!$this->existsByVideoId($playlist_id, $v->snippet->resourceId->videoId)) {
 
                 $song = $this->model->create([
                     'video_id' => $v->snippet->resourceId->videoId,
                     'title' => $v->snippet->title,
-                    'playlist_id' => $playlist_id
+                    'playlist_id' => $playlist_id,
                 ]);
 
                 array_push($songs, $song);

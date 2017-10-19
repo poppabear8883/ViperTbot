@@ -224,7 +224,7 @@
                     if (ButtonPressed === "Yes") {
                         this.deleteSong({
                             playlist_id: this.playlist.id,
-                            video_id: this.song.video_id
+                            video_id: song.video_id
                         }).then((response) => {
                             alerts.success(`You successfully removed the song ${song.title}`);
                         }).catch((error) => {
@@ -251,7 +251,9 @@
                     buttons: '[No][Yes]'
                 }, (ButtonPressed) => {
                     if (ButtonPressed === "Yes") {
-                        this.deletePlaylist(this.playlist).then((response) => {
+                        this.deletePlaylist({
+                            id: this.playlist.id
+                        }).then((response) => {
                             this.playlist = this.playlists[0];
                             alerts.success(`You successfully removed the playlist ${playlist.name}`);
                         }).catch((error) => {

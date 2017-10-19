@@ -4,51 +4,13 @@ namespace Modules\Playlists\Contracts;
 
 interface SongsInterface
 {
-    /**
-     * @return mixed
-     */
+
     public function getAll($user_id);
-
-    /**
-     * @param $playlist_id
-     * @param $video_id
-     * @return mixed
-     */
-    public function getById($playlist_id, $video_id);
-
-    /**
-     * @param $playlist
-     * @param $video_id
-     * @return mixed
-     */
+    public function getById($id);
+    public function getByVideoId($playlist_id, $video_id);
     public function create($playlist, $video_id);
-
-    /**
-     * @param $playlist_id
-     * @param $video_id
-     * @param $params
-     * @return mixed
-     */
     public function update($playlist_id, $video_id, $params);
-
-    /**
-     * @param $playlist_id
-     * @param $video_id
-     * @return mixed
-     */
     public function remove($playlist_id, $video_id);
-
-    /**
-     * @param $playlist_id
-     * @param $name
-     * @return mixed
-     */
     public function existsByName($playlist_id, $name);
-
-    /**
-     * @param $playlist_id
-     * @param $video_id
-     * @return mixed
-     */
-    public function existsById($playlist_id, $video_id);
+    public function existsByVideoId($playlist_id, $video_id);
 }

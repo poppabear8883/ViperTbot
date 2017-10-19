@@ -17,7 +17,7 @@ Route::middleware(['api','auth:api'])->namespace('Modules\Playlists\Http\Control
         Route::post('/', 'ApiPlaylistsController@addPlaylist')->name('playlists.addplaylist');
         Route::put('/', 'ApiPlaylistsController@updatePlaylist')->name('playlists.updateplaylist');
         Route::patch('/', 'ApiPlaylistsController@updatePlaylist')->name('playlists.updateplaylist');
-        Route::delete('/{id}', 'ApiPlaylistsController@deletePlaylist')->name('playlists.deleteplaylist');
+        Route::delete('/', 'ApiPlaylistsController@deletePlaylist')->name('playlists.deleteplaylist');
         Route::get('youtube/search', 'ApiPlaylistsController@searchYoutube')->name('playlists.youtube.search');
         Route::get('youtube/playlist', 'ApiPlaylistsController@playlistContent')->name('playlists.youtube.playlist');
     });
@@ -35,7 +35,7 @@ Route::middleware(['api','auth:api'])->namespace('Modules\Playlists\Http\Control
         Route::post('/', 'ApiSongsController@addSong')->name('songs.addreqsongs');
         Route::put('/', 'ApiSongsController@updateSong')->name('songs.updatereqsongs');
         Route::patch('/', 'ApiSongsController@updateSong')->name('songs.updatereqsongs');
-        Route::delete('/{id}', 'ApiSongsController@deleteSong')->name('songs.deletereqsongs');
+        Route::delete('/', 'ApiSongsController@deleteSong')->name('songs.deletereqsongs');
     });
 
 

@@ -5,6 +5,7 @@ namespace Modules\Playlists\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Playlists\Contracts\SongsInterface;
+use Modules\Playlists\Transformers\SongResource;
 
 class ApiSongsController extends Controller
 {
@@ -25,7 +26,34 @@ class ApiSongsController extends Controller
         ]);
 
         $user_id = $request->input('user_id');
+        $response = SongResource::collection($this->songs->getAll($user_id));
+        return response($response, 200);
+    }
 
-        return response($this->songs->getAll($user_id), 200);
+    public function addSong(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|integer',
+            'video_id' => 'required|string'
+        ]);
+
+        $playlist_id = $request->input('playlist_id');
+        $video_id = $request->input('video_id');
+        $response = $this->songs->create($playlist_id, $video_id);
+        return response($response, 200);
+    }
+
+    public function deleteSong(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|integer',
+            'video_id' => 'required|string'
+        ]);
+
+        $playlist_id = $request->input('playlist_id');
+        $video_id = $request->input('video_id');
+        $response = [$this->songs->remove($playlist_id, $video_id)];
+        return response($response, 200);
+
     }
 }

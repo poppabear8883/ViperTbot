@@ -5,7 +5,7 @@ namespace Modules\Playlists\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Playlists\Contracts\RequestedSongsInterface;
-use Modules\Playlists\Transformers\ReqSongsResource;
+use Modules\Playlists\Transformers\ReqSongResource;
 
 class ApiReqSongsController extends Controller
 {
@@ -61,7 +61,7 @@ class ApiReqSongsController extends Controller
         ]);
 
         $user_id = $request->input('user_id');
-        $response = ReqSongsResource::collection($this->reqsong->getAll($user_id));
+        $response = ReqSongResource::collection($this->reqsong->getAll($user_id));
         return response($response, 200);
     }
 
@@ -107,11 +107,11 @@ class ApiReqSongsController extends Controller
         $video_id = $request->input('video_id');
         $requested_by = $request->input('requested_by');
 
-        if ($this->reqsong->existsByName($name, $user_id)) {
-            return response('Playlist already exists', 422);
+        if ($this->reqsong->existsByVideoId($video_id)) {
+            return response('Song already exists', 422);
         }
 
-        $response = new PlaylistResource($this->playlists->create($name, $user_id));
+        $response = new ReqSongResource($this->reqsong->create($user_id, $title, $video_id, $requested_by));
         return response($response, 200);
     }
 

@@ -28,9 +28,14 @@ class RequestedSongsRepository implements RequestedSongsInterface
         return $this->model->where('user_id', $user_id)->get();
     }
 
-    public function create($params)
+    public function create($user_id, $title, $video_id, $requested_by)
     {
-        return $this->model->create($params);
+        return $this->model->create([
+            'user_id' => $user_id,
+            'title' => $title,
+            'video_id' => $video_id,
+            'requested_by' => $requested_by
+        ]);
     }
 
     public function update($id, $params)

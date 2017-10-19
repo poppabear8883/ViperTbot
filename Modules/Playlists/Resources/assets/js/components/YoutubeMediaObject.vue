@@ -130,6 +130,7 @@
                         }
 
                         this.addReqSong({
+                            user_id: this.user.id,
                             video: this.video,
                             username: this.user.username
                         }).then((response) => {

@@ -17,7 +17,7 @@ export function getSongs(context, user_id) {
 export function addSong(context, payload) {
     return new Promise((resolve, reject) => {
         axios.post('/api/songs', {
-            'video_id': payload.id,
+            'video_id': payload.video_id,
             'playlist_id': payload.playlist_id
         }).then((response) => {
 
@@ -46,9 +46,10 @@ export function updateSong(context, id) {
 
 export function deleteSong(context, payload) {
     return new Promise((resolve, reject) => {
-        axios.delete(`/api/songs/${payload.video_id}`, {
+        axios.delete('/api/songs', {
             params: {
-                playlist_id: payload.playlist_id
+                playlist_id: payload.playlist_id,
+                video_id: payload.video_id
             }
         }).then((response) => {
             context.commit('DELETE_SONG', {
@@ -85,6 +86,7 @@ export function getReqSongs(context, user_id) {
 export function addReqSong(context, payload) {
     return new Promise((resolve, reject) => {
         axios.post('/api/reqsongs', {
+            'user_id': payload.user_id,
             'video_id': payload.video.id.videoId,
             'title': payload.video.snippet.title,
             'requested_by': payload.username
@@ -148,10 +150,14 @@ export function updatePlaylist(context, playlist) {
     context.commit('UPDATE_PLAYLIST', playlist)
 }
 
-export function deletePlaylist(context, playlist) {
+export function deletePlaylist(context, payload) {
     return new Promise((resolve, reject) => {
-        axios.delete(`/api/playlists/${playlist.id}`).then((response) => {
-            context.commit('DELETE_PLAYLIST', playlist.id);
+        axios.delete('/api/playlists', {
+            params: {
+                id: payload.id
+            }
+        }).then((response) => {
+            context.commit('DELETE_PLAYLIST', payload.id);
             resolve(response);
         }).catch((error) => {
             reject(error);

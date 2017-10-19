@@ -7,12 +7,12 @@
             <!-- SINGLE GRID -->
             <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <youtube-search-widget></youtube-search-widget>
+                <stream-setup-widget
+                        client-id="sbuautwemmz4hr6sbuabyp9bg9uwaav"
+                ></stream-setup-widget>
 
-                <playlist-widget
-                        :playlists="playlists"
-                        max-height="400px"
-                ></playlist-widget>
+                <!--<twitch-chat-widget></twitch-chat-widget>-->
+
 
             </article><!-- END GRID -->
 
@@ -24,10 +24,10 @@
                         :reqplaylist="reqplaylist"
                 ></media-player-widget>
 
-                <requested-songs-widget
-                        v-if="reqplaylist !== null"
-                        :reqplaylist="reqplaylist"
-                ></requested-songs-widget>
+                <playlist-widget
+                        :playlists="playlists"
+                        max-height="400px"
+                ></playlist-widget>
 
             </article><!-- END GRID -->
 
@@ -36,18 +36,19 @@
     </section><!-- end widget grid -->
 </template>
 <script>
-    import MediaPlayerWidget from './MediaPlayerWidget.vue';
-    import RequestedSongsWidget from './RequestedSongWidget.vue';
-    import PlaylistWidget from './PlaylistWidget.vue';
-    import YoutubeSearchWidget from './YoutubeSearchWidget.vue';
+    import StreamSetupWidget from './widgets/StreamSetupWidget.vue';
+    import MediaPlayerWidget from 'Modules/Playlists/Resources/assets/js/components/MediaPlayerWidget.vue';
+    import PlaylistWidget from 'Modules/Playlists/Resources/assets/js/components/PlaylistWidget.vue';
+    import TwitchChatWidget from './widgets/TwitchChatWidget.vue';
+
     import {mapActions} from 'vuex';
 
     export default {
         components: {
+            StreamSetupWidget,
             MediaPlayerWidget,
-            RequestedSongsWidget,
             PlaylistWidget,
-            YoutubeSearchWidget
+            TwitchChatWidget
         },
         data() {
             return {
