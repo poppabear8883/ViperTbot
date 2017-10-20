@@ -1,39 +1,28 @@
 <template>
-    <section id="widget-grid">
+    <!-- row -->
+    <div class="row">
 
-        <!-- row -->
-        <div class="row" v-if="playlists !== null && reqplaylist !== null">
+        <!-- SINGLE GRID -->
+        <article class="col-sm-6 sortable-grid ui-sortable">
 
-            <!-- SINGLE GRID -->
-            <article class="col-sm-6 sortable-grid ui-sortable">
+            <youtube-search-widget></youtube-search-widget>
 
-                <youtube-search-widget></youtube-search-widget>
+            <playlist-widget
+                    max-height="400px"
+            ></playlist-widget>
 
-                <playlist-widget
-                        :playlists="playlists"
-                        max-height="400px"
-                ></playlist-widget>
+        </article><!-- END GRID -->
 
-            </article><!-- END GRID -->
+        <!-- SINGLE GRID -->
+        <article class="col-sm-6 sortable-grid ui-sortable">
 
-            <!-- SINGLE GRID -->
-            <article class="col-sm-6 sortable-grid ui-sortable">
+            <media-player-widget></media-player-widget>
 
-                <media-player-widget
-                        :playlists="playlists"
-                        :reqplaylist="reqplaylist"
-                ></media-player-widget>
+            <requested-songs-widget></requested-songs-widget>
 
-                <requested-songs-widget
-                        v-if="reqplaylist !== null"
-                        :reqplaylist="reqplaylist"
-                ></requested-songs-widget>
+        </article><!-- END GRID -->
 
-            </article><!-- END GRID -->
-
-        </div><!-- end row -->
-
-    </section><!-- end widget grid -->
+    </div><!-- end row -->
 </template>
 <script>
     import MediaPlayerWidget from './MediaPlayerWidget.vue';
@@ -51,8 +40,7 @@
         },
         data() {
             return {
-                playlists: null,
-                reqplaylist: null
+                dataReady: false
             }
         },
         computed: {
@@ -67,20 +55,16 @@
             ]),
         },
         created() {
-            /**
-             * Get the Playlists with songs
-             */
+            // Get the Playlists with songs
             this.getPlaylists(this.user.id).then((response) => {
-                this.playlists = response.data;
-            }).catch((error) => {
-                alerts.error(error.response.data)
-            });
 
-            /**
-             * Get the requested songs
-             */
-            this.getReqSongs(this.user.id).then((response) => {
-                this.reqplaylist = response.data;
+                // Gets the requested songs
+                this.getReqSongs(this.user.id).then((response) => {
+                    this.dataReady = true;
+                }).catch((error) => {
+                    alerts.error(error.response.data)
+                });
+
             }).catch((error) => {
                 alerts.error(error.response.data)
             });

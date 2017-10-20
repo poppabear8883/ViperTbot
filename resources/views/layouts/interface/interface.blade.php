@@ -62,7 +62,9 @@
             </div>
             @endif
 
-            @yield('content')
+            <section id="widget-grid">
+                @yield('content')
+            </section>
         </div>
         {{-- End Main Content --}}
 

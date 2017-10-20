@@ -135,7 +135,6 @@
 
     export default {
         props: {
-            playlists: {required: true, type: Array},
             maxHeight: {default: '400px'}
         },
 
@@ -275,6 +274,9 @@
         computed: {
             user() {
                 return this.$store.getters.getUser;
+            },
+            playlists() {
+                return this.$store.getters.getPlaylists;
             },
             playlistName() {
                 if (this.playlist) {

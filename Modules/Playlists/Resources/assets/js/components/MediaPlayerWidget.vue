@@ -96,10 +96,6 @@
     Vue.use(VueYoutubeEmbed);
 
     export default {
-        props: {
-            playlists: {required: true, type: Array},
-            reqplaylist: {required: true, type: Array}
-        },
         components: {
             Widget,
             VueSlider
@@ -138,6 +134,12 @@
         computed: {
             user() {
                 return this.$parent.user;
+            },
+            playlists() {
+                return this.$store.getters.getPlaylists;
+            },
+            reqplaylist() {
+                return this.$store.getters.getReqSongs;
             },
             allsongs() {
 

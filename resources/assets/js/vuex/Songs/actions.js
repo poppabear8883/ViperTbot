@@ -72,7 +72,7 @@ export function getReqSongs(context, user_id) {
     return new Promise((resolve, reject) => {
         axios.get('/api/reqsongs', {
             params: {
-                'user_id': user_id
+                user_id: user_id
             }
         }).then((response) => {
             context.commit('SET_REQSONGS', response.data);
@@ -121,7 +121,7 @@ export function getPlaylists(context, user_id) {
     return new Promise((resolve, reject) => {
         axios.get('/api/playlists', {
             params: {
-                'user_id': user_id
+                user_id: user_id
             }
         }).then((response) => {
             context.commit('SET_PLAYLISTS', response.data);

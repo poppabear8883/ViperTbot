@@ -81,7 +81,6 @@
 
     export default {
         props: {
-            reqplaylist: {required: true, type: Array},
             maxHeight: {default: '400px'}
         },
 
@@ -94,8 +93,13 @@
                 searchTerm: ''
             }
         },
-        methods: {},
+        methods: {
+
+        },
         computed: {
+            reqplaylist() {
+                return this.$store.getters.getReqSongs;
+            },
             songs() {
                 if (this.searchTerm !== '') {
                     return this.reqplaylist.filter((row) => {
@@ -107,9 +111,6 @@
 
                 return this.reqplaylist;
             }
-        },
-        created() {
-
         }
     }
 </script>

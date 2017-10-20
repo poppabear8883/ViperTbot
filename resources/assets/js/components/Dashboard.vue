@@ -1,39 +1,31 @@
 <template>
-    <section id="widget-grid">
+    <!-- row -->
+    <div class="row" v-if="dataReady">
 
-        <!-- row -->
-        <div class="row" v-if="playlists !== null && reqplaylist !== null">
+        <!-- SINGLE GRID -->
+        <article class="col-sm-6 sortable-grid ui-sortable">
 
-            <!-- SINGLE GRID -->
-            <article class="col-sm-6 sortable-grid ui-sortable">
+            <stream-setup-widget
+                    clientId="sbuautwemmz4hr6sbuabyp9bg9uwaav"
+            ></stream-setup-widget>
 
-                <stream-setup-widget
-                        client-id="sbuautwemmz4hr6sbuabyp9bg9uwaav"
-                ></stream-setup-widget>
-
-                <!--<twitch-chat-widget></twitch-chat-widget>-->
+            <!--<twitch-chat-widget></twitch-chat-widget>-->
 
 
-            </article><!-- END GRID -->
+        </article><!-- END GRID -->
 
-            <!-- SINGLE GRID -->
-            <article class="col-sm-6 sortable-grid ui-sortable">
+        <!-- SINGLE GRID -->
+        <article class="col-sm-6 sortable-grid ui-sortable">
 
-                <media-player-widget
-                        :playlists="playlists"
-                        :reqplaylist="reqplaylist"
-                ></media-player-widget>
+            <media-player-widget></media-player-widget>
 
-                <playlist-widget
-                        :playlists="playlists"
-                        max-height="400px"
-                ></playlist-widget>
+            <playlist-widget
+                    max-height="400px"
+            ></playlist-widget>
 
-            </article><!-- END GRID -->
+        </article><!-- END GRID -->
 
-        </div><!-- end row -->
-
-    </section><!-- end widget grid -->
+    </div><!-- end row -->
 </template>
 <script>
     import StreamSetupWidget from './widgets/StreamSetupWidget.vue';
@@ -52,8 +44,7 @@
         },
         data() {
             return {
-                playlists: null,
-                reqplaylist: null
+                dataReady: false
             }
         },
         computed: {
@@ -68,22 +59,21 @@
             ]),
         },
         created() {
-            /**
-             * Get the Playlists with songs
-             */
+            // Get the Playlists with songs
             this.getPlaylists(this.user.id).then((response) => {
-                this.playlists = response.data;
+                // Gets the requested songs
+                this.getReqSongs(this.user.id).then((response) => {
+                    this.dataReady = true;
+                }).catch((error) => {
+                    alerts.error(error.response.data)
+                });
             }).catch((error) => {
                 alerts.error(error.response.data)
             });
+        },
+        mounted() {
+            this.$nextTick(() => {
 
-            /**
-             * Get the requested songs
-             */
-            this.getReqSongs(this.user.id).then((response) => {
-                this.reqplaylist = response.data;
-            }).catch((error) => {
-                alerts.error(error.response.data)
             });
         }
     }

@@ -149,7 +149,7 @@
 
             getItemCount() {
                 if (this.video.id.playlistId) {
-                    axios.get('/api/v2/playlists/youtube/playlist', {
+                    axios.get('/api/playlists/youtube/playlist', {
                         params: {
                             id: this.video.id.playlistId
                         }

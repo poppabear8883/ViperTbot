@@ -68,9 +68,7 @@ const app = new Vue({
             return this.$store.getters.getChannel;
         }
     },
-
     mounted() {
         this.getUser();
-        // this.pubSubConnect();
     }
 });
