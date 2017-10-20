@@ -1,6 +1,6 @@
 <template>
     <!-- row -->
-    <div class="row">
+    <div class="row" v-if="dataReady">
 
         <!-- SINGLE GRID -->
         <article class="col-sm-6 sortable-grid ui-sortable">
@@ -67,6 +67,11 @@
 
             }).catch((error) => {
                 alerts.error(error.response.data)
+            });
+        },
+        mounted() {
+            this.$nextTick(() => {
+                setup_widgets_desktop();
             });
         }
     }
