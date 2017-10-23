@@ -40,6 +40,11 @@ class ApiSongsController extends Controller
         $playlist_id = $request->input('playlist_id');
         $video_id = $request->input('video_id');
         $response = $this->songs->create($playlist_id, $video_id);
+
+        if (!is_array($response)) {
+            return response(['Invalid Url or ID provided!'], 400);
+        }
+
         return response($response, 200);
     }
 

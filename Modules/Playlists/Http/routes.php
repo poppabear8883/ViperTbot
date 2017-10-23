@@ -27,7 +27,7 @@ Route::middleware(['api','auth:api'])->namespace('Modules\Playlists\Http\Control
         Route::post('/', 'ApiReqSongsController@addReqSong')->name('reqsongs.addreqsongs');
         Route::put('/', 'ApiReqSongsController@updateReqSong')->name('reqsongs.updatereqsongs');
         Route::patch('/', 'ApiReqSongsController@updateReqSong')->name('reqsongs.updatereqsongs');
-        Route::delete('/{id}', 'ApiReqSongsController@deleteReqSong')->name('reqsongs.deletereqsongs');
+        Route::delete('/', 'ApiReqSongsController@deleteReqSong')->name('reqsongs.deletereqsongs');
     });
 
     Route::prefix('api/songs')->group(function() {

@@ -291,7 +291,7 @@
                         this.updateVideo(item);
                     }
 
-                }, 1000);
+                }, 500);
             },
 
             /**

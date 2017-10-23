@@ -1,6 +1,6 @@
 <template>
     <!-- row -->
-    <div class="row" v-if="dataReady">
+    <div class="row" v-if="pageReady">
 
         <!-- SINGLE GRID -->
         <article class="col-sm-6 sortable-grid ui-sortable">
@@ -34,6 +34,7 @@
     import TwitchChatWidget from './widgets/TwitchChatWidget.vue';
 
     import {mapActions} from 'vuex';
+    import {pageReadyMixin} from './mixins';
 
     export default {
         components: {
@@ -42,9 +43,10 @@
             PlaylistWidget,
             TwitchChatWidget
         },
+        mixins: [pageReadyMixin],
         data() {
             return {
-                dataReady: false
+
             }
         },
         computed: {
@@ -63,7 +65,8 @@
             this.getPlaylists(this.user.id).then((response) => {
                 // Gets the requested songs
                 this.getReqSongs(this.user.id).then((response) => {
-                    this.dataReady = true;
+                    this.pageReady = true;
+                    this.$root.loading = false;
                 }).catch((error) => {
                     alerts.error(error.response.data)
                 });
@@ -71,10 +74,5 @@
                 alerts.error(error.response.data)
             });
         },
-        mounted() {
-            this.$nextTick(() => {
-
-            });
-        }
     }
 </script>

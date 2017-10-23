@@ -62,9 +62,18 @@
             </div>
             @endif
 
-            <section id="widget-grid">
-                @yield('content')
-            </section>
+
+            <div class="media" v-if="loading">
+                <div class="media-left">
+                    <img class="media-object" src="img/spinner.gif" alt="Loading ...">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">Loading ...</h4>
+                    Please wait while we prepare this page.
+                </div>
+            </div>
+
+            @yield('content')
         </div>
         {{-- End Main Content --}}
 
@@ -110,7 +119,7 @@
     $(document).ready(function () {
 
         // DO NOT REMOVE : GLOBAL FUNCTIONS!
-        pageSetUp();
+        //pageSetUp();
 
     });
 </script>

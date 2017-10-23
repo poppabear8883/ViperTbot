@@ -1,14 +1,16 @@
 <template>
     <!-- row -->
-    <div class="row" v-if="dataReady">
+    <div class="row" v-if="pageReady">
+
+        <article class="col-sm-12 sortable-grid ui-sortable">
+            <youtube-search-widget></youtube-search-widget>
+        </article>
 
         <!-- SINGLE GRID -->
         <article class="col-sm-6 sortable-grid ui-sortable">
 
-            <youtube-search-widget></youtube-search-widget>
-
             <playlist-widget
-                    max-height="400px"
+                    max-height="500px"
             ></playlist-widget>
 
         </article><!-- END GRID -->
@@ -29,7 +31,9 @@
     import RequestedSongsWidget from './RequestedSongWidget.vue';
     import PlaylistWidget from './PlaylistWidget.vue';
     import YoutubeSearchWidget from './YoutubeSearchWidget.vue';
+
     import {mapActions} from 'vuex';
+    import {pageReadyMixin} from 'RootComponents/mixins';
 
     export default {
         components: {
@@ -38,9 +42,10 @@
             PlaylistWidget,
             YoutubeSearchWidget
         },
+        mixins: [pageReadyMixin],
         data() {
             return {
-                dataReady: false
+
             }
         },
         computed: {
@@ -57,21 +62,14 @@
         created() {
             // Get the Playlists with songs
             this.getPlaylists(this.user.id).then((response) => {
-
                 // Gets the requested songs
                 this.getReqSongs(this.user.id).then((response) => {
-                    this.dataReady = true;
+                    this.pageReady = true;
                 }).catch((error) => {
                     alerts.error(error.response.data)
                 });
-
             }).catch((error) => {
                 alerts.error(error.response.data)
-            });
-        },
-        mounted() {
-            this.$nextTick(() => {
-                setup_widgets_desktop();
             });
         }
     }

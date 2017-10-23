@@ -180,7 +180,7 @@ class ApiReqSongsController extends Controller
      *     path="/reqsongs/{video_id}",
      *     summary="Deletes a requested song by the given video id",
      *     description="",
-     *     operationId="destroyReqSong",
+     *     operationId="deleteReqSong",
      *     produces={"application/json"},
      *     tags={"reqsongs"},
      *     @SWG\Parameter(
@@ -202,15 +202,15 @@ class ApiReqSongsController extends Controller
      *     security={{"OAuth2":{}}}
      * )
      */
-    public function destroyReqSong(Request $request)
+    public function deleteReqSong(Request $request)
     {
         $request->validate([
             'video_id' => 'required|string'
         ]);
 
-        $this->reqsong->remove($request->input('video_id'));
-
-        return response(true, 200);
+        $video_id = $request->input('video_id');
+        $response = [$this->reqsong->remove($video_id)];
+        return response($response, 200);
     }
 
 

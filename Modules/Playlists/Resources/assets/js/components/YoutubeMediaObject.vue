@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-md-8">
-            <button class="btn btn-default btn-sm pull-right" @click="request()">
+            <button class="btn btn-default btn-sm pull-right" @click="request()" v-if="!video.id.playlistId">
                 <i class="fa fa-plus"></i>
                 <span class="hidden-mobile">
                         Request

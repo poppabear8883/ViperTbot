@@ -31,6 +31,7 @@ const app = new Vue({
     el: '#app',
     store,
     data: {
+        loading: false,
         showAddSongModal: false,
         showPlaylistModal: false,
         showReqPlaylistModal: false,

@@ -105,7 +105,11 @@ export function updateReqSong(context, id) {
 
 export function deleteReqSong(context, videoId) {
     return new Promise((resolve, reject) => {
-        axios.delete(`/api/reqsongs/${videoId}`).then((response) => {
+        axios.delete('/api/reqsongs', {
+            params: {
+                video_id: videoId
+            }
+        }).then((response) => {
             context.commit('DELETE_REQSONG', 0);
             resolve(response);
         }).catch((error) => {

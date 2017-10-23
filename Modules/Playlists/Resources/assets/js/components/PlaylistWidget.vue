@@ -186,6 +186,7 @@
                         this.video_id = parse.id
                     }
                 }
+                console.log(this.video_id);
 
                 this.addSong({
                     video_id: this.video_id,
