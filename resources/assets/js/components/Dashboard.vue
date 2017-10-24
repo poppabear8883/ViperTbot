@@ -34,7 +34,7 @@
     import TwitchChatWidget from './widgets/TwitchChatWidget.vue';
 
     import {mapActions} from 'vuex';
-    import {pageReadyMixin} from './mixins';
+    import pageReadyMixin from './mixins/pageReady';
 
     export default {
         components: {
@@ -66,7 +66,6 @@
                 // Gets the requested songs
                 this.getReqSongs(this.user.id).then((response) => {
                     this.pageReady = true;
-                    this.$root.loading = false;
                 }).catch((error) => {
                     alerts.error(error.response.data)
                 });

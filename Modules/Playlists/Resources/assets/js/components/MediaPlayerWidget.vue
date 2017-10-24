@@ -243,13 +243,9 @@
              * @param player
              */
             ended(player) {
-                if (this.isReq) {
-                    this.removeReq()
-                }
-
-                setTimeout(function () {
+                setTimeout(() => {
                     this.next(true)
-                }.bind(this), 300);
+                }, 300);
             },
 
             /**
@@ -267,31 +263,25 @@
             next(ended = false) {
                 let item;
 
-                if (this.isReq && !ended) {
-                    this.removeReq();
-                }
+                if (this.isReq) {
+                    this.removeReq().then((response) => {
+                        if (this.hasRequests()) {
+                            item = this.getReqItem();
+                        } else {
+                            item = this.getRandomItem();
+                        }
 
-                setTimeout(() => {
-                    if (this.reqplaylist[0]) {
-                        item = this.getReqItem();
-                    } else {
-                        item = this.getRandomItem();
-                    }
-
-                    if (!item) {
-                        this.listEmpty = true;
-                        this.listReady = false;
-                        this.listItem = null;
-                        this.listCopy = [];
-                        this.isReq = false;
-                        this.title = '';
-                        this.videoId = '';
-                        this.progress = 0;
-                    } else {
                         this.updateVideo(item);
-                    }
-
-                }, 500);
+                    }).catch((error) => {
+                        alerts.error(error);
+                    });
+                } else if (this.hasRequests()) {
+                    item = this.getReqItem();
+                    this.updateVideo(item);
+                } else {
+                    item = this.getRandomItem();
+                    this.updateVideo(item);
+                }
             },
 
             /**
@@ -309,14 +299,22 @@
                 this.player.pauseVideo()
             },
 
+            hasRequests() {
+                return (this.reqplaylist.length > 0);
+            },
+
             /**
              * Removes the song from the requested playlist
              */
             removeReq() {
-                this.deleteReqSong(this.videoId).then((response) => {
-                    this.isReq = false;
-                }).catch((error) => {
-                    alerts.error(error.response.data);
+                return new Promise((resolve, reject) => {
+                    this.deleteReqSong(this.videoId).then((response) => {
+                        this.isReq = false;
+                        resolve(response);
+                    }).catch((error) => {
+                        reject(error.response.data);
+                        alerts.error(error.response.data);
+                    });
                 });
             },
 
@@ -401,9 +399,23 @@
              * @param item
              */
             updateVideo(item) {
-                this.videoId = '';
-                this.videoId = item.video_id;
-                this.title = item.title;
+                setTimeout(() => {
+                    if (!item) {
+                        this.listEmpty = true;
+                        this.listReady = false;
+                        this.listItem = null;
+                        this.listCopy = [];
+                        this.isReq = false;
+                        this.title = '';
+                        this.videoId = '';
+                        this.progress = 0;
+                    } else {
+                        this.videoId = '';
+                        this.videoId = item.video_id;
+                        this.title = item.title;
+                    }
+                }, 1);
+
             },
 
             showAddSongModal() {

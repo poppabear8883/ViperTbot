@@ -1,4 +1,4 @@
-export const pageReadyMixin = {
+export default {
     created() {
         this.$root.loading = true;
     },

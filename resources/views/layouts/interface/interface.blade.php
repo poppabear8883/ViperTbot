@@ -73,7 +73,9 @@
                 </div>
             </div>
 
-            @yield('content')
+                <section id="widget-grid">
+                    @yield('content')
+                </section>
         </div>
         {{-- End Main Content --}}
 

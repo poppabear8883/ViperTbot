@@ -70,6 +70,7 @@
  * angular mode) to clear auto fetch interval
  */
 $.intervalArr = [];
+
 /*
  * Calculate nav height
  */
@@ -1456,8 +1457,10 @@ function setup_widgets_desktop() {
 
         });
 
+        return true;
     }
 
+ return false;
 }
 
 /*
@@ -1982,6 +1985,8 @@ function pageSetUp() {
         // run form elements
         runAllForms();
 
+        return 'desktop';
+
     } else {
 
         // is mobile
@@ -2003,6 +2008,7 @@ function pageSetUp() {
         // run form elements
         runAllForms();
 
+        return 'mobile'
     }
 
 }

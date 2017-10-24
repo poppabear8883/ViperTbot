@@ -33,7 +33,7 @@
     import YoutubeSearchWidget from './YoutubeSearchWidget.vue';
 
     import {mapActions} from 'vuex';
-    import {pageReadyMixin} from 'RootComponents/mixins';
+    import pageReadyMixin from 'RootComponents/mixins/pageReady';
 
     export default {
         components: {
