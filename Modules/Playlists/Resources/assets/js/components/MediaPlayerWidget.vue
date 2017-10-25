@@ -1,5 +1,4 @@
 <template>
-    <!-- todo: lock this widget to non-sortable! -->
     <widget wid-id="65846" :fullscreen="false" color="red" :sortable="false">
         <div slot="title">
             Media Player
@@ -19,10 +18,18 @@
             <!-- all your toolbars can go here -->
             <div class="widget-toolbar" role="menu">
                 <div class="btn-group">
-                    <button class="btn btn-default btn-xs" @click="play()"><i class="fa fa-play"></i></button>
-                    <button class="btn btn-default btn-xs" @click="pause()"><i class="fa fa-pause"></i></button>
-                    <button class="btn btn-default btn-xs" @click="stop()"><i class="fa fa-stop"></i></button>
-                    <button class="btn btn-default btn-xs" @click="next()"><i class="fa fa-forward"></i></button>
+                    <button class="btn btn-default btn-xs" @click="play()">
+                        <i class="fa fa-play"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" @click="pause()">
+                        <i class="fa fa-pause"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" @click="stop()">
+                        <i class="fa fa-stop"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" @click="next()">
+                        <i class="fa fa-forward"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -46,7 +53,7 @@
                                 All
                             </option>
                             <option v-for="playlist in playlists"
-                                    :value="playlist" v-if="playlist.songs.length > 0">
+                                    :value="playlist">
                                 {{ playlist.name }}
                             </option>
                         </select>
@@ -56,7 +63,7 @@
                         <strong>Volume {{ volume }}</strong>
                         <vue-slider v-model="volume"
                                     tooltip="hover"
-                                    :process-style="processStyle"
+                                    :process-style="sliderStyle"
                         ></vue-slider>
                     </div>
                 </div>
@@ -64,21 +71,17 @@
 
             <div v-if="player" class="alert alert-default no-margin fade in text-center">
                 <i class="fa-fw fa fa-music"></i>
-                Current Song: {{ title }}
+                Current Song: {{ listItem.title }}
             </div>
 
             <div class="text-center">
-                <youtube v-if="listReady"
-                         :video-id="videoId"
+                <youtube v-if="listItem"
+                         :video-id="listItem.video_id"
                          :player-width="width"
                          :player-height="height"
                          :player-vars="{autoplay: 1, controls: 0, showinfo: 0, rel: 0}"
                          @ready="ready"
-                         @playing="playing"
                          @ended="ended"
-                         @buffering="buffering"
-                         @paused="paused"
-                         @queued="queued"
                 ></youtube>
             </div>
         </div>
@@ -102,19 +105,13 @@
         },
         data() {
             return {
-                processStyle: {"backgroundColor": "#BA2C38"},
+                sliderStyle: {"backgroundColor": "#BA2C38"},
                 volume: 30,
-                listEmpty: false,
-                listReady: false,
                 listItem: null,
                 listCopy: [],
-                isReq: false,
-                title: '',
-                videoId: '',
                 progress: 0,
                 width: 368,
                 height: 207,
-                firstLoad: true,
                 player: null,
                 playlist: {
                     id: 1,
@@ -141,31 +138,16 @@
             reqplaylist() {
                 return this.$store.getters.getReqSongs;
             },
-            allsongs() {
-
-                let arr = [];
+            all() {
+                let songs = [];
 
                 _.each(this.playlists, (playlist) => {
                     _.each(playlist.songs, (song) => {
-                        arr.push(song);
+                        songs.push(song);
                     });
                 });
 
-                return arr;
-            },
-            songs() {
-                if (this.playlist) {
-                    return this.playlist.songs;
-                }
-
-                return [];
-            },
-            all() {
-                return {
-                    id: 0,
-                    name: 'All',
-                    songs: this.allsongs
-                }
+                return {id: 0, name: 'All', songs: songs}
             },
         },
         methods: {
@@ -176,63 +158,12 @@
              */
             ready(player) {
                 this.player = player;
-                this.initialize()
-            },
+                this.player.setVolume(this.volume);
 
-            /**
-             * Some initialization
-             */
-            initialize() {
-
-                if (this.firstLoad) {
-                    this.player.stopVideo();
+                setInterval(() => {
                     this.updateTimerDisplay();
                     this.updateProgressBar();
-                    this.firstLoad = false
-                }
-
-                clearInterval(time_update_interval);
-
-                let time_update_interval = setInterval(function () {
-                    this.updateTimerDisplay();
-                    this.updateProgressBar();
-                }.bind(this), 1000)
-            },
-
-            /**
-             * Playing event
-             *
-             * @param player
-             */
-            playing(player) {
-                //console.log('playing')
-            },
-
-            /**
-             * Paused event
-             *
-             * @param player
-             */
-            paused(player) {
-                //console.log('paused')
-            },
-
-            /**
-             * Buffering event
-             *
-             * @param player
-             */
-            buffering(player) {
-                //console.log('buffering')
-            },
-
-            /**
-             * Queued event
-             *
-             * @param player
-             */
-            queued(player) {
-                //console.log('queued')
+                }, 1000);
             },
 
             /**
@@ -243,45 +174,18 @@
              * @param player
              */
             ended(player) {
+                this.state = 'ended';
+
                 setTimeout(() => {
                     this.next(true)
                 }, 300);
             },
 
             /**
-             * Play the current videoId
+             * Play the current listItem.video_id
              */
             play() {
                 this.player.playVideo()
-            },
-
-            /**
-             * Process the next song to play.
-             *
-             * @param ended
-             */
-            next(ended = false) {
-                let item;
-
-                if (this.isReq) {
-                    this.removeReq().then((response) => {
-                        if (this.hasRequests()) {
-                            item = this.getReqItem();
-                        } else {
-                            item = this.getRandomItem();
-                        }
-
-                        this.updateVideo(item);
-                    }).catch((error) => {
-                        alerts.error(error);
-                    });
-                } else if (this.hasRequests()) {
-                    item = this.getReqItem();
-                    this.updateVideo(item);
-                } else {
-                    item = this.getRandomItem();
-                    this.updateVideo(item);
-                }
             },
 
             /**
@@ -299,6 +203,19 @@
                 this.player.pauseVideo()
             },
 
+            /**
+             * Process the next song to play.
+             *
+             * @param ended
+             */
+            next(ended = false) {
+                if (this.hasRequests()) {
+                    this.getReqItem();
+                } else {
+                    this.getRandomItem();
+                }
+            },
+
             hasRequests() {
                 return (this.reqplaylist.length > 0);
             },
@@ -307,14 +224,10 @@
              * Removes the song from the requested playlist
              */
             removeReq() {
-                return new Promise((resolve, reject) => {
-                    this.deleteReqSong(this.videoId).then((response) => {
-                        this.isReq = false;
-                        resolve(response);
-                    }).catch((error) => {
-                        reject(error.response.data);
-                        alerts.error(error.response.data);
-                    });
+                this.deleteReqSong(this.listItem.video_id).then((response) => {
+
+                }).catch((error) => {
+                    alerts.error(error.response.data);
                 });
             },
 
@@ -359,8 +272,8 @@
              * @returns {*}
              */
             getReqItem() {
-                this.isReq = true;
                 this.listItem = this.reqplaylist[0];
+                this.removeReq();
                 return this.listItem
             },
 
@@ -370,18 +283,11 @@
              * @returns {*}
              */
             getRandomItem() {
-                this.isReq = false;
-
-                if (this.songs.length <= 0) {
-                    return false;
-                }
 
                 if (this.listCopy.length <= 0) {
-
-                    _(this.songs).forEach((item) => {
-                        this.listCopy.push(item)
+                    _.each(this.playlist.songs, (song) => {
+                        this.listCopy.push(song);
                     });
-
                 }
 
                 this.listItem = _.sample(_.shuffle(this.listCopy));
@@ -393,35 +299,6 @@
                 return this.listItem
             },
 
-            /**
-             * Updates video information.
-             *
-             * @param item
-             */
-            updateVideo(item) {
-                setTimeout(() => {
-                    if (!item) {
-                        this.listEmpty = true;
-                        this.listReady = false;
-                        this.listItem = null;
-                        this.listCopy = [];
-                        this.isReq = false;
-                        this.title = '';
-                        this.videoId = '';
-                        this.progress = 0;
-                    } else {
-                        this.videoId = '';
-                        this.videoId = item.video_id;
-                        this.title = item.title;
-                    }
-                }, 1);
-
-            },
-
-            showAddSongModal() {
-                this.$root.showAddSongModal = true;
-            },
-
             ...mapActions([
                 'deleteReqSong'
             ]),
@@ -431,28 +308,11 @@
          * This fires when the component is created.
          */
         created() {
-
-            let setVolume = setInterval(() => {
-                if (this.player) {
-                    this.player.setVolume(this.volume);
-                    clearInterval(setVolume)
-                }
-            }, 500);
-
             this.playlist = this.playlists[0];
 
             if (this.playlist.songs.length > 0) {
-                this.listReady = true;
-                this.listEmpty = false;
-                let item = this.getRandomItem();
-                this.updateVideo(item);
-            } else {
-                this.listEmpty = true
+                this.getRandomItem();
             }
         }
     }
 </script>
-
-<style>
-
-</style>

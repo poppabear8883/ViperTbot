@@ -13003,10 +13003,6 @@ module.exports = Vue$3;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(52)
-}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(55)
@@ -13015,7 +13011,7 @@ var __vue_template__ = __webpack_require__(65)
 /* template functional */
   var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -39524,46 +39520,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(53);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("0b5948db", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7923e07a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./MediaPlayerWidget.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7923e07a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./MediaPlayerWidget.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 52 */,
+/* 53 */,
 /* 54 */
 /***/ (function(module, exports) {
 
@@ -39700,6 +39658,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 
 
@@ -39716,19 +39677,13 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
     },
     data: function data() {
         return {
-            processStyle: { "backgroundColor": "#BA2C38" },
+            sliderStyle: { "backgroundColor": "#BA2C38" },
             volume: 30,
-            listEmpty: false,
-            listReady: false,
             listItem: null,
             listCopy: [],
-            isReq: false,
-            title: '',
-            videoId: '',
             progress: 0,
             width: 368,
             height: 207,
-            firstLoad: true,
             player: null,
             playlist: {
                 id: 1,
@@ -39756,31 +39711,16 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
         reqplaylist: function reqplaylist() {
             return this.$store.getters.getReqSongs;
         },
-        allsongs: function allsongs() {
-
-            var arr = [];
+        all: function all() {
+            var songs = [];
 
             _.each(this.playlists, function (playlist) {
                 _.each(playlist.songs, function (song) {
-                    arr.push(song);
+                    songs.push(song);
                 });
             });
 
-            return arr;
-        },
-        songs: function songs() {
-            if (this.playlist) {
-                return this.playlist.songs;
-            }
-
-            return [];
-        },
-        all: function all() {
-            return {
-                id: 0,
-                name: 'All',
-                songs: this.allsongs
-            };
+            return { id: 0, name: 'All', songs: songs };
         }
     },
     methods: _extends({
@@ -39790,69 +39730,15 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
          * @param player
          */
         ready: function ready(player) {
+            var _this = this;
+
             this.player = player;
-            this.initialize();
-        },
+            this.player.setVolume(this.volume);
 
-
-        /**
-         * Some initialization
-         */
-        initialize: function initialize() {
-
-            if (this.firstLoad) {
-                this.player.stopVideo();
-                this.updateTimerDisplay();
-                this.updateProgressBar();
-                this.firstLoad = false;
-            }
-
-            clearInterval(time_update_interval);
-
-            var time_update_interval = setInterval(function () {
-                this.updateTimerDisplay();
-                this.updateProgressBar();
-            }.bind(this), 1000);
-        },
-
-
-        /**
-         * Playing event
-         *
-         * @param player
-         */
-        playing: function playing(player) {
-            //console.log('playing')
-        },
-
-
-        /**
-         * Paused event
-         *
-         * @param player
-         */
-        paused: function paused(player) {
-            //console.log('paused')
-        },
-
-
-        /**
-         * Buffering event
-         *
-         * @param player
-         */
-        buffering: function buffering(player) {
-            //console.log('buffering')
-        },
-
-
-        /**
-         * Queued event
-         *
-         * @param player
-         */
-        queued: function queued(player) {
-            //console.log('queued')
+            setInterval(function () {
+                _this.updateTimerDisplay();
+                _this.updateProgressBar();
+            }, 1000);
         },
 
 
@@ -39864,53 +39750,21 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
          * @param player
          */
         ended: function ended(player) {
-            var _this = this;
+            var _this2 = this;
+
+            this.state = 'ended';
 
             setTimeout(function () {
-                _this.next(true);
+                _this2.next(true);
             }, 300);
         },
 
 
         /**
-         * Play the current videoId
+         * Play the current listItem.video_id
          */
         play: function play() {
             this.player.playVideo();
-        },
-
-
-        /**
-         * Process the next song to play.
-         *
-         * @param ended
-         */
-        next: function next() {
-            var _this2 = this;
-
-            var ended = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-            var item = void 0;
-
-            if (this.isReq) {
-                this.removeReq().then(function (response) {
-                    if (_this2.hasRequests()) {
-                        item = _this2.getReqItem();
-                    } else {
-                        item = _this2.getRandomItem();
-                    }
-
-                    _this2.updateVideo(item);
-                }).catch(function (error) {
-                    __WEBPACK_IMPORTED_MODULE_3_Utilities_alerts__["b" /* error */](error);
-                });
-            } else if (this.hasRequests()) {
-                item = this.getReqItem();
-                this.updateVideo(item);
-            } else {
-                item = this.getRandomItem();
-                this.updateVideo(item);
-            }
         },
 
 
@@ -39929,6 +39783,22 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
         pause: function pause() {
             this.player.pauseVideo();
         },
+
+
+        /**
+         * Process the next song to play.
+         *
+         * @param ended
+         */
+        next: function next() {
+            var ended = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+            if (this.hasRequests()) {
+                this.getReqItem();
+            } else {
+                this.getRandomItem();
+            }
+        },
         hasRequests: function hasRequests() {
             return this.reqplaylist.length > 0;
         },
@@ -39938,16 +39808,8 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
          * Removes the song from the requested playlist
          */
         removeReq: function removeReq() {
-            var _this3 = this;
-
-            return new Promise(function (resolve, reject) {
-                _this3.deleteReqSong(_this3.videoId).then(function (response) {
-                    _this3.isReq = false;
-                    resolve(response);
-                }).catch(function (error) {
-                    reject(error.response.data);
-                    __WEBPACK_IMPORTED_MODULE_3_Utilities_alerts__["b" /* error */](error.response.data);
-                });
+            this.deleteReqSong(this.listItem.video_id).then(function (response) {}).catch(function (error) {
+                __WEBPACK_IMPORTED_MODULE_3_Utilities_alerts__["b" /* error */](error.response.data);
             });
         },
 
@@ -39996,8 +39858,8 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
          * @returns {*}
          */
         getReqItem: function getReqItem() {
-            this.isReq = true;
             this.listItem = this.reqplaylist[0];
+            this.removeReq();
             return this.listItem;
         },
 
@@ -40008,58 +39870,21 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
          * @returns {*}
          */
         getRandomItem: function getRandomItem() {
-            var _this4 = this;
-
-            this.isReq = false;
-
-            if (this.songs.length <= 0) {
-                return false;
-            }
+            var _this3 = this;
 
             if (this.listCopy.length <= 0) {
-
-                _(this.songs).forEach(function (item) {
-                    _this4.listCopy.push(item);
+                _.each(this.playlist.songs, function (song) {
+                    _this3.listCopy.push(song);
                 });
             }
 
             this.listItem = _.sample(_.shuffle(this.listCopy));
 
             _.remove(this.listCopy, function (Obj) {
-                return Obj === _this4.listItem;
+                return Obj === _this3.listItem;
             });
 
             return this.listItem;
-        },
-
-
-        /**
-         * Updates video information.
-         *
-         * @param item
-         */
-        updateVideo: function updateVideo(item) {
-            var _this5 = this;
-
-            setTimeout(function () {
-                if (!item) {
-                    _this5.listEmpty = true;
-                    _this5.listReady = false;
-                    _this5.listItem = null;
-                    _this5.listCopy = [];
-                    _this5.isReq = false;
-                    _this5.title = '';
-                    _this5.videoId = '';
-                    _this5.progress = 0;
-                } else {
-                    _this5.videoId = '';
-                    _this5.videoId = item.video_id;
-                    _this5.title = item.title;
-                }
-            }, 1);
-        },
-        showAddSongModal: function showAddSongModal() {
-            this.$root.showAddSongModal = true;
         }
     }, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['deleteReqSong'])),
 
@@ -40067,24 +39892,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
      * This fires when the component is created.
      */
     created: function created() {
-        var _this6 = this;
-
-        var setVolume = setInterval(function () {
-            if (_this6.player) {
-                _this6.player.setVolume(_this6.volume);
-                clearInterval(setVolume);
-            }
-        }, 500);
-
         this.playlist = this.playlists[0];
 
         if (this.playlist.songs.length > 0) {
-            this.listReady = true;
-            this.listEmpty = false;
-            var item = this.getRandomItem();
-            this.updateVideo(item);
-        } else {
-            this.listEmpty = true;
+            this.getRandomItem();
         }
     }
 });
@@ -41016,15 +40827,13 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _vm._l(_vm.playlists, function(playlist) {
-                        return playlist.songs.length > 0
-                          ? _c("option", { domProps: { value: playlist } }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(playlist.name) +
-                                  "\n                        "
-                              )
-                            ])
-                          : _vm._e()
+                        return _c("option", { domProps: { value: playlist } }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(playlist.name) +
+                              "\n                        "
+                          )
+                        ])
                       })
                     ],
                     2
@@ -41041,7 +40850,7 @@ var render = function() {
                   _c("vue-slider", {
                     attrs: {
                       tooltip: "hover",
-                      "process-style": _vm.processStyle
+                      "process-style": _vm.sliderStyle
                     },
                     model: {
                       value: _vm.volume,
@@ -41068,7 +40877,7 @@ var render = function() {
                   _c("i", { staticClass: "fa-fw fa fa-music" }),
                   _vm._v(
                     "\n            Current Song: " +
-                      _vm._s(_vm.title) +
+                      _vm._s(_vm.listItem.title) +
                       "\n        "
                   )
                 ]
@@ -41079,10 +40888,10 @@ var render = function() {
             "div",
             { staticClass: "text-center" },
             [
-              _vm.listReady
+              _vm.listItem
                 ? _c("youtube", {
                     attrs: {
-                      "video-id": _vm.videoId,
+                      "video-id": _vm.listItem.video_id,
                       "player-width": _vm.width,
                       "player-height": _vm.height,
                       "player-vars": {
@@ -41092,14 +40901,7 @@ var render = function() {
                         rel: 0
                       }
                     },
-                    on: {
-                      ready: _vm.ready,
-                      playing: _vm.playing,
-                      ended: _vm.ended,
-                      buffering: _vm.buffering,
-                      paused: _vm.paused,
-                      queued: _vm.queued
-                    }
+                    on: { ready: _vm.ready, ended: _vm.ended }
                   })
                 : _vm._e()
             ],
