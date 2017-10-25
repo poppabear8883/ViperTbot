@@ -46,7 +46,7 @@
                                 All
                             </option>
                             <option v-for="playlist in playlists"
-                                    :value="playlist">
+                                    :value="playlist" v-if="playlist.songs.length > 0">
                                 {{ playlist.name }}
                             </option>
                         </select>

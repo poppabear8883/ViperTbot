@@ -41016,13 +41016,15 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _vm._l(_vm.playlists, function(playlist) {
-                        return _c("option", { domProps: { value: playlist } }, [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(playlist.name) +
-                              "\n                        "
-                          )
-                        ])
+                        return playlist.songs.length > 0
+                          ? _c("option", { domProps: { value: playlist } }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(playlist.name) +
+                                  "\n                        "
+                              )
+                            ])
+                          : _vm._e()
                       })
                     ],
                     2
