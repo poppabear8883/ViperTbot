@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 
-@include('layouts.interface.partials.headmeta')
+@include('layouts.partials.headmeta')
 
 <body class="fixed-header fixed-page-footer smart-style-1">
 
@@ -115,16 +115,7 @@
 <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
 <![endif]-->
 
-@include('layouts.interface.partials.javascript')
-
-<script type="application/javascript">
-    $(document).ready(function () {
-
-        // DO NOT REMOVE : GLOBAL FUNCTIONS!
-        //pageSetUp();
-
-    });
-</script>
+@include('layouts.partials.javascript')
 
 @yield('scripts')
 

@@ -13,5 +13,4 @@ class TwitchApi extends TwitchApiService
         return $users->liveChannels($token);
     }
 
-
 }

@@ -6,6 +6,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('twitch')->group(function () {
         Route::get('livechannels', 'TwitchController@liveChannels');
+        Route::get('following', 'TwitchController@following');
         Route::get('authchannel', 'TwitchController@authChannel');
         Route::put('updatechannel', 'TwitchController@updateChannel');
     });

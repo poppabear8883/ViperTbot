@@ -26,29 +26,38 @@ require('./components/register');
 
 import store from './vuex/store'
 import {TwitchPubSub} from "./webhooks/TwitchPubSub";
+import {mapActions} from 'vuex';
+import * as alerts from './utils/alerts';
 
 const app = new Vue({
     el: '#app',
     store,
     data: {
         loading: false,
-        showAddSongModal: false,
-        showPlaylistModal: false,
-        showReqPlaylistModal: false,
-        showAddRegularModal: false
+        showAddRegularModal: false,
     },
     methods: {
-        getUser() {
-            axios.get('/api/v2/user')
-                .then((response) => {
-                    this.$store.commit('SET_USER', response.data.account);
-                    this.$store.commit('SET_CHANNEL', response.data.channel);
-                }).catch((error) => {
-                    console.log(error.response);
-                    return null
-                });
+        ...mapActions([
+            'getAccount',
+            'getFollowings',
+        ]),
+        setAccount() {
+            this.getAccount().then((response) => {
+                return true;
+            }).catch((error) => {
+                alerts.critical(error.response);
+                return false;
+            });
         },
-
+        setFollowing() {
+            this.getFollowings().then((response) => {
+                console.log(response.data);
+                return true;
+            }).catch((error) => {
+                alerts.critical(error.response);
+                return false;
+            });
+        },
         pubSubConnect() {
             let topics = [
                 'whispers'
@@ -67,9 +76,19 @@ const app = new Vue({
         },
         channel() {
             return this.$store.getters.getChannel;
+        },
+        following() {
+            return this.$store.getters.getFollowing;
         }
     },
     mounted() {
-        this.getUser();
+        this.setAccount();
+        this.setFollowing();
+
+        let pollFollowing = setInterval(() => {
+            if (!this.setFollowing()) {
+                clearInterval(pollFollowing);
+            }
+        }, 60000 * 3);
     }
 });

@@ -10,14 +10,15 @@
 // FontAwesome
 @import "~font-awesome/css/font-awesome";
 
-.modal-content {
-  border-radius: 0;
-}
+@import "./lockscreen";
 
-.ajax-dropdown {
-  width: 400px !important;
-}
+.modal-content {border-radius: 0}
 
-.ajax-dropdown>:first-child {
-  padding: 10px !important;
-}
+.ajax-dropdown {width: 400px !important}
+.ajax-dropdown>:first-child {padding: 10px !important}
+
+.margin-right-10{margin-right:10px !important}
+.margin-right-15{margin-right:15px !important}
+
+.margin-left-10{margin-left:10px !important}
+.margin-left-15{margin-left:15px !important}

@@ -37,6 +37,14 @@ class TwitchController extends Controller
         return response($this->api->liveChannels($this->token()), 200);
     }
 
+    public function following()
+    {
+        return response([
+            $this->api->followings($this->channel_id(), []),
+            'online' => $this->api->liveChannels($this->token())
+        ], 200);
+    }
+
 
     /**
      * Get authenticated channel object.
@@ -58,7 +66,6 @@ class TwitchController extends Controller
     public function updateChannel(Request $request)
     {
         $this->api->updateChannel($this->channel_id(), $request->all(), $this->token());
-
         return response($this->api->authChannel($this->token()), 200);
     }
 

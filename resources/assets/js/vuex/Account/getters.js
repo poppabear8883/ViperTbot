@@ -13,3 +13,7 @@ export function getChannel(state) {
 export function getChannelId(state) {
     return state.channel._id;
 }
+
+export function getFollowing(state) {
+    return state.following;
+}

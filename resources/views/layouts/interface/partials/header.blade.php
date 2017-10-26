@@ -6,8 +6,6 @@
         <span id="logo" style="color: #FFFFFF;"> ViperTwitchBot v1.0 Beta </span>
         <!-- END LOGO PLACEHOLDER -->
 
-        {{--  LiveChannels Component --}}
-        <live-channels></live-channels>
     </div>
 
     <!-- #PROJECTS: projects dropdown -->

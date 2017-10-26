@@ -6,7 +6,15 @@ export default {
 
     state: {
         user: {},
-        channel: {}
+        channel: {},
+        following: {
+            total: 0,
+            streams: [],
+            online: {
+                total: 0,
+                streams: []
+            },
+        }
     },
 
     getters,
@@ -20,6 +28,10 @@ export default {
 
         [types.SET_CHANNEL] (state, channel) {
             state.channel = channel
+        },
+
+        [types.SET_FOLLOWING] (state, following) {
+            state.following = following;
         }
     }
-};
+}

@@ -2,9 +2,8 @@
 <!-- Note: This width of the aside area can be adjusted through LESS variables -->
 <aside id="left-panel" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
-@if(!\Auth::guest())
-    <!-- User info -->
-        <div class="login-info">
+<!-- User info -->
+    <div class="login-info">
         <span> <!-- User image size is adjusted inside CSS, it should stay as it -->
             <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
                 <img src="{{ \Auth::user()->avatar }}" alt="ME" class="online"/>
@@ -16,9 +15,8 @@
                 <i class="fa fa-angle-down"></i>
             </a>
         </span>
-        </div>
-        <!-- end user info -->
-@endif
+    </div>
+<!-- end user info -->
 
 <!-- NAVIGATION : This navigation is also responsive-->
     <nav>
@@ -51,13 +49,18 @@
 
             <li>
                 <a href="#">
-                    <i class="fa fa-lg fa-fw fa-twitch"></i>
+                    <i class="fa fa-lg fa-fw fa-twitch">
+                        <em v-if="following.online.total > 0">@{{ following.online.total }}</em>
+                    </i>
                     <span class="menu-item-parent">Twitch</span>
                 </a>
                 <ul>
                     <li>
                         <a href="#">
-                            Following
+                            Live Now
+                            <span class="badge bg-color-red pull-right inbox-badge" v-if="following.online.total > 0">
+                                @{{ following.online.total }}
+                            </span>
                         </a>
                     </li>
                     <li>
