@@ -45,16 +45,15 @@ const app = new Vue({
             this.getAccount().then((response) => {
                 return true;
             }).catch((error) => {
-                alerts.critical(error.response);
+                alerts.critical(error.response.message);
                 return false;
             });
         },
         setFollowing() {
             this.getFollowings().then((response) => {
-                console.log(response.data);
                 return true;
             }).catch((error) => {
-                alerts.critical(error.response);
+                alerts.critical(error.response.message);
                 return false;
             });
         },
@@ -82,13 +81,17 @@ const app = new Vue({
         }
     },
     mounted() {
-        this.setAccount();
-        this.setFollowing();
+        let path = window.location.pathname;
 
-        let pollFollowing = setInterval(() => {
-            if (!this.setFollowing()) {
-                clearInterval(pollFollowing);
-            }
-        }, 60000 * 3);
+        if(path !== '/login') {
+            this.setAccount();
+            this.setFollowing();
+
+            let pollFollowing = setInterval(() => {
+                if (!this.setFollowing()) {
+                    clearInterval(pollFollowing);
+                }
+            }, 60000 * 3);
+        }
     }
 });
