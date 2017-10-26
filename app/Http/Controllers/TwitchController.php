@@ -39,8 +39,10 @@ class TwitchController extends Controller
 
     public function following()
     {
+        $following = $this->api->followings($this->channel_id(), []);
         return response([
-            $this->api->followings($this->channel_id(), []),
+            'total' => $following['_total'],
+            'streams' => $following['follows'],
             'online' => $this->api->liveChannels($this->token())
         ], 200);
     }

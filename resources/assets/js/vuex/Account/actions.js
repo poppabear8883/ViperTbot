@@ -15,8 +15,8 @@ export function getFollowings(context, payload) {
     return new Promise((resolve, reject) => {
         axios.get('/api/twitch/following').then((response) => {
             context.commit('SET_FOLLOWING', {
-                total: response.data._total,
-                streams: response.data.follows,
+                total: response.data.total,
+                streams: response.data.streams,
                 online: {
                     total: response.data.online._total,
                     streams: response.data.online.streams
