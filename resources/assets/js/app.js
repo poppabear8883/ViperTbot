@@ -51,6 +51,7 @@ const app = new Vue({
         },
         setFollowing() {
             this.getFollowings().then((response) => {
+                console.log('setFollowing ...');
                 return true;
             }).catch((error) => {
                 alerts.critical(error.response.message);
@@ -88,10 +89,10 @@ const app = new Vue({
             this.setFollowing();
 
             let pollFollowing = setInterval(() => {
-                if (!this.setFollowing()) {
+                if (this.setFollowing() === false) {
                     clearInterval(pollFollowing);
                 }
-            }, 60000 * 3);
+            }, 60000);
         }
     }
 });

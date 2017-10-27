@@ -1829,7 +1829,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/Widget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\Widget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -2470,7 +2470,7 @@ module.exports = Cancel;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.5.1
+ * Vue.js v2.5.2
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -2937,6 +2937,92 @@ function parsePath (path) {
 
 /*  */
 
+// can we use __proto__?
+var hasProto = '__proto__' in {};
+
+// Browser environment sniffing
+var inBrowser = typeof window !== 'undefined';
+var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && /msie|trident/.test(UA);
+var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+var isEdge = UA && UA.indexOf('edge/') > 0;
+var isAndroid = UA && UA.indexOf('android') > 0;
+var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
+var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
+
+// Firefox has a "watch" function on Object.prototype...
+var nativeWatch = ({}).watch;
+
+var supportsPassive = false;
+if (inBrowser) {
+  try {
+    var opts = {};
+    Object.defineProperty(opts, 'passive', ({
+      get: function get () {
+        /* istanbul ignore next */
+        supportsPassive = true;
+      }
+    })); // https://github.com/facebook/flow/issues/285
+    window.addEventListener('test-passive', null, opts);
+  } catch (e) {}
+}
+
+// this needs to be lazy-evaled because vue may be required before
+// vue-server-renderer can set VUE_ENV
+var _isServer;
+var isServerRendering = function () {
+  if (_isServer === undefined) {
+    /* istanbul ignore if */
+    if (!inBrowser && typeof global !== 'undefined') {
+      // detect presence of vue-server-renderer and avoid
+      // Webpack shimming the process
+      _isServer = global['process'].env.VUE_ENV === 'server';
+    } else {
+      _isServer = false;
+    }
+  }
+  return _isServer
+};
+
+// detect devtools
+var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+/* istanbul ignore next */
+function isNative (Ctor) {
+  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+}
+
+var hasSymbol =
+  typeof Symbol !== 'undefined' && isNative(Symbol) &&
+  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+
+var _Set;
+/* istanbul ignore if */ // $flow-disable-line
+if (typeof Set !== 'undefined' && isNative(Set)) {
+  // use native Set when available.
+  _Set = Set;
+} else {
+  // a non-standard Set polyfill that only works with primitive keys.
+  _Set = (function () {
+    function Set () {
+      this.set = Object.create(null);
+    }
+    Set.prototype.has = function has (key) {
+      return this.set[key] === true
+    };
+    Set.prototype.add = function add (key) {
+      this.set[key] = true;
+    };
+    Set.prototype.clear = function clear () {
+      this.set = Object.create(null);
+    };
+
+    return Set;
+  }());
+}
+
+/*  */
+
 var warn = noop;
 var tip = noop;
 var generateComponentTrace = (noop); // work around flow check
@@ -3027,220 +3113,6 @@ if (true) {
       return ("\n\n(found in " + (formatComponentName(vm)) + ")")
     }
   };
-}
-
-/*  */
-
-function handleError (err, vm, info) {
-  if (vm) {
-    var cur = vm;
-    while ((cur = cur.$parent)) {
-      var hooks = cur.$options.errorCaptured;
-      if (hooks) {
-        for (var i = 0; i < hooks.length; i++) {
-          try {
-            var capture = hooks[i].call(cur, err, vm, info) === false;
-            if (capture) { return }
-          } catch (e) {
-            globalHandleError(e, cur, 'errorCaptured hook');
-          }
-        }
-      }
-    }
-  }
-  globalHandleError(err, vm, info);
-}
-
-function globalHandleError (err, vm, info) {
-  if (config.errorHandler) {
-    try {
-      return config.errorHandler.call(null, err, vm, info)
-    } catch (e) {
-      logError(e, null, 'config.errorHandler');
-    }
-  }
-  logError(err, vm, info);
-}
-
-function logError (err, vm, info) {
-  if (true) {
-    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
-  }
-  /* istanbul ignore else */
-  if (inBrowser && typeof console !== 'undefined') {
-    console.error(err);
-  } else {
-    throw err
-  }
-}
-
-/*  */
-/* globals MessageChannel */
-
-// can we use __proto__?
-var hasProto = '__proto__' in {};
-
-// Browser environment sniffing
-var inBrowser = typeof window !== 'undefined';
-var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && /msie|trident/.test(UA);
-var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
-var isEdge = UA && UA.indexOf('edge/') > 0;
-var isAndroid = UA && UA.indexOf('android') > 0;
-var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
-var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
-
-// Firefox has a "watch" function on Object.prototype...
-var nativeWatch = ({}).watch;
-
-var supportsPassive = false;
-if (inBrowser) {
-  try {
-    var opts = {};
-    Object.defineProperty(opts, 'passive', ({
-      get: function get () {
-        /* istanbul ignore next */
-        supportsPassive = true;
-      }
-    })); // https://github.com/facebook/flow/issues/285
-    window.addEventListener('test-passive', null, opts);
-  } catch (e) {}
-}
-
-// this needs to be lazy-evaled because vue may be required before
-// vue-server-renderer can set VUE_ENV
-var _isServer;
-var isServerRendering = function () {
-  if (_isServer === undefined) {
-    /* istanbul ignore if */
-    if (!inBrowser && typeof global !== 'undefined') {
-      // detect presence of vue-server-renderer and avoid
-      // Webpack shimming the process
-      _isServer = global['process'].env.VUE_ENV === 'server';
-    } else {
-      _isServer = false;
-    }
-  }
-  return _isServer
-};
-
-// detect devtools
-var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
-/* istanbul ignore next */
-function isNative (Ctor) {
-  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
-}
-
-var hasSymbol =
-  typeof Symbol !== 'undefined' && isNative(Symbol) &&
-  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
-
-/**
- * Defer a task to execute it asynchronously.
- */
-var nextTick = (function () {
-  var callbacks = [];
-  var pending = false;
-  var timerFunc;
-
-  function nextTickHandler () {
-    pending = false;
-    var copies = callbacks.slice(0);
-    callbacks.length = 0;
-    for (var i = 0; i < copies.length; i++) {
-      copies[i]();
-    }
-  }
-
-  // An asynchronous deferring mechanism.
-  // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
-  // but microtasks actually has too high a priority and fires in between
-  // supposedly sequential events (e.g. #4521, #6690) or even between
-  // bubbling of the same event (#6566). Technically setImmediate should be
-  // the ideal choice, but it's not available everywhere; and the only polyfill
-  // that consistently queues the callback after all DOM events triggered in the
-  // same loop is by using MessageChannel.
-  /* istanbul ignore if */
-  if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-    timerFunc = function () {
-      setImmediate(nextTickHandler);
-    };
-  } else if (typeof MessageChannel !== 'undefined' && (
-    isNative(MessageChannel) ||
-    // PhantomJS
-    MessageChannel.toString() === '[object MessageChannelConstructor]'
-  )) {
-    var channel = new MessageChannel();
-    var port = channel.port2;
-    channel.port1.onmessage = nextTickHandler;
-    timerFunc = function () {
-      port.postMessage(1);
-    };
-  } else
-  /* istanbul ignore next */
-  if (typeof Promise !== 'undefined' && isNative(Promise)) {
-    // use microtask in non-DOM environments, e.g. Weex
-    var p = Promise.resolve();
-    timerFunc = function () {
-      p.then(nextTickHandler);
-    };
-  } else {
-    // fallback to setTimeout
-    timerFunc = function () {
-      setTimeout(nextTickHandler, 0);
-    };
-  }
-
-  return function queueNextTick (cb, ctx) {
-    var _resolve;
-    callbacks.push(function () {
-      if (cb) {
-        try {
-          cb.call(ctx);
-        } catch (e) {
-          handleError(e, ctx, 'nextTick');
-        }
-      } else if (_resolve) {
-        _resolve(ctx);
-      }
-    });
-    if (!pending) {
-      pending = true;
-      timerFunc();
-    }
-    // $flow-disable-line
-    if (!cb && typeof Promise !== 'undefined') {
-      return new Promise(function (resolve, reject) {
-        _resolve = resolve;
-      })
-    }
-  }
-})();
-
-var _Set;
-/* istanbul ignore if */ // $flow-disable-line
-if (typeof Set !== 'undefined' && isNative(Set)) {
-  // use native Set when available.
-  _Set = Set;
-} else {
-  // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
-    function Set () {
-      this.set = Object.create(null);
-    }
-    Set.prototype.has = function has (key) {
-      return this.set[key] === true
-    };
-    Set.prototype.add = function add (key) {
-      this.set[key] = true;
-    };
-    Set.prototype.clear = function clear () {
-      this.set = Object.create(null);
-    };
-
-    return Set;
-  }());
 }
 
 /*  */
@@ -4244,6 +4116,165 @@ function isType (type, fn) {
   }
   /* istanbul ignore next */
   return false
+}
+
+/*  */
+
+function handleError (err, vm, info) {
+  if (vm) {
+    var cur = vm;
+    while ((cur = cur.$parent)) {
+      var hooks = cur.$options.errorCaptured;
+      if (hooks) {
+        for (var i = 0; i < hooks.length; i++) {
+          try {
+            var capture = hooks[i].call(cur, err, vm, info) === false;
+            if (capture) { return }
+          } catch (e) {
+            globalHandleError(e, cur, 'errorCaptured hook');
+          }
+        }
+      }
+    }
+  }
+  globalHandleError(err, vm, info);
+}
+
+function globalHandleError (err, vm, info) {
+  if (config.errorHandler) {
+    try {
+      return config.errorHandler.call(null, err, vm, info)
+    } catch (e) {
+      logError(e, null, 'config.errorHandler');
+    }
+  }
+  logError(err, vm, info);
+}
+
+function logError (err, vm, info) {
+  if (true) {
+    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
+  }
+  /* istanbul ignore else */
+  if (inBrowser && typeof console !== 'undefined') {
+    console.error(err);
+  } else {
+    throw err
+  }
+}
+
+/*  */
+/* globals MessageChannel */
+
+var callbacks = [];
+var pending = false;
+
+function flushCallbacks () {
+  pending = false;
+  var copies = callbacks.slice(0);
+  callbacks.length = 0;
+  for (var i = 0; i < copies.length; i++) {
+    copies[i]();
+  }
+}
+
+// Here we have async deferring wrappers using both micro and macro tasks.
+// In < 2.4 we used micro tasks everywhere, but there are some scenarios where
+// micro tasks have too high a priority and fires in between supposedly
+// sequential events (e.g. #4521, #6690) or even between bubbling of the same
+// event (#6566). However, using macro tasks everywhere also has subtle problems
+// when state is changed right before repaint (e.g. #6813, out-in transitions).
+// Here we use micro task by default, but expose a way to force macro task when
+// needed (e.g. in event handlers attached by v-on).
+var microTimerFunc;
+var macroTimerFunc;
+var useMacroTask = false;
+
+// Determine (macro) Task defer implementation.
+// Technically setImmediate should be the ideal choice, but it's only available
+// in IE. The only polyfill that consistently queues the callback after all DOM
+// events triggered in the same loop is by using MessageChannel.
+/* istanbul ignore if */
+if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+  macroTimerFunc = function () {
+    setImmediate(flushCallbacks);
+  };
+} else if (typeof MessageChannel !== 'undefined' && (
+  isNative(MessageChannel) ||
+  // PhantomJS
+  MessageChannel.toString() === '[object MessageChannelConstructor]'
+)) {
+  var channel = new MessageChannel();
+  var port = channel.port2;
+  channel.port1.onmessage = flushCallbacks;
+  macroTimerFunc = function () {
+    port.postMessage(1);
+  };
+} else {
+  /* istanbul ignore next */
+  macroTimerFunc = function () {
+    setTimeout(flushCallbacks, 0);
+  };
+}
+
+// Determine MicroTask defer implementation.
+/* istanbul ignore next, $flow-disable-line */
+if (typeof Promise !== 'undefined' && isNative(Promise)) {
+  var p = Promise.resolve();
+  microTimerFunc = function () {
+    p.then(flushCallbacks);
+    // in problematic UIWebViews, Promise.then doesn't completely break, but
+    // it can get stuck in a weird state where callbacks are pushed into the
+    // microtask queue but the queue isn't being flushed, until the browser
+    // needs to do some other work, e.g. handle a timer. Therefore we can
+    // "force" the microtask queue to be flushed by adding an empty timer.
+    if (isIOS) { setTimeout(noop); }
+  };
+} else {
+  // fallback to macro
+  microTimerFunc = macroTimerFunc;
+}
+
+/**
+ * Wrap a function so that if any code inside triggers state change,
+ * the changes are queued using a Task instead of a MicroTask.
+ */
+function withMacroTask (fn) {
+  return fn._withTask || (fn._withTask = function () {
+    useMacroTask = true;
+    var res = fn.apply(null, arguments);
+    useMacroTask = false;
+    return res
+  })
+}
+
+function nextTick (cb, ctx) {
+  var _resolve;
+  callbacks.push(function () {
+    if (cb) {
+      try {
+        cb.call(ctx);
+      } catch (e) {
+        handleError(e, ctx, 'nextTick');
+      }
+    } else if (_resolve) {
+      _resolve(ctx);
+    }
+  });
+  if (!pending) {
+    pending = true;
+    if (useMacroTask) {
+      macroTimerFunc();
+    } else {
+      microTimerFunc();
+    }
+  }
+  // $flow-disable-line
+  if (!cb && typeof Promise !== 'undefined') {
+    return new Promise(function (resolve) {
+      _resolve = resolve;
+    })
+  }
 }
 
 /*  */
@@ -7370,7 +7401,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.1';
+Vue$3.version = '2.5.2';
 
 /*  */
 
@@ -9202,6 +9233,16 @@ function normalizeEvents (on) {
 
 var target$1;
 
+function createOnceHandler (handler, event, capture) {
+  var _target = target$1; // save current target element in closure
+  return function onceHandler () {
+    var res = handler.apply(null, arguments);
+    if (res !== null) {
+      remove$2(event, onceHandler, capture, _target);
+    }
+  }
+}
+
 function add$1 (
   event,
   handler,
@@ -9209,18 +9250,8 @@ function add$1 (
   capture,
   passive
 ) {
-  if (once$$1) {
-    var oldHandler = handler;
-    var _target = target$1; // save current target element in closure
-    handler = function (ev) {
-      var res = arguments.length === 1
-        ? oldHandler(ev)
-        : oldHandler.apply(null, arguments);
-      if (res !== null) {
-        remove$2(event, handler, capture, _target);
-      }
-    };
-  }
+  handler = withMacroTask(handler);
+  if (once$$1) { handler = createOnceHandler(handler, event, capture); }
   target$1.addEventListener(
     event,
     handler,
@@ -9236,7 +9267,11 @@ function remove$2 (
   capture,
   _target
 ) {
-  (_target || target$1).removeEventListener(event, handler, capture);
+  (_target || target$1).removeEventListener(
+    event,
+    handler._withTask || handler,
+    capture
+  );
 }
 
 function updateDOMListeners (oldVnode, vnode) {
@@ -13024,7 +13059,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/MediaPlayerWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\MediaPlayerWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -13076,7 +13111,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/PlaylistWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\PlaylistWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -13196,6 +13231,7 @@ var app = new Vue({
         },
         setFollowing: function setFollowing() {
             this.getFollowings().then(function (response) {
+                console.log('setFollowing ...');
                 return true;
             }).catch(function (error) {
                 __WEBPACK_IMPORTED_MODULE_3__utils_alerts__["b" /* critical */](error.response.message);
@@ -13235,10 +13271,10 @@ var app = new Vue({
             this.setFollowing();
 
             var pollFollowing = setInterval(function () {
-                if (!_this2.setFollowing()) {
+                if (_this2.setFollowing() === false) {
                     clearInterval(pollFollowing);
                 }
-            }, 60000 * 3);
+            }, 60000);
         }
     }
 });
@@ -39431,7 +39467,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/Playlists.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\Playlists.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -40337,7 +40373,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\partials\\ToolbarColorPicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -40974,7 +41010,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/RequestedSongWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\RequestedSongWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -42783,7 +42819,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/YoutubeSearchWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\YoutubeSearchWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43040,7 +43076,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/YoutubeMediaObject.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\YoutubeMediaObject.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43735,7 +43771,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/Dashboard.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Dashboard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43765,16 +43801,12 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__widgets_StreamSetupWidget_vue__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__widgets_StreamSetupWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__widgets_StreamSetupWidget_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Modules_Playlists_Resources_assets_js_components_MediaPlayerWidget_vue__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Modules_Playlists_Resources_assets_js_components_MediaPlayerWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_Modules_Playlists_Resources_assets_js_components_MediaPlayerWidget_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_Playlists_Resources_assets_js_components_PlaylistWidget_vue__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Modules_Playlists_Resources_assets_js_components_PlaylistWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_Modules_Playlists_Resources_assets_js_components_PlaylistWidget_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__widgets_TwitchChatWidget_vue__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__widgets_TwitchChatWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__widgets_TwitchChatWidget_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuex__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__mixins_pageReady__ = __webpack_require__(19);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue__ = __webpack_require__(145);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_pageReady__ = __webpack_require__(19);
 //
 //
 //
@@ -43788,23 +43820,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -43816,11 +43831,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         StreamSetupWidget: __WEBPACK_IMPORTED_MODULE_0__widgets_StreamSetupWidget_vue___default.a,
-        MediaPlayerWidget: __WEBPACK_IMPORTED_MODULE_1_Modules_Playlists_Resources_assets_js_components_MediaPlayerWidget_vue___default.a,
-        PlaylistWidget: __WEBPACK_IMPORTED_MODULE_2_Modules_Playlists_Resources_assets_js_components_PlaylistWidget_vue___default.a,
-        TwitchChatWidget: __WEBPACK_IMPORTED_MODULE_3__widgets_TwitchChatWidget_vue___default.a
+        TwitchChatWidget: __WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue___default.a,
+        ProfileWidget: __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue___default.a
     },
-    mixins: [__WEBPACK_IMPORTED_MODULE_5__mixins_pageReady__["a" /* default */]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_pageReady__["a" /* default */]],
     data: function data() {
         return {};
     },
@@ -43830,21 +43844,26 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.$store.getters.getUser;
         }
     },
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['getPlaylists', 'getReqSongs'])),
+    methods: {
+        //            ...mapActions([
+        //                'getPlaylists',
+        //                'getReqSongs',
+        //            ]),
+    },
     created: function created() {
-        var _this = this;
+        this.pageReady = true;
 
         // Get the Playlists with songs
-        this.getPlaylists(this.user.id).then(function (response) {
+        /*this.getPlaylists(this.user.id).then((response) => {
             // Gets the requested songs
-            _this.getReqSongs(_this.user.id).then(function (response) {
-                _this.pageReady = true;
-            }).catch(function (error) {
-                alerts.error(error.response.data);
+            this.getReqSongs(this.user.id).then((response) => {
+                this.pageReady = true;
+            }).catch((error) => {
+                alerts.error(error.response.data)
             });
-        }).catch(function (error) {
-            alerts.error(error.response.data);
-        });
+        }).catch((error) => {
+            alerts.error(error.response.data)
+        });*/
     }
 });
 
@@ -43879,7 +43898,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/StreamSetupWidget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\StreamSetupWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -44323,7 +44342,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/TwitchChatWidget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\TwitchChatWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -44523,11 +44542,7 @@ var render = function() {
         _c(
           "article",
           { staticClass: "col-sm-6 sortable-grid ui-sortable" },
-          [
-            _c("stream-setup-widget", {
-              attrs: { clientId: "sbuautwemmz4hr6sbuabyp9bg9uwaav" }
-            })
-          ],
+          [_c("profile-widget")],
           1
         ),
         _vm._v(" "),
@@ -44535,9 +44550,9 @@ var render = function() {
           "article",
           { staticClass: "col-sm-6 sortable-grid ui-sortable" },
           [
-            _c("media-player-widget"),
-            _vm._v(" "),
-            _c("playlist-widget", { attrs: { "max-height": "400px" } })
+            _c("stream-setup-widget", {
+              attrs: { clientId: "sbuautwemmz4hr6sbuabyp9bg9uwaav" }
+            })
           ],
           1
         )
@@ -44584,7 +44599,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/Clients.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\Clients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -45591,7 +45606,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/AuthorizedClients.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\AuthorizedClients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -45916,7 +45931,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/PersonalAccessTokens.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\PersonalAccessTokens.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -46706,7 +46721,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/header/LiveChannels.vue"
+Component.options.__file = "resources\\assets\\js\\components\\header\\LiveChannels.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -47641,6 +47656,581 @@ var TwitchPubSub = function () {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 132 */,
+/* 133 */,
+/* 134 */,
+/* 135 */,
+/* 136 */,
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(146)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(148)
+/* template */
+var __vue_template__ = __webpack_require__(149)
+/* template functional */
+  var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\ProfileWidget.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-098d6511", Component.options)
+  } else {
+    hotAPI.reload("data-v-098d6511", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(147);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("5aa99ab8", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-098d6511\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./ProfileWidget.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-098d6511\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./ProfileWidget.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Widget_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {},
+    components: {
+        Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
+    },
+    methods: {},
+    computed: {
+        date_joined: function date_joined() {
+            return new Date(this.$root.channel.created_at).toDateString();
+        }
+    },
+    created: function created() {}
+});
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "widget",
+    { attrs: { "wid-id": "5438974", color: "purple", fullscreen: true } },
+    [
+      _c("div", { attrs: { slot: "title" }, slot: "title" }, [
+        _vm._v("Profile")
+      ]),
+      _vm._v(" "),
+      _c("div", { attrs: { slot: "icon" }, slot: "icon" }, [
+        _c("i", { staticClass: "fa fa-user txt-color-white" })
+      ]),
+      _vm._v(" "),
+      _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
+      _vm._v(" "),
+      _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+        _c("div", { staticClass: "alert alert-info no-margin fade in" }, [
+          _c(
+            "button",
+            { staticClass: "close", attrs: { "data-dismiss": "alert" } },
+            [_vm._v("\n                ×\n            ")]
+          ),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa-fw fa fa-info" }),
+          _vm._v("\n            Profile Widget v1.0 Beta\n        ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-12" }, [
+            _c("div", { staticClass: "profile-header" }, [
+              _c("div", { staticClass: "air air-bottom-right padding-10" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn txt-color-white bg-color-teal btn-sm",
+                    attrs: { href: "javascript:void(0);" }
+                  },
+                  [_c("i", { staticClass: "fa fa-check" }), _vm._v(" Follow")]
+                ),
+                _vm._v("  "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn txt-color-white bg-color-pinkDark btn-sm",
+                    attrs: { href: "javascript:void(0);" }
+                  },
+                  [_c("i", { staticClass: "fa fa-link" }), _vm._v(" Connect")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "air air-top-left padding-10" }, [
+                _c("h4", { staticClass: "txt-color-white font-md" }, [
+                  _vm._v(_vm._s(_vm.date_joined))
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "profile-header-inner" }, [
+                _c("div", [
+                  _c("img", {
+                    attrs: {
+                      src: _vm.$root.channel.profile_banner,
+                      alt: "demo user",
+                      width: "100%"
+                    }
+                  })
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-12" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-3 profile-pic" }, [
+                _c("img", {
+                  attrs: { src: _vm.$root.user.avatar, alt: "demo user" }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "padding-10" }, [
+                  _c("h4", { staticClass: "font-md" }, [
+                    _c("strong", [_vm._v(_vm._s(_vm.$root.channel.followers))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("small", [_vm._v("Followers")])
+                  ]),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "font-md" }, [
+                    _c("strong", [_vm._v(_vm._s(_vm.$root.channel.views))]),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("small", [_vm._v("Views")])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-6" }, [
+                _c("h1", [_vm._v(_vm._s(_vm.$root.channel.display_name))]),
+                _vm._v(" "),
+                _c("ul", { staticClass: "list-unstyled" }, [
+                  _c("li", [
+                    _c("p", { staticClass: "text-muted" }, [
+                      _c("i", { staticClass: "fa fa-phone" }),
+                      _vm._v("  \n                                    ("),
+                      _c("span", { staticClass: "txt-color-darken" }, [
+                        _vm._v("313")
+                      ]),
+                      _vm._v(")\n                                    "),
+                      _c("span", { staticClass: "txt-color-darken" }, [
+                        _vm._v("464")
+                      ]),
+                      _vm._v(" -\n                                    "),
+                      _c("span", { staticClass: "txt-color-darken" }, [
+                        _vm._v("6473")
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("p", { staticClass: "text-muted" }, [
+                      _c("i", { staticClass: "fa fa-envelope" }),
+                      _vm._v("  "),
+                      _c(
+                        "a",
+                        { attrs: { href: "mailto:" + _vm.$root.user.email } },
+                        [_vm._v(_vm._s(_vm.$root.user.email))]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("p", { staticClass: "text-muted" }, [
+                      _c("i", { staticClass: "fa fa-skype" }),
+                      _vm._v("  "),
+                      _c("span", { staticClass: "txt-color-darken" }, [
+                        _vm._v("john12")
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("p", { staticClass: "text-muted" }, [
+                      _c("i", { staticClass: "fa fa-calendar" }),
+                      _vm._v("  "),
+                      _c("span", { staticClass: "txt-color-darken" }, [
+                        _vm._v("Free after "),
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: "javascript:void(0);",
+                              rel: "tooltip",
+                              title: "",
+                              "data-placement": "top",
+                              "data-original-title": "Create an Appointment"
+                            }
+                          },
+                          [_vm._v("4:30 PM")]
+                        )
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("p", { staticClass: "font-md" }, [
+                  _c("i", [_vm._v("A little about me...")])
+                ]),
+                _vm._v(" "),
+                _c("p", [_vm._v(_vm._s(_vm.$root.channel.description))]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-default btn-xs",
+                    attrs: { href: "javascript:void(0);" }
+                  },
+                  [
+                    _c("i", { staticClass: "fa fa-envelope-o" }),
+                    _vm._v(" Send Message")
+                  ]
+                ),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("br")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-3" }, [
+                _c("h1", [_c("small", [_vm._v("Connections")])]),
+                _vm._v(" "),
+                _c("ul", { staticClass: "list-inline friends-list" }, [
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/1.png", alt: "friend-1" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/2.png", alt: "friend-2" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/3.png", alt: "friend-3" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/4.png", alt: "friend-4" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/5.png", alt: "friend-5" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/male.png", alt: "friend-6" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("a", { attrs: { href: "javascript:void(0);" } }, [
+                      _vm._v("413 more")
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("h1", [_c("small", [_vm._v("Recent visitors")])]),
+                _vm._v(" "),
+                _c("ul", { staticClass: "list-inline friends-list" }, [
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/male.png", alt: "friend-1" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/female.png", alt: "friend-2" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c("img", {
+                      attrs: { src: "img/avatars/female.png", alt: "friend-3" }
+                    })
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-098d6511", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

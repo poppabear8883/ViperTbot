@@ -11519,3 +11519,14 @@ button.close {
   margin-left: 15px !important;
 }
 
+.profile-header {
+  position: relative !important;
+}
+
+.profile-header .profile-header-inner {
+  max-height: 150px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
