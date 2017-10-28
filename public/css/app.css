@@ -11503,6 +11503,22 @@ button.close {
   padding: 10px !important;
 }
 
+.padding-1 {
+  padding: 1px !important;
+}
+
+.padding-2 {
+  padding: 2px !important;
+}
+
+.padding-3 {
+  padding: 3px !important;
+}
+
+.padding-4 {
+  padding: 4px !important;
+}
+
 .margin-right-10 {
   margin-right: 10px !important;
 }
@@ -11517,16 +11533,5 @@ button.close {
 
 .margin-left-15 {
   margin-left: 15px !important;
-}
-
-.profile-header {
-  position: relative !important;
-}
-
-.profile-header .profile-header-inner {
-  max-height: 150px;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
 }
 

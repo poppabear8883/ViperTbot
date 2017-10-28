@@ -1,5 +1,8 @@
 <template>
-    <div class="row" v-if="pageReady">
+    <div class="row">
+        <article class="col-sm-12 sortable-grid ui-sortable">
+
+        </article>
         <article class="col-sm-6 sortable-grid ui-sortable">
             <profile-widget></profile-widget>
         </article>
@@ -17,43 +20,20 @@
     import ProfileWidget from './widgets/ProfileWidget.vue';
 
     import {mapActions} from 'vuex';
-    import pageReadyMixin from './mixins/pageReady';
+    import isPageComponent from './mixins/isPageComponent';
 
     export default {
+        mixins: [isPageComponent],
+
         components: {
             StreamSetupWidget,
             TwitchChatWidget,
             ProfileWidget
         },
-        mixins: [pageReadyMixin],
-        data() {
-            return {}
-        },
         computed: {
             user() {
                 return this.$store.getters.getUser;
             }
-        },
-        methods: {
-//            ...mapActions([
-//                'getPlaylists',
-//                'getReqSongs',
-//            ]),
-        },
-        created() {
-            this.pageReady = true;
-
-            // Get the Playlists with songs
-            /*this.getPlaylists(this.user.id).then((response) => {
-                // Gets the requested songs
-                this.getReqSongs(this.user.id).then((response) => {
-                    this.pageReady = true;
-                }).catch((error) => {
-                    alerts.error(error.response.data)
-                });
-            }).catch((error) => {
-                alerts.error(error.response.data)
-            });*/
-        },
+        }
     }
 </script>

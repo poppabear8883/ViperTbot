@@ -51,7 +51,6 @@ const app = new Vue({
         },
         setFollowing() {
             this.getFollowings().then((response) => {
-                console.log('setFollowing ...');
                 return true;
             }).catch((error) => {
                 alerts.critical(error.response.message);

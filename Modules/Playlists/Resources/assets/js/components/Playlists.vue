@@ -1,6 +1,6 @@
 <template>
     <!-- row -->
-    <div class="row" v-if="pageReady">
+    <div class="row" v-if="ready">
 
         <article class="col-sm-12 sortable-grid ui-sortable">
             <youtube-search-widget></youtube-search-widget>
@@ -33,7 +33,7 @@
     import YoutubeSearchWidget from './YoutubeSearchWidget.vue';
 
     import {mapActions} from 'vuex';
-    import pageReadyMixin from 'RootComponents/mixins/pageReady';
+    import isPageComponent from 'RootComponents/mixins/isPageComponent';
 
     export default {
         components: {
@@ -42,7 +42,7 @@
             PlaylistWidget,
             YoutubeSearchWidget
         },
-        mixins: [pageReadyMixin],
+        mixins: [isPageComponent],
         data() {
             return {
 
@@ -64,7 +64,7 @@
             this.getPlaylists(this.user.id).then((response) => {
                 // Gets the requested songs
                 this.getReqSongs(this.user.id).then((response) => {
-                    this.pageReady = true;
+                    this.ready = true;
                 }).catch((error) => {
                     alerts.error(error.response.data)
                 });

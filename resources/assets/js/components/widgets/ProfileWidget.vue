@@ -25,14 +25,14 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="profile-header">
-                        <div class="air air-bottom-right padding-10">
+                        <!--<div class="air air-bottom-right padding-10">
                             <a href="javascript:void(0);"
                                class="btn txt-color-white bg-color-teal btn-sm"><i
                                     class="fa fa-check"></i> Follow</a>&nbsp; <a
                                 href="javascript:void(0);"
                                 class="btn txt-color-white bg-color-pinkDark btn-sm"><i
                                 class="fa fa-link"></i> Connect</a>
-                        </div>
+                        </div>-->
                         <div class="air air-top-left padding-10">
                             <h4 class="txt-color-white font-md">{{date_joined}}</h4>
                         </div>
@@ -69,31 +69,14 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <p class="text-muted">
-                                        <i class="fa fa-phone"></i>&nbsp;&nbsp;
-                                        (<span class="txt-color-darken">313</span>)
-                                        <span class="txt-color-darken">464</span> -
-                                        <span class="txt-color-darken">6473</span>
+                                        <i class="fa fa-twitch"></i>&nbsp;&nbsp;
+                                        <span class="txt-color-darken">{{$root.channel._id}}</span>
                                     </p>
                                 </li>
                                 <li>
                                     <p class="text-muted">
                                         <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a
                                             :href="`mailto:${$root.user.email}`">{{$root.user.email}}</a>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p class="text-muted">
-                                        <i class="fa fa-skype"></i>&nbsp;&nbsp;<span
-                                            class="txt-color-darken">john12</span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p class="text-muted">
-                                        <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span
-                                            class="txt-color-darken">Free after <a
-                                            href="javascript:void(0);" rel="tooltip" title=""
-                                            data-placement="top"
-                                            data-original-title="Create an Appointment">4:30 PM</a></span>
                                     </p>
                                 </li>
                             </ul>
@@ -104,42 +87,36 @@
                             <p>{{$root.channel.description}}</p>
                             <br>
                             <a href="javascript:void(0);" class="btn btn-default btn-xs"><i
-                                    class="fa fa-envelope-o"></i> Send Message</a>
+                                    class="fa fa-pencil"></i> Edit Profile</a>
                             <br>
                             <br>
 
                         </div>
                         <div class="col-sm-3">
                             <h1>
-                                <small>Connections</small>
+                                <small>Recent Followers</small>
                             </h1>
-                            <ul class="list-inline friends-list">
-                                <li><img src="img/avatars/1.png" alt="friend-1">
-                                </li>
-                                <li><img src="img/avatars/2.png" alt="friend-2">
-                                </li>
-                                <li><img src="img/avatars/3.png" alt="friend-3">
-                                </li>
-                                <li><img src="img/avatars/4.png" alt="friend-4">
-                                </li>
-                                <li><img src="img/avatars/5.png" alt="friend-5">
-                                </li>
-                                <li><img src="img/avatars/male.png" alt="friend-6">
+                            <ul class="list-inline followers-list">
+                                <li v-for="follower in recent_followers">
+                                    <a href="javascript:void(0);">
+                                        <img v-if="follower.user.logo != null"
+                                             :src="follower.user.logo"
+                                             :alt="follower.user.name"
+                                             rel="tooltip"
+                                             data-placement="top"
+                                             :data-original-title="follower.user.display_name"
+                                        >
+                                        <img v-if="follower.user.logo == null"
+                                             src="img/avatars/male.png"
+                                             :alt="follower.user.name"
+                                             rel="tooltip"
+                                             data-placement="top"
+                                             :data-original-title="follower.user.display_name"
+                                        >
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">413 more</a>
-                                </li>
-                            </ul>
-
-                            <h1>
-                                <small>Recent visitors</small>
-                            </h1>
-                            <ul class="list-inline friends-list">
-                                <li><img src="img/avatars/male.png" alt="friend-1">
-                                </li>
-                                <li><img src="img/avatars/female.png" alt="friend-2">
-                                </li>
-                                <li><img src="img/avatars/female.png" alt="friend-3">
+                                    <a href="javascript:void(0);">See All</a>
                                 </li>
                             </ul>
 
@@ -167,16 +144,51 @@
         components:{
             Widget
         },
+        data() {
+            return {
+                followers: {}
+            }
+        },
         methods: {
+            getFollowers() {
+                axios.get('/api/twitch/followers').then((response) => {
+                    this.followers = response.data;
+                }).catch((error) => {
 
+                });
+            }
         },
         computed: {
+            recent_followers() {
+                return _.take(this.followers.follows, 18);
+            },
             date_joined() {
                 return new Date(this.$root.channel.created_at).toDateString();
             }
         },
         created() {
-
+            this.getFollowers();
         }
     }
 </script>
+<style>
+    .profile-header {position: relative !important}
+    .profile-header .profile-header-inner {
+        max-height: 150px;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .followers-list li {
+        margin-bottom: 5px !important;
+        margin-right: 5px !important;
+        padding: 0 !important;
+    }
+
+    .followers-list img {
+        width: 35px;
+        border: 1px solid #fff;
+        outline: 1px solid #bfbfbf;
+    }
+</style>
