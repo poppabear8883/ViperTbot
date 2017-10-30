@@ -105,6 +105,7 @@
         },
         data() {
             return {
+                initialized: false,
                 sliderStyle: {"backgroundColor": "#BA2C38"},
                 volume: 30,
                 listItem: null,
@@ -123,6 +124,17 @@
         watch: {
             playlist(newPlaylist) {
                 this.listCopy = [];
+            },
+            playlists() {
+                if (!this.initialized && this.playlists[0]) {
+                    this.playlist = this.playlists[0];
+
+                    if (this.playlist.songs.length > 0) {
+                        this.getRandomItem();
+                    }
+
+                    this.initialized = true;
+                }
             },
             volume() {
                 this.player.setVolume(this.volume);
@@ -302,17 +314,6 @@
             ...mapActions([
                 'deleteReqSong'
             ]),
-        },
-
-        /**
-         * This fires when the component is created.
-         */
-        created() {
-            this.playlist = this.playlists[0];
-
-            if (this.playlist.songs.length > 0) {
-                this.getRandomItem();
-            }
         }
     }
 </script>

@@ -144,6 +144,7 @@
 
         data() {
             return {
+                initialized:false,
                 color: '',
                 title: '',
                 video_id: '',
@@ -161,6 +162,12 @@
                 this.video_id = '';
                 this.new_playlist = '';
                 this.searchTerm = '';
+            },
+            playlists() {
+                if (!this.initialized && this.playlists[0]) {
+                    this.playlist = this.playlists[0];
+                    this.initialized = true;
+                }
             }
         },
         methods: {
@@ -305,9 +312,6 @@
             btnActionClasses() {
                 return ['btn', 'dropdown-toggle', 'btn-xs', 'btn-default'];
             }
-        },
-        created() {
-            this.playlist = this.playlists[0];
         }
     }
 </script>

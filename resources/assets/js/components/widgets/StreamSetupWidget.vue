@@ -23,7 +23,7 @@
                 Stream Setup Widget v1.0 Beta
             </div>
 
-            <form class="smart-form">
+            <form class="smart-form" v-if="initialized">
                 <header>
                     Setup Stream
                 </header>
@@ -33,7 +33,7 @@
                     <section>
                         <label class="input">
                             <i class="icon-append fa fa-comment"></i>
-                            <input type="text" v-model="title" :placeholder="current_title">
+                            <input type="text" v-model="title" :placeholder="channel.status">
                             <b class="tooltip tooltip-bottom-right">
                                 Enter the title of your stream.
                             </b>
@@ -84,6 +84,7 @@
         },
         data() {
             return {
+                initialized: false,
                 isLoading: false,
                 games: [],
                 game: null,
@@ -95,11 +96,27 @@
             Widget,
             Multiselect
         },
+        computed: {
+            channel() {
+                return this.$store.getters.getChannel;
+            },
+        },
+        watch: {
+            channel() {
+                if(!this.initialized && this.channel.status) {
+                    this.title = this.channel.status;
+                    this.games.push({name: this.channel.game});
+                    this.game = {name: this.channel.game};
+                    this.initialized = true;
+                }
+            }
+        },
         methods: {
             asyncFind(query) {
                 if(query !== '')
                 {
                     this.isLoading = true;
+
                     axios.get('https://api.twitch.tv/kraken/search/games', {
                         params: {
                             'client_id': this.clientId,
@@ -131,30 +148,6 @@
                     });
                 }
             }
-        },
-        computed: {
-            user() {
-                return this.$store.getters.getUser;
-            },
-            channel() {
-                return this.$store.getters.getChannel;
-            },
-            current_title() {
-                return this.channel.status;
-            },
-            current_game() {
-                return this.channel.game;
-            }
-        },
-        created() {
-            let setup = setInterval(() => {
-                if(this.channel.status) {
-                    this.title = this.channel.status;
-                    this.games.push({name: this.channel.game});
-                    this.game = {name: this.channel.game};
-                    clearInterval(setup)
-                }
-            }, 1000);
         }
     }
 </script>

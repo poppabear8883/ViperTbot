@@ -49,12 +49,12 @@
                         <li class="sparks-info">
                             <h5> Subscribers
                                 <span class="txt-color-greenDark">
-                            @if(isset($subscribers->error))
+                                    @if(isset($subscribers->error))
                                         0
                                     @else
                                         {{ $subscribers['_total'] }}
                                     @endif
-                        </span>
+                                </span>
                             </h5>
                         </li>
                     </ul>

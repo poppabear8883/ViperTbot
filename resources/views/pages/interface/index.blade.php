@@ -5,5 +5,5 @@
     Dashboard <span>&gt; My Dashboard</span>
 @endsection
 @section('content')
-    <dashboard v-if="user.id"></dashboard>
+    <dashboard></dashboard>
 @endsection

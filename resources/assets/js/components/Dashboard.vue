@@ -3,6 +3,7 @@
         <article class="col-sm-12 sortable-grid ui-sortable">
 
         </article>
+
         <article class="col-sm-6 sortable-grid ui-sortable">
             <profile-widget></profile-widget>
         </article>
@@ -19,21 +20,11 @@
     import TwitchChatWidget from './widgets/TwitchChatWidget.vue';
     import ProfileWidget from './widgets/ProfileWidget.vue';
 
-    import {mapActions} from 'vuex';
-    import isPageComponent from './mixins/isPageComponent';
-
     export default {
-        mixins: [isPageComponent],
-
         components: {
             StreamSetupWidget,
             TwitchChatWidget,
             ProfileWidget
-        },
-        computed: {
-            user() {
-                return this.$store.getters.getUser;
-            }
         }
     }
 </script>

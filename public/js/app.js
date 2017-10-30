@@ -2474,7 +2474,7 @@ module.exports = Cancel;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.5.2
+ * Vue.js v2.5.1
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -2941,92 +2941,6 @@ function parsePath (path) {
 
 /*  */
 
-// can we use __proto__?
-var hasProto = '__proto__' in {};
-
-// Browser environment sniffing
-var inBrowser = typeof window !== 'undefined';
-var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && /msie|trident/.test(UA);
-var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
-var isEdge = UA && UA.indexOf('edge/') > 0;
-var isAndroid = UA && UA.indexOf('android') > 0;
-var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
-var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
-
-// Firefox has a "watch" function on Object.prototype...
-var nativeWatch = ({}).watch;
-
-var supportsPassive = false;
-if (inBrowser) {
-  try {
-    var opts = {};
-    Object.defineProperty(opts, 'passive', ({
-      get: function get () {
-        /* istanbul ignore next */
-        supportsPassive = true;
-      }
-    })); // https://github.com/facebook/flow/issues/285
-    window.addEventListener('test-passive', null, opts);
-  } catch (e) {}
-}
-
-// this needs to be lazy-evaled because vue may be required before
-// vue-server-renderer can set VUE_ENV
-var _isServer;
-var isServerRendering = function () {
-  if (_isServer === undefined) {
-    /* istanbul ignore if */
-    if (!inBrowser && typeof global !== 'undefined') {
-      // detect presence of vue-server-renderer and avoid
-      // Webpack shimming the process
-      _isServer = global['process'].env.VUE_ENV === 'server';
-    } else {
-      _isServer = false;
-    }
-  }
-  return _isServer
-};
-
-// detect devtools
-var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
-/* istanbul ignore next */
-function isNative (Ctor) {
-  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
-}
-
-var hasSymbol =
-  typeof Symbol !== 'undefined' && isNative(Symbol) &&
-  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
-
-var _Set;
-/* istanbul ignore if */ // $flow-disable-line
-if (typeof Set !== 'undefined' && isNative(Set)) {
-  // use native Set when available.
-  _Set = Set;
-} else {
-  // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
-    function Set () {
-      this.set = Object.create(null);
-    }
-    Set.prototype.has = function has (key) {
-      return this.set[key] === true
-    };
-    Set.prototype.add = function add (key) {
-      this.set[key] = true;
-    };
-    Set.prototype.clear = function clear () {
-      this.set = Object.create(null);
-    };
-
-    return Set;
-  }());
-}
-
-/*  */
-
 var warn = noop;
 var tip = noop;
 var generateComponentTrace = (noop); // work around flow check
@@ -3117,6 +3031,220 @@ if (true) {
       return ("\n\n(found in " + (formatComponentName(vm)) + ")")
     }
   };
+}
+
+/*  */
+
+function handleError (err, vm, info) {
+  if (vm) {
+    var cur = vm;
+    while ((cur = cur.$parent)) {
+      var hooks = cur.$options.errorCaptured;
+      if (hooks) {
+        for (var i = 0; i < hooks.length; i++) {
+          try {
+            var capture = hooks[i].call(cur, err, vm, info) === false;
+            if (capture) { return }
+          } catch (e) {
+            globalHandleError(e, cur, 'errorCaptured hook');
+          }
+        }
+      }
+    }
+  }
+  globalHandleError(err, vm, info);
+}
+
+function globalHandleError (err, vm, info) {
+  if (config.errorHandler) {
+    try {
+      return config.errorHandler.call(null, err, vm, info)
+    } catch (e) {
+      logError(e, null, 'config.errorHandler');
+    }
+  }
+  logError(err, vm, info);
+}
+
+function logError (err, vm, info) {
+  if (true) {
+    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
+  }
+  /* istanbul ignore else */
+  if (inBrowser && typeof console !== 'undefined') {
+    console.error(err);
+  } else {
+    throw err
+  }
+}
+
+/*  */
+/* globals MessageChannel */
+
+// can we use __proto__?
+var hasProto = '__proto__' in {};
+
+// Browser environment sniffing
+var inBrowser = typeof window !== 'undefined';
+var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && /msie|trident/.test(UA);
+var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+var isEdge = UA && UA.indexOf('edge/') > 0;
+var isAndroid = UA && UA.indexOf('android') > 0;
+var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
+var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
+
+// Firefox has a "watch" function on Object.prototype...
+var nativeWatch = ({}).watch;
+
+var supportsPassive = false;
+if (inBrowser) {
+  try {
+    var opts = {};
+    Object.defineProperty(opts, 'passive', ({
+      get: function get () {
+        /* istanbul ignore next */
+        supportsPassive = true;
+      }
+    })); // https://github.com/facebook/flow/issues/285
+    window.addEventListener('test-passive', null, opts);
+  } catch (e) {}
+}
+
+// this needs to be lazy-evaled because vue may be required before
+// vue-server-renderer can set VUE_ENV
+var _isServer;
+var isServerRendering = function () {
+  if (_isServer === undefined) {
+    /* istanbul ignore if */
+    if (!inBrowser && typeof global !== 'undefined') {
+      // detect presence of vue-server-renderer and avoid
+      // Webpack shimming the process
+      _isServer = global['process'].env.VUE_ENV === 'server';
+    } else {
+      _isServer = false;
+    }
+  }
+  return _isServer
+};
+
+// detect devtools
+var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+/* istanbul ignore next */
+function isNative (Ctor) {
+  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+}
+
+var hasSymbol =
+  typeof Symbol !== 'undefined' && isNative(Symbol) &&
+  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+
+/**
+ * Defer a task to execute it asynchronously.
+ */
+var nextTick = (function () {
+  var callbacks = [];
+  var pending = false;
+  var timerFunc;
+
+  function nextTickHandler () {
+    pending = false;
+    var copies = callbacks.slice(0);
+    callbacks.length = 0;
+    for (var i = 0; i < copies.length; i++) {
+      copies[i]();
+    }
+  }
+
+  // An asynchronous deferring mechanism.
+  // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
+  // but microtasks actually has too high a priority and fires in between
+  // supposedly sequential events (e.g. #4521, #6690) or even between
+  // bubbling of the same event (#6566). Technically setImmediate should be
+  // the ideal choice, but it's not available everywhere; and the only polyfill
+  // that consistently queues the callback after all DOM events triggered in the
+  // same loop is by using MessageChannel.
+  /* istanbul ignore if */
+  if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+    timerFunc = function () {
+      setImmediate(nextTickHandler);
+    };
+  } else if (typeof MessageChannel !== 'undefined' && (
+    isNative(MessageChannel) ||
+    // PhantomJS
+    MessageChannel.toString() === '[object MessageChannelConstructor]'
+  )) {
+    var channel = new MessageChannel();
+    var port = channel.port2;
+    channel.port1.onmessage = nextTickHandler;
+    timerFunc = function () {
+      port.postMessage(1);
+    };
+  } else
+  /* istanbul ignore next */
+  if (typeof Promise !== 'undefined' && isNative(Promise)) {
+    // use microtask in non-DOM environments, e.g. Weex
+    var p = Promise.resolve();
+    timerFunc = function () {
+      p.then(nextTickHandler);
+    };
+  } else {
+    // fallback to setTimeout
+    timerFunc = function () {
+      setTimeout(nextTickHandler, 0);
+    };
+  }
+
+  return function queueNextTick (cb, ctx) {
+    var _resolve;
+    callbacks.push(function () {
+      if (cb) {
+        try {
+          cb.call(ctx);
+        } catch (e) {
+          handleError(e, ctx, 'nextTick');
+        }
+      } else if (_resolve) {
+        _resolve(ctx);
+      }
+    });
+    if (!pending) {
+      pending = true;
+      timerFunc();
+    }
+    // $flow-disable-line
+    if (!cb && typeof Promise !== 'undefined') {
+      return new Promise(function (resolve, reject) {
+        _resolve = resolve;
+      })
+    }
+  }
+})();
+
+var _Set;
+/* istanbul ignore if */ // $flow-disable-line
+if (typeof Set !== 'undefined' && isNative(Set)) {
+  // use native Set when available.
+  _Set = Set;
+} else {
+  // a non-standard Set polyfill that only works with primitive keys.
+  _Set = (function () {
+    function Set () {
+      this.set = Object.create(null);
+    }
+    Set.prototype.has = function has (key) {
+      return this.set[key] === true
+    };
+    Set.prototype.add = function add (key) {
+      this.set[key] = true;
+    };
+    Set.prototype.clear = function clear () {
+      this.set = Object.create(null);
+    };
+
+    return Set;
+  }());
 }
 
 /*  */
@@ -4120,165 +4248,6 @@ function isType (type, fn) {
   }
   /* istanbul ignore next */
   return false
-}
-
-/*  */
-
-function handleError (err, vm, info) {
-  if (vm) {
-    var cur = vm;
-    while ((cur = cur.$parent)) {
-      var hooks = cur.$options.errorCaptured;
-      if (hooks) {
-        for (var i = 0; i < hooks.length; i++) {
-          try {
-            var capture = hooks[i].call(cur, err, vm, info) === false;
-            if (capture) { return }
-          } catch (e) {
-            globalHandleError(e, cur, 'errorCaptured hook');
-          }
-        }
-      }
-    }
-  }
-  globalHandleError(err, vm, info);
-}
-
-function globalHandleError (err, vm, info) {
-  if (config.errorHandler) {
-    try {
-      return config.errorHandler.call(null, err, vm, info)
-    } catch (e) {
-      logError(e, null, 'config.errorHandler');
-    }
-  }
-  logError(err, vm, info);
-}
-
-function logError (err, vm, info) {
-  if (true) {
-    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
-  }
-  /* istanbul ignore else */
-  if (inBrowser && typeof console !== 'undefined') {
-    console.error(err);
-  } else {
-    throw err
-  }
-}
-
-/*  */
-/* globals MessageChannel */
-
-var callbacks = [];
-var pending = false;
-
-function flushCallbacks () {
-  pending = false;
-  var copies = callbacks.slice(0);
-  callbacks.length = 0;
-  for (var i = 0; i < copies.length; i++) {
-    copies[i]();
-  }
-}
-
-// Here we have async deferring wrappers using both micro and macro tasks.
-// In < 2.4 we used micro tasks everywhere, but there are some scenarios where
-// micro tasks have too high a priority and fires in between supposedly
-// sequential events (e.g. #4521, #6690) or even between bubbling of the same
-// event (#6566). However, using macro tasks everywhere also has subtle problems
-// when state is changed right before repaint (e.g. #6813, out-in transitions).
-// Here we use micro task by default, but expose a way to force macro task when
-// needed (e.g. in event handlers attached by v-on).
-var microTimerFunc;
-var macroTimerFunc;
-var useMacroTask = false;
-
-// Determine (macro) Task defer implementation.
-// Technically setImmediate should be the ideal choice, but it's only available
-// in IE. The only polyfill that consistently queues the callback after all DOM
-// events triggered in the same loop is by using MessageChannel.
-/* istanbul ignore if */
-if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-  macroTimerFunc = function () {
-    setImmediate(flushCallbacks);
-  };
-} else if (typeof MessageChannel !== 'undefined' && (
-  isNative(MessageChannel) ||
-  // PhantomJS
-  MessageChannel.toString() === '[object MessageChannelConstructor]'
-)) {
-  var channel = new MessageChannel();
-  var port = channel.port2;
-  channel.port1.onmessage = flushCallbacks;
-  macroTimerFunc = function () {
-    port.postMessage(1);
-  };
-} else {
-  /* istanbul ignore next */
-  macroTimerFunc = function () {
-    setTimeout(flushCallbacks, 0);
-  };
-}
-
-// Determine MicroTask defer implementation.
-/* istanbul ignore next, $flow-disable-line */
-if (typeof Promise !== 'undefined' && isNative(Promise)) {
-  var p = Promise.resolve();
-  microTimerFunc = function () {
-    p.then(flushCallbacks);
-    // in problematic UIWebViews, Promise.then doesn't completely break, but
-    // it can get stuck in a weird state where callbacks are pushed into the
-    // microtask queue but the queue isn't being flushed, until the browser
-    // needs to do some other work, e.g. handle a timer. Therefore we can
-    // "force" the microtask queue to be flushed by adding an empty timer.
-    if (isIOS) { setTimeout(noop); }
-  };
-} else {
-  // fallback to macro
-  microTimerFunc = macroTimerFunc;
-}
-
-/**
- * Wrap a function so that if any code inside triggers state change,
- * the changes are queued using a Task instead of a MicroTask.
- */
-function withMacroTask (fn) {
-  return fn._withTask || (fn._withTask = function () {
-    useMacroTask = true;
-    var res = fn.apply(null, arguments);
-    useMacroTask = false;
-    return res
-  })
-}
-
-function nextTick (cb, ctx) {
-  var _resolve;
-  callbacks.push(function () {
-    if (cb) {
-      try {
-        cb.call(ctx);
-      } catch (e) {
-        handleError(e, ctx, 'nextTick');
-      }
-    } else if (_resolve) {
-      _resolve(ctx);
-    }
-  });
-  if (!pending) {
-    pending = true;
-    if (useMacroTask) {
-      macroTimerFunc();
-    } else {
-      microTimerFunc();
-    }
-  }
-  // $flow-disable-line
-  if (!cb && typeof Promise !== 'undefined') {
-    return new Promise(function (resolve) {
-      _resolve = resolve;
-    })
-  }
 }
 
 /*  */
@@ -7405,7 +7374,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.2';
+Vue$3.version = '2.5.1';
 
 /*  */
 
@@ -9237,16 +9206,6 @@ function normalizeEvents (on) {
 
 var target$1;
 
-function createOnceHandler (handler, event, capture) {
-  var _target = target$1; // save current target element in closure
-  return function onceHandler () {
-    var res = handler.apply(null, arguments);
-    if (res !== null) {
-      remove$2(event, onceHandler, capture, _target);
-    }
-  }
-}
-
 function add$1 (
   event,
   handler,
@@ -9254,8 +9213,18 @@ function add$1 (
   capture,
   passive
 ) {
-  handler = withMacroTask(handler);
-  if (once$$1) { handler = createOnceHandler(handler, event, capture); }
+  if (once$$1) {
+    var oldHandler = handler;
+    var _target = target$1; // save current target element in closure
+    handler = function (ev) {
+      var res = arguments.length === 1
+        ? oldHandler(ev)
+        : oldHandler.apply(null, arguments);
+      if (res !== null) {
+        remove$2(event, handler, capture, _target);
+      }
+    };
+  }
   target$1.addEventListener(
     event,
     handler,
@@ -9271,11 +9240,7 @@ function remove$2 (
   capture,
   _target
 ) {
-  (_target || target$1).removeEventListener(
-    event,
-    handler._withTask || handler,
-    capture
-  );
+  (_target || target$1).removeEventListener(event, handler, capture);
 }
 
 function updateDOMListeners (oldVnode, vnode) {
@@ -13038,98 +13003,12 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(45).setImmediate))
 
 /***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-    created: function created() {
-        this.$root.loading = true;
-    },
-    updated: function updated() {
-        var _this = this;
-
-        this.$nextTick(function () {
-            setTimeout(function () {
-                _this.activateTooltips();
-                _this.activatePopovers();
-            }, 50);
-        });
-    },
-    mounted: function mounted() {
-        var _this2 = this;
-
-        this.$nextTick(function () {
-            /**
-             * If ready state is not true with-in this time we will force the page setup ??
-             *
-             * This will allow us not to change ready state in a page component
-             * that doesn't need to wait on data ??
-             */
-            setTimeout(function () {
-                if (!_this2.ready) {
-                    _this2.ready = true;
-                }
-            }, 2000);
-        });
-    },
-    data: function data() {
-        return {
-            ready: false
-        };
-    },
-
-    methods: {
-        pageSetup: function pageSetup() {
-            this.$root.loading = false;
-
-            this.setupWidgets();
-            this.runCharts();
-            this.runForms();
-            this.activateTooltips();
-            this.activatePopovers();
-        },
-        setupWidgets: function setupWidgets() {
-            setup_widgets_desktop();
-        },
-        runCharts: function runCharts() {
-            runAllCharts();
-        },
-        runForms: function runForms() {
-            runAllForms();
-        },
-        activateTooltips: function activateTooltips() {
-            $("[rel=tooltip], [data-rel=tooltip]").tooltip();
-        },
-        activatePopovers: function activatePopovers() {
-            // activate popovers
-            $("[rel=popover], [data-rel=popover]").popover();
-
-            // activate popovers with hover states
-            $("[rel=popover-hover], [data-rel=popover-hover]").popover({
-                trigger: "hover"
-            });
-        }
-    },
-    watch: {
-        ready: function ready(newVal, oldVal) {
-            var _this3 = this;
-
-            if (newVal) {
-                setTimeout(function () {
-                    _this3.pageSetup();
-                }, 10);
-            }
-        }
-    }
-});
-
-/***/ }),
+/* 17 */,
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
-module.exports = __webpack_require__(141);
+module.exports = __webpack_require__(142);
 
 
 /***/ }),
@@ -13139,11 +13018,13 @@ module.exports = __webpack_require__(141);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_localstorage__ = __webpack_require__(139);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_localstorage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_localstorage__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__webhooks_TwitchPubSub__ = __webpack_require__(140);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_alerts__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_alerts__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_v_media_query__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_v_media_query___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_v_media_query__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_localstorage__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_localstorage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vue_localstorage__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 /**
@@ -13155,6 +13036,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 __webpack_require__(20);
 
 window.Vue = __webpack_require__(16);
+
+window.sentinel = __webpack_require__(156);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -13177,8 +13060,14 @@ __webpack_require__(86);
 
 
 
+/**
+ * Vue Plugins
+ */
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_localstorage___default.a, {
+
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_4_v_media_query___default.a);
+Vue.use(__WEBPACK_IMPORTED_MODULE_5_vue_localstorage___default.a, {
     name: 'ls',
     createComputed: true
 });
@@ -13190,12 +13079,12 @@ var app = new Vue({
         loading: false,
         showAddRegularModal: false
     },
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapActions */])(['getAccount', 'getFollowings']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapActions */])(['getAccount', 'getFollowings']), {
         setAccount: function setAccount() {
             this.getAccount().then(function (response) {
                 return true;
             }).catch(function (error) {
-                __WEBPACK_IMPORTED_MODULE_4__utils_alerts__["b" /* critical */](error.response.message);
+                __WEBPACK_IMPORTED_MODULE_3__utils_alerts__["b" /* critical */](error.response.message);
                 return false;
             });
         },
@@ -13203,7 +13092,7 @@ var app = new Vue({
             this.getFollowings().then(function (response) {
                 return true;
             }).catch(function (error) {
-                __WEBPACK_IMPORTED_MODULE_4__utils_alerts__["b" /* critical */](error.response.message);
+                __WEBPACK_IMPORTED_MODULE_3__utils_alerts__["b" /* critical */](error.response.message);
                 return false;
             });
         },
@@ -13213,7 +13102,7 @@ var app = new Vue({
             var topics = ['whispers'];
 
             setTimeout(function () {
-                var tl = new __WEBPACK_IMPORTED_MODULE_2__webhooks_TwitchPubSub__["a" /* TwitchPubSub */](topics, _this.user.channel_id, _this.user.access_token);
+                var tl = new __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__["a" /* TwitchPubSub */](topics, _this.user.channel_id, _this.user.access_token);
                 tl.connect();
             }, 5000);
         }
@@ -13233,6 +13122,10 @@ var app = new Vue({
     mounted: function mounted() {
         var _this2 = this;
 
+        if (this.$mq.below(1280)) {
+            document.body.classList.add('minified');
+        }
+
         var path = window.location.pathname;
 
         if (path !== '/login') {
@@ -13245,6 +13138,34 @@ var app = new Vue({
                 }
             }, 60000);
         }
+    },
+    created: function created() {
+        var tooltip = '[rel=tooltip], [data-rel=tooltip]';
+        var popover = '[rel=popover], [data-rel=popover]';
+        var popover_hover = '[rel=popover-hover], [data-rel=popover-hover]';
+        var widget = '.jarviswidget';
+
+        sentinel.on(widget, function (el) {
+            if (thisDevice === "desktop") {
+                setup_widgets_desktop();
+            } else {
+                setup_widgets_mobile();
+            }
+        });
+
+        sentinel.on(tooltip, function (el) {
+            $(el).tooltip();
+        });
+
+        sentinel.on(popover, function (el) {
+            $(el).popover();
+        });
+
+        sentinel.on(popover_hover, function (el) {
+            $(el).popover({
+                trigger: 'hover'
+            });
+        });
     }
 });
 
@@ -39473,7 +39394,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__YoutubeSearchWidget_vue__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__YoutubeSearchWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__YoutubeSearchWidget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuex__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_RootComponents_mixins_isPageComponent__ = __webpack_require__(17);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -39512,7 +39432,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         MediaPlayerWidget: __WEBPACK_IMPORTED_MODULE_0__MediaPlayerWidget_vue___default.a,
@@ -39520,11 +39439,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         PlaylistWidget: __WEBPACK_IMPORTED_MODULE_2__PlaylistWidget_vue___default.a,
         YoutubeSearchWidget: __WEBPACK_IMPORTED_MODULE_3__YoutubeSearchWidget_vue___default.a
     },
-    mixins: [__WEBPACK_IMPORTED_MODULE_5_RootComponents_mixins_isPageComponent__["a" /* default */]],
-    data: function data() {
-        return {};
-    },
-
     computed: {
         user: function user() {
             return this.$store.getters.getUser;
@@ -39534,12 +39448,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     created: function created() {
         var _this = this;
 
-        // Get the Playlists with songs
         this.getPlaylists(this.user.id).then(function (response) {
             // Gets the requested songs
-            _this.getReqSongs(_this.user.id).then(function (response) {
-                _this.ready = true;
-            }).catch(function (error) {
+            _this.getReqSongs(_this.user.id).then(function (response) {}).catch(function (error) {
                 alerts.error(error.response.data);
             });
         }).catch(function (error) {
@@ -39719,6 +39630,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
     },
     data: function data() {
         return {
+            initialized: false,
             sliderStyle: { "backgroundColor": "#BA2C38" },
             volume: 30,
             listItem: null,
@@ -39738,6 +39650,17 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
     watch: {
         playlist: function playlist(newPlaylist) {
             this.listCopy = [];
+        },
+        playlists: function playlists() {
+            if (!this.initialized && this.playlists[0]) {
+                this.playlist = this.playlists[0];
+
+                if (this.playlist.songs.length > 0) {
+                    this.getRandomItem();
+                }
+
+                this.initialized = true;
+            }
         },
         volume: function volume() {
             this.player.setVolume(this.volume);
@@ -39928,18 +39851,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_youtube_embed___default.a);
 
             return this.listItem;
         }
-    }, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['deleteReqSong'])),
-
-    /**
-     * This fires when the component is created.
-     */
-    created: function created() {
-        this.playlist = this.playlists[0];
-
-        if (this.playlist.songs.length > 0) {
-            this.getRandomItem();
-        }
-    }
+    }, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['deleteReqSong']))
 });
 
 /***/ }),
@@ -41486,7 +41398,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -41652,6 +41564,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
     data: function data() {
         return {
+            initialized: false,
             color: '',
             title: '',
             video_id: '',
@@ -41670,6 +41583,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.video_id = '';
             this.new_playlist = '';
             this.searchTerm = '';
+        },
+        playlists: function playlists() {
+            if (!this.initialized && this.playlists[0]) {
+                this.playlist = this.playlists[0];
+                this.initialized = true;
+            }
         }
     },
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapActions */])(['addSong', 'addPlaylist', 'deleteSong', 'deletePlaylist']), {
@@ -41808,9 +41727,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         btnActionClasses: function btnActionClasses() {
             return ['btn', 'dropdown-toggle', 'btn-xs', 'btn-default'];
         }
-    },
-    created: function created() {
-        this.playlist = this.playlists[0];
     }
 });
 
@@ -43009,7 +42925,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -43154,7 +43070,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Widget: __WEBPACK_IMPORTED_MODULE_0_Widgets_Widget_vue___default.a,
         YoutubeMediaObject: __WEBPACK_IMPORTED_MODULE_2__YoutubeMediaObject_vue___default.a
     },
-    computed: {},
     methods: {
         search: function search() {
             var _this = this;
@@ -43303,6 +43218,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     props: ['video'],
     data: function data() {
         return {
+            initialized: false,
             playlist: {},
             itemCount: 0
         };
@@ -43313,6 +43229,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.itemCount = 0;
 
             this.getItemCount();
+        },
+        playlists: function playlists() {
+            if (!this.initialized && this.playlists[0]) {
+                this.playlist = this.playlists[0];
+                this.initialized = true;
+            }
         }
     },
     computed: {
@@ -43390,31 +43312,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         getItemCount: function getItemCount() {
             var _this3 = this;
 
-            if (this.video.id.playlistId) {
-                axios.get('/api/playlists/youtube/playlist', {
-                    params: {
-                        id: this.video.id.playlistId
-                    }
-                }).then(function (response) {
-                    _this3.itemCount = response.data.contentDetails.itemCount;
-                }).catch(function (error) {
-                    console.error(error.response);
-                    __WEBPACK_IMPORTED_MODULE_0_Utilities_alerts__["c" /* error */](error.response);
-                });
-            }
+            axios.get('/api/playlists/youtube/playlist', {
+                params: {
+                    id: this.video.id.playlistId
+                }
+            }).then(function (response) {
+                _this3.itemCount = response.data.contentDetails.itemCount;
+            }).catch(function (error) {
+                console.error(error.response);
+                __WEBPACK_IMPORTED_MODULE_0_Utilities_alerts__["c" /* error */](error.response);
+            });
         }
     }),
     created: function created() {
-        var _this4 = this;
-
-        var setup = setInterval(function () {
-            if (_this4.playlists[0]) {
-                _this4.playlist = _this4.playlists[0];
-                clearInterval(setup);
-            }
-        }, 1000);
-
-        this.getItemCount();
+        if (this.video.id.playlistId) {
+            this.getItemCount();
+        }
     }
 });
 
@@ -43818,34 +43731,28 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.ready
-    ? _c("div", { staticClass: "row" }, [
-        _c(
-          "article",
-          { staticClass: "col-sm-12 sortable-grid ui-sortable" },
-          [_c("youtube-search-widget")],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "article",
-          { staticClass: "col-sm-6 sortable-grid ui-sortable" },
-          [_c("playlist-widget", { attrs: { "max-height": "500px" } })],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "article",
-          { staticClass: "col-sm-6 sortable-grid ui-sortable" },
-          [
-            _c("media-player-widget"),
-            _vm._v(" "),
-            _c("requested-songs-widget")
-          ],
-          1
-        )
-      ])
-    : _vm._e()
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "article",
+      { staticClass: "col-sm-12 sortable-grid ui-sortable" },
+      [_c("youtube-search-widget")],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "article",
+      { staticClass: "col-sm-6 sortable-grid ui-sortable" },
+      [_c("playlist-widget", { attrs: { "max-height": "500px" } })],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "article",
+      { staticClass: "col-sm-6 sortable-grid ui-sortable" },
+      [_c("media-player-widget"), _vm._v(" "), _c("requested-songs-widget")],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -43938,8 +43845,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue__ = __webpack_require__(102);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mixins_isPageComponent__ = __webpack_require__(17);
 //
 //
 //
@@ -43956,26 +43861,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-
-
+//
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mixins: [__WEBPACK_IMPORTED_MODULE_4__mixins_isPageComponent__["a" /* default */]],
-
     components: {
         StreamSetupWidget: __WEBPACK_IMPORTED_MODULE_0__widgets_StreamSetupWidget_vue___default.a,
         TwitchChatWidget: __WEBPACK_IMPORTED_MODULE_1__widgets_TwitchChatWidget_vue___default.a,
         ProfileWidget: __WEBPACK_IMPORTED_MODULE_2__widgets_ProfileWidget_vue___default.a
-    },
-    computed: {
-        user: function user() {
-            return this.$store.getters.getUser;
-        }
     }
 });
 
@@ -44209,6 +44105,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
+            initialized: false,
             isLoading: false,
             games: [],
             game: null,
@@ -44221,12 +44118,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a,
         Multiselect: __WEBPACK_IMPORTED_MODULE_1_vue_multiselect___default.a
     },
+    computed: {
+        channel: function channel() {
+            return this.$store.getters.getChannel;
+        }
+    },
+    watch: {
+        channel: function channel() {
+            if (!this.initialized && this.channel.status) {
+                this.title = this.channel.status;
+                this.games.push({ name: this.channel.game });
+                this.game = { name: this.channel.game };
+                this.initialized = true;
+            }
+        }
+    },
     methods: {
         asyncFind: function asyncFind(query) {
             var _this = this;
 
             if (query !== '') {
                 this.isLoading = true;
+
                 axios.get('https://api.twitch.tv/kraken/search/games', {
                     params: {
                         'client_id': this.clientId,
@@ -44259,32 +44172,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         }
-    },
-    computed: {
-        user: function user() {
-            return this.$store.getters.getUser;
-        },
-        channel: function channel() {
-            return this.$store.getters.getChannel;
-        },
-        current_title: function current_title() {
-            return this.channel.status;
-        },
-        current_game: function current_game() {
-            return this.channel.game;
-        }
-    },
-    created: function created() {
-        var _this3 = this;
-
-        var setup = setInterval(function () {
-            if (_this3.channel.status) {
-                _this3.title = _this3.channel.status;
-                _this3.games.push({ name: _this3.channel.game });
-                _this3.game = { name: _this3.channel.game };
-                clearInterval(setup);
-            }
-        }, 1000);
     }
 });
 
@@ -44325,92 +44212,96 @@ var render = function() {
         _vm._v("\n            Stream Setup Widget v1.0 Beta\n        ")
       ]),
       _vm._v(" "),
-      _c("form", { staticClass: "smart-form" }, [
-        _c("header", [_vm._v("\n                Setup Stream\n            ")]),
-        _vm._v(" "),
-        _c("fieldset", [
-          _c("section", [
-            _c("label", { staticClass: "input" }, [
-              _c("i", { staticClass: "icon-append fa fa-comment" }),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.title,
-                    expression: "title"
-                  }
-                ],
-                attrs: { type: "text", placeholder: _vm.current_title },
-                domProps: { value: _vm.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+      _vm.initialized
+        ? _c("form", { staticClass: "smart-form" }, [
+            _c("header", [
+              _vm._v("\n                Setup Stream\n            ")
+            ]),
+            _vm._v(" "),
+            _c("fieldset", [
+              _c("section", [
+                _c("label", { staticClass: "input" }, [
+                  _c("i", { staticClass: "icon-append fa fa-comment" }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.title,
+                        expression: "title"
+                      }
+                    ],
+                    attrs: { type: "text", placeholder: _vm.channel.status },
+                    domProps: { value: _vm.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.title = $event.target.value
+                      }
                     }
-                    _vm.title = $event.target.value
-                  }
-                }
-              }),
+                  }),
+                  _vm._v(" "),
+                  _c("b", { staticClass: "tooltip tooltip-bottom-right" }, [
+                    _vm._v(
+                      "\n                            Enter the title of your stream.\n                        "
+                    )
+                  ])
+                ])
+              ]),
               _vm._v(" "),
-              _c("b", { staticClass: "tooltip tooltip-bottom-right" }, [
-                _vm._v(
-                  "\n                            Enter the title of your stream.\n                        "
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "section",
-            [
-              _c("multiselect", {
-                attrs: {
-                  "open-direction": "bottom",
-                  searchable: true,
-                  "max-height": 300,
-                  options: _vm.games,
-                  loading: _vm.isLoading,
-                  "internal-search": false,
-                  "close-on-select": true,
-                  placeholder: "Search ...",
-                  label: "name",
-                  "track-by": "name"
+              _c(
+                "section",
+                [
+                  _c("multiselect", {
+                    attrs: {
+                      "open-direction": "bottom",
+                      searchable: true,
+                      "max-height": 300,
+                      options: _vm.games,
+                      loading: _vm.isLoading,
+                      "internal-search": false,
+                      "close-on-select": true,
+                      placeholder: "Search ...",
+                      label: "name",
+                      "track-by": "name"
+                    },
+                    on: { "search-change": _vm.asyncFind },
+                    model: {
+                      value: _vm.game,
+                      callback: function($$v) {
+                        _vm.game = $$v
+                      },
+                      expression: "game"
+                    }
+                  })
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("footer", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.updateStream()
+                    }
+                  }
                 },
-                on: { "search-change": _vm.asyncFind },
-                model: {
-                  value: _vm.game,
-                  callback: function($$v) {
-                    _vm.game = $$v
-                  },
-                  expression: "game"
-                }
-              })
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c("footer", [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.updateStream()
-                }
-              }
-            },
-            [
-              _c("i", { staticClass: "fa fa-save" }),
-              _vm._v("\n                    Update\n                ")
-            ]
-          )
-        ])
-      ])
+                [
+                  _c("i", { staticClass: "fa fa-save" }),
+                  _vm._v("\n                    Update\n                ")
+                ]
+              )
+            ])
+          ])
+        : _vm._e()
     ])
   ])
 }
@@ -44729,7 +44620,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -44769,7 +44660,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.overlay {\n    background: #000000;\n    display: none;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    opacity: 0.5;\n}\n.profile-pic > a > img {\n    border-radius: 0;\n    position: relative;\n    border: 5px solid #fff;\n    top: -30px;\n    left: 10px;\n    display: inline-block;\n    text-align: right;\n    z-index: 4;\n    max-width: 100px;\n    margin-bottom: -30px;\n}\n.profile-header {\n    position: relative !important\n}\n.profile-header .profile-header-inner {\n    max-height: 150px;\n    position: relative;\n    overflow: hidden;\n    width: 100%;\n}\n.followers-list li {\n    margin-bottom: 5px !important;\n    margin-right: 5px !important;\n    padding: 0 !important;\n}\n.followers-list img {\n    width: 35px;\n    border: 1px solid #fff;\n    outline: 1px solid #bfbfbf;\n}\n.profile-actions {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n}\n.profile-actions li {\n    margin-bottom: 5px;\n}\n.follow-btn.bg-color-green:hover {\n    background-color: #8b111c !important;\n}\n.follow-btn.bg-color-purple:hover {\n    background-color: #126410 !important;\n}\n", ""]);
+exports.push([module.i, "\n.profile-pic > a > img {\n    border-radius: 0;\n    position: relative;\n    border: 5px solid #fff;\n    top: -30px;\n    left: 10px;\n    display: inline-block;\n    text-align: right;\n    z-index: 4;\n    max-width: 100px;\n    margin-bottom: -30px;\n}\n.profile-header {\n    position: relative !important\n}\n.profile-header .profile-header-inner {\n    max-height: 150px;\n    position: relative;\n    overflow: hidden;\n    width: 100%;\n}\n.followers-list li {\n    margin-bottom: 5px !important;\n    margin-right: 5px !important;\n    padding: 0 !important;\n}\n.followers-list img {\n    width: 35px;\n    border: 1px solid #fff;\n    outline: 1px solid #bfbfbf;\n}\n.profile-actions {\n    padding: 0;\n    margin: 0;\n    list-style: none;\n}\n.profile-actions li {\n    margin-bottom: 5px;\n}\n.follow-btn.bg-color-green:hover {\n    background-color: #8b111c !important;\n}\n.follow-btn.bg-color-purple:hover {\n    background-color: #126410 !important;\n}\n", ""]);
 
 // exports
 
@@ -44966,24 +44857,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {},
     components: {
         Widget: __WEBPACK_IMPORTED_MODULE_0__Widget_vue___default.a
     },
     data: function data() {
         return {
+            initialized: false,
             channel: {},
             followers: {},
             following: false,
-            my_channel: {},
             prev_channels: [],
             history: [],
             btn: {
@@ -44996,9 +44883,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
+    computed: {
+        recent_followers: function recent_followers() {
+            return _.take(this.followers.follows, 18);
+        },
+        date_joined: function date_joined() {
+            return new Date(this.channel.created_at).toDateString();
+        },
+        my_channel: function my_channel() {
+            return this.$store.getters.getChannel;
+        }
+    },
     watch: {
-        followers: function followers() {
-            this.$parent.activateTooltips();
+        my_channel: function my_channel() {
+            if (!this.initialized && this.my_channel._id) {
+                this.getMyChannel();
+                this.initialized = true;
+            }
         }
     },
     methods: {
@@ -45055,11 +44956,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                 channel_id: channel_id
                             }
                         }).then(function (response) {
-                            //                                console.log({
-                            //                                    msg: 'Get Channel (not following)',
-                            //                                    channel: response.data,
-                            //                                });
-
                             _this2.channel = response.data;
                             resolve(response.data);
                         }).catch(function (error) {
@@ -45069,12 +44965,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         });
                     } else {
                         _this2.isFollowing();
-
-                        //                            console.log({
-                        //                                msg: 'Get Channel (following)',
-                        //                                channel: response.data.channel,
-                        //                            });
-
                         _this2.channel = response.data.channel;
                         resolve(response.data.channel);
                     }
@@ -45088,9 +44978,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getMyChannel: function getMyChannel() {
             var _this3 = this;
 
-            this.$emit('loading', true);
-
-            this.my_channel = this.$root.channel;
             this.channel = this.my_channel;
             this.notFollowing();
 
@@ -45100,13 +44987,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.error(error);
                 __WEBPACK_IMPORTED_MODULE_1_Utilities_alerts__["c" /* error */]('getMyChannel: Unable to get followers');
             });
-
-            this.$emit('loading', false);
         },
         setChannel: function setChannel(channel_id) {
             var _this4 = this;
-
-            this.$emit('loading', true);
 
             /**
              * Lets add the channel we are leaving to the prev_channels list for "back()" navigation
@@ -45130,16 +45013,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 this.getChannel(channel_id).then(function (channel) {
                     _this4.getFollowers(channel._id).then(function (followers) {
-                        //                            console.log({
-                        //                                msg: 'Adding to History',
-                        //                                channel_id: channel._id,
-                        //                                data: {
-                        //                                    channel: channel,
-                        //                                    followers: followers,
-                        //                                    following: this.following
-                        //                                }
-                        //                            });
-
                         _this4.lsSet(channel, followers, _this4.following);
                     }).catch(function (error) {
                         __WEBPACK_IMPORTED_MODULE_1_Utilities_alerts__["c" /* error */](error.response);
@@ -45148,8 +45021,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     __WEBPACK_IMPORTED_MODULE_1_Utilities_alerts__["c" /* error */](error.response);
                 });
             }
-
-            this.$emit('loading', false);
         },
         inHistory: function inHistory(channel_id) {
 
@@ -45183,15 +45054,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.notFollowing();
             }
-
-            //                console.log({
-            //                    msg: 'Loading from History',
-            //                    channel_id: channel_id,
-            //                    channel: this.channel,
-            //                    followers: this.followers,
-            //                    following: this.following,
-            //                    ls: o
-            //                });
         },
         back: function back() {
             this.$emit('loading', true);
@@ -45223,20 +45085,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
         }
-    },
-    computed: {
-        recent_followers: function recent_followers() {
-            return _.take(this.followers.follows, 18);
-        },
-        date_joined: function date_joined() {
-            return new Date(this.channel.created_at).toDateString();
-        },
-        user: function user() {
-            return this.$store.getters.getUser;
-        }
-    },
-    created: function created() {
-        this.getMyChannel();
     }
 });
 
@@ -45263,299 +45111,321 @@ var render = function() {
       _c("div", { attrs: { slot: "toolbars" }, slot: "toolbars" }),
       _vm._v(" "),
       _c("div", { attrs: { slot: "body" }, slot: "body" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "overlay" }, [
-            _c("img", { attrs: { src: "img/loading.gif", alt: "loading ..." } })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-sm-12" }, [
-            _c("div", { staticClass: "profile-header" }, [
-              _c("div", { staticClass: "air air-bottom-right padding-10" }, [
-                _vm.channel._id != _vm.user.channel_id
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-default btn-sm",
-                        on: {
-                          click: function($event) {
-                            _vm.getMyChannel()
-                          }
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "fa fa-user" }),
-                        _vm._v(" My Profile\n                        ")
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v("\n                         \n                        "),
-                _vm.prev_channels.length > 0
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn txt-color-white bg-color-teal btn-sm",
-                        on: {
-                          click: function($event) {
-                            _vm.back()
-                          }
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "fa fa-arrow-left" }),
-                        _vm._v(" Back\n                        ")
-                      ]
-                    )
-                  : _vm._e()
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "profile-header-inner" }, [
-                _c("div", [
-                  _c("img", {
-                    attrs: {
-                      src: _vm.channel.profile_banner,
-                      alt: "demo user",
-                      width: "100%"
-                    }
-                  })
-                ])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-sm-12" }, [
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-sm-3 profile-pic" }, [
-                _c(
-                  "a",
-                  { attrs: { href: _vm.channel.url, target: "_blank" } },
-                  [
-                    _c("img", {
-                      attrs: { src: _vm.channel.logo, alt: "demo user" }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "padding-10" }, [
-                  _c("h4", { staticClass: "font-md" }, [
-                    _c("strong", [_vm._v(_vm._s(_vm.channel.followers))]),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c("small", [_vm._v("Followers")])
-                  ]),
+        _vm.initialized
+          ? _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-sm-12" }, [
+                _c("div", { staticClass: "profile-header" }, [
+                  _c(
+                    "div",
+                    { staticClass: "air air-bottom-right padding-10" },
+                    [
+                      _vm.channel._id != _vm.my_channel._id
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-default btn-sm",
+                              on: {
+                                click: function($event) {
+                                  _vm.getMyChannel()
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fa fa-user" }),
+                              _vm._v(" My Profile\n                        ")
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(
+                        "\n                         \n                        "
+                      ),
+                      _vm.prev_channels.length > 0
+                        ? _c(
+                            "button",
+                            {
+                              staticClass:
+                                "btn txt-color-white bg-color-teal btn-sm",
+                              on: {
+                                click: function($event) {
+                                  _vm.back()
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "fa fa-arrow-left" }),
+                              _vm._v(" Back\n                        ")
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  ),
                   _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "font-md" }, [
-                    _c("strong", [_vm._v(_vm._s(_vm.channel.views))]),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c("small", [_vm._v("Views")])
+                  _c("div", { staticClass: "profile-header-inner" }, [
+                    _c("div", [
+                      _c("img", {
+                        attrs: {
+                          src: _vm.channel.profile_banner,
+                          alt: "demo user",
+                          width: "100%"
+                        }
+                      })
+                    ])
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-6" }, [
-                _c("h1", [_vm._v(_vm._s(_vm.channel.display_name))]),
-                _vm._v(" "),
-                _c("ul", { staticClass: "list-unstyled" }, [
-                  _c("li", [
-                    _c("p", { staticClass: "text-muted" }, [
-                      _c("i", { staticClass: "fa fa-twitch" }),
-                      _vm._v("  \n                                    "),
-                      _c("span", { staticClass: "txt-color-darken" }, [
-                        _vm._v(
-                          "\n                                        " +
-                            _vm._s(_vm.channel._id) +
-                            "\n                                    "
-                        )
+              _c("div", { staticClass: "col-sm-12" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm-3 profile-pic" }, [
+                    _c(
+                      "a",
+                      { attrs: { href: _vm.channel.url, target: "_blank" } },
+                      [
+                        _c("img", {
+                          attrs: { src: _vm.channel.logo, alt: "demo user" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "padding-10" }, [
+                      _c("h4", { staticClass: "font-md" }, [
+                        _c("strong", [_vm._v(_vm._s(_vm.channel.followers))]),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("small", [_vm._v("Followers")])
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "font-md" }, [
+                        _c("strong", [_vm._v(_vm._s(_vm.channel.views))]),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("small", [_vm._v("Views")])
                       ])
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm.channel.broadcaster_type !== ""
-                    ? _c("li", [
+                  _c("div", { staticClass: "col-sm-6" }, [
+                    _c("h1", [_vm._v(_vm._s(_vm.channel.display_name))]),
+                    _vm._v(" "),
+                    _c("ul", { staticClass: "list-unstyled" }, [
+                      _c("li", [
                         _c("p", { staticClass: "text-muted" }, [
                           _c("i", { staticClass: "fa fa-twitch" }),
                           _vm._v("  \n                                    "),
                           _c("span", { staticClass: "txt-color-darken" }, [
                             _vm._v(
                               "\n                                        " +
-                                _vm._s(_vm.channel.broadcaster_type) +
+                                _vm._s(_vm.channel._id) +
                                 "\n                                    "
                             )
                           ])
                         ])
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("p", { staticClass: "text-muted" }, [
-                      _c("i", { staticClass: "fa fa-calendar" }),
-                      _vm._v("  \n                                    "),
-                      _c("span", { staticClass: "txt-color-darken" }, [
-                        _vm._v(
-                          "\n                                        " +
-                            _vm._s(_vm.date_joined) +
-                            "\n                                    "
-                        )
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("p", { staticClass: "text-muted" }, [
-                      _c("i", { staticClass: "fa fa-gamepad" }),
-                      _vm._v("  \n                                    "),
-                      _c("span", { staticClass: "txt-color-darken" }, [
-                        _vm._v(
-                          "\n                                        " +
-                            _vm._s(_vm.channel.game) +
-                            "\n                                    "
-                        )
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm.channel.email
-                    ? _c("li", [
-                        _c("p", { staticClass: "text-muted" }, [
-                          _c("i", { staticClass: "fa fa-envelope" }),
-                          _vm._v("  \n                                    "),
-                          _c(
-                            "a",
-                            { attrs: { href: "mailto:" + _vm.channel.email } },
-                            [
+                      ]),
+                      _vm._v(" "),
+                      _vm.channel.broadcaster_type !== ""
+                        ? _c("li", [
+                            _c("p", { staticClass: "text-muted" }, [
+                              _c("i", { staticClass: "fa fa-twitch" }),
                               _vm._v(
-                                "\n                                        " +
-                                  _vm._s(_vm.channel.email) +
-                                  "\n                                    "
-                              )
-                            ]
-                          )
-                        ])
-                      ])
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("p", { staticClass: "font-md" }, [
-                  _c("i", [_vm._v("A little about me...")])
-                ]),
-                _vm._v(" "),
-                _c("p", [_vm._v(_vm._s(_vm.channel.description))]),
-                _vm._v(" "),
-                _vm.channel._id != _vm.user.channel_id
-                  ? _c("ul", { staticClass: "profile-actions" }, [
+                                "  \n                                    "
+                              ),
+                              _c("span", { staticClass: "txt-color-darken" }, [
+                                _vm._v(
+                                  "\n                                        " +
+                                    _vm._s(_vm.channel.broadcaster_type) +
+                                    "\n                                    "
+                                )
+                              ])
+                            ])
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("li", [
-                        _c(
-                          "button",
-                          {
-                            class: _vm.btn.following.classes,
-                            on: {
-                              mouseenter: _vm.btnFollowingHover,
-                              mouseleave: _vm.btnFollowingHover
-                            }
-                          },
-                          [
-                            _c("i", { class: ["fa", _vm.btn.following.icon] }),
+                        _c("p", { staticClass: "text-muted" }, [
+                          _c("i", { staticClass: "fa fa-calendar" }),
+                          _vm._v("  \n                                    "),
+                          _c("span", { staticClass: "txt-color-darken" }, [
                             _vm._v(
-                              " " +
-                                _vm._s(_vm.btn.following.text) +
-                                "\n                                "
+                              "\n                                        " +
+                                _vm._s(_vm.date_joined) +
+                                "\n                                    "
                             )
-                          ]
-                        )
+                          ])
+                        ])
                       ]),
                       _vm._v(" "),
                       _c("li", [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "btn btn-xs bg-color-blueLight txt-color-white"
-                          },
-                          [
-                            _c("i", { staticClass: "fa fa-comments" }),
+                        _c("p", { staticClass: "text-muted" }, [
+                          _c("i", { staticClass: "fa fa-gamepad" }),
+                          _vm._v("  \n                                    "),
+                          _c("span", { staticClass: "txt-color-darken" }, [
                             _vm._v(
-                              " Send Message\n                                "
+                              "\n                                        " +
+                                _vm._s(_vm.channel.game) +
+                                "\n                                    "
                             )
-                          ]
-                        )
-                      ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("br")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-3" }, [
-                _c("h1", [_c("small", [_vm._v("Recent Followers")])]),
-                _vm._v(" "),
-                _c(
-                  "ul",
-                  { staticClass: "list-inline followers-list" },
-                  [
-                    _vm._l(_vm.recent_followers, function(follower) {
-                      return _c("li", [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                _vm.setChannel(follower.user._id)
-                              }
-                            }
-                          },
-                          [
-                            follower.user.logo != null
-                              ? _c("img", {
-                                  attrs: {
-                                    src: follower.user.logo,
-                                    alt: follower.user.name,
-                                    rel: "tooltip",
-                                    "data-placement": "top",
-                                    "data-original-title":
-                                      follower.user.display_name
-                                  }
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            follower.user.logo == null
-                              ? _c("img", {
-                                  attrs: {
-                                    src: "img/avatars/male.png",
-                                    alt: follower.user.name,
-                                    rel: "tooltip",
-                                    "data-placement": "top",
-                                    "data-original-title":
-                                      follower.user.display_name
-                                  }
-                                })
-                              : _vm._e()
-                          ]
-                        )
-                      ])
-                    }),
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm.channel.email
+                        ? _c("li", [
+                            _c("p", { staticClass: "text-muted" }, [
+                              _c("i", { staticClass: "fa fa-envelope" }),
+                              _vm._v(
+                                "  \n                                    "
+                              ),
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "mailto:" + _vm.channel.email }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(_vm.channel.email) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        : _vm._e()
+                    ]),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("a", { attrs: { href: "javascript:void(0);" } }, [
-                        _vm._v("See All")
-                      ])
-                    ])
-                  ],
-                  2
-                )
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "font-md" }, [
+                      _c("i", [_vm._v("A little about me...")])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(_vm.channel.description))]),
+                    _vm._v(" "),
+                    _vm.channel._id != _vm.my_channel._id
+                      ? _c("ul", { staticClass: "profile-actions" }, [
+                          _c("li", [
+                            _c(
+                              "button",
+                              {
+                                class: _vm.btn.following.classes,
+                                on: {
+                                  mouseenter: _vm.btnFollowingHover,
+                                  mouseleave: _vm.btnFollowingHover
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  class: ["fa", _vm.btn.following.icon]
+                                }),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.btn.following.text) +
+                                    "\n                                "
+                                )
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "btn btn-xs bg-color-blueLight txt-color-white"
+                              },
+                              [
+                                _c("i", { staticClass: "fa fa-comments" }),
+                                _vm._v(
+                                  " Send Message\n                                "
+                                )
+                              ]
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("br")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-3" }, [
+                    _c("h1", { staticStyle: { "margin-left": "-5px" } }, [
+                      _c("small", [_vm._v("Recent Followers")])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      { staticClass: "list-inline followers-list" },
+                      [
+                        _vm._l(_vm.recent_followers, function(follower) {
+                          return _c("li", [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.setChannel(follower.user._id)
+                                  }
+                                }
+                              },
+                              [
+                                follower.user.logo != null
+                                  ? _c("img", {
+                                      attrs: {
+                                        src: follower.user.logo,
+                                        alt: follower.user.name,
+                                        rel: "tooltip",
+                                        "data-placement": "top",
+                                        "data-original-title":
+                                          follower.user.display_name
+                                      }
+                                    })
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                follower.user.logo == null
+                                  ? _c("img", {
+                                      attrs: {
+                                        src: "img/avatars/male.png",
+                                        alt: follower.user.name,
+                                        rel: "tooltip",
+                                        "data-placement": "top",
+                                        "data-original-title":
+                                          follower.user.display_name
+                                      }
+                                    })
+                                  : _vm._e()
+                              ]
+                            )
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("li", [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                href: _vm.channel.url + "/followers",
+                                target: "_blank"
+                              }
+                            },
+                            [_vm._v("See All")]
+                          )
+                        ])
+                      ],
+                      2
+                    )
+                  ])
+                ])
               ])
             ])
-          ])
-        ])
+          : _vm._e()
       ])
     ]
   )
@@ -48917,9 +48787,180 @@ var TwitchPubSub = function () {
 
 /***/ }),
 /* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.vMediaQuery=e():t.vMediaQuery=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var i=n[r]={exports:{},id:r,loaded:!1};return t[r].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports}var n={};return e.m=t,e.c=n,e.p="/dist/",e(0)}([function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){p=t.util.extend,y=t.util.defineReactive}function o(){var t=(0,m["default"])(function(){Object.keys(b).forEach(function(t){return++b[t][x.methods].resize})},150);window.addEventListener("resize",t)}function a(t){return t.length>0?t.reverse():t}function u(t){return(""+parseInt(t)).length===(""+t).length?t+"px":t}function f(t){return matchMedia(t).matches}function c(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(max-"+c+": "+u(o)+")").matches}function d(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(min-"+c+": "+u(o)+")").matches}function s(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(s)+") and\n    (max-"+c+": "+u(l)+")\n  ").matches}function l(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(l)+"),\n    (max-"+c+": "+u(s)+")\n  ").matches}Object.defineProperty(e,"__esModule",{value:!0});var v=function(){function t(t,e){var n=[],r=!0,i=!1,o=void 0;try{for(var a,u=t[Symbol.iterator]();!(r=(a=u.next()).done)&&(n.push(a.value),!e||n.length!==e);r=!0);}catch(f){i=!0,o=f}finally{try{!r&&u["return"]&&u["return"]()}finally{if(i)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),h=n(1),m=r(h),p=void 0,y=void 0,b={},x={methods:"$mq",variables:"$mv"},g={expr:f,below:c,above:d,beyond:l,between:s},j={created:function(){var t=this.$parent;t?y(this[x.methods],"resize",t[x.methods].resize):(b[this._uid]=this,y(this[x.methods],"resize",1))}};e["default"]={methods:g,install:function(t){var e=arguments.length<=1||void 0===arguments[1]?{}:arguments[1],n=e.methods,r=void 0===n?{}:n,a=e.variables,u=void 0===a?{}:a,f=e.nameSpace,c=void 0===f?{}:f;i(t),p(x,c),t.mixin(j),t.prototype[x.methods]=p(p({},g),r),t.prototype[x.variables]=u,o()}}},function(t,e){(function(e){function n(t,e,n){function r(e){var n=m,r=p;return m=p=void 0,O=e,b=t.apply(r,n)}function o(t){return O=t,x=setTimeout(d,e),T?r(t):b}function a(t){var n=t-g,r=t-O,i=e-n;return $?w(i,y-r):i}function c(t){var n=t-g,r=t-O;return void 0===g||n>=e||0>n||$&&r>=y}function d(){var t=M();return c(t)?s(t):void(x=setTimeout(d,a(t)))}function s(t){return x=void 0,A&&m?r(t):(m=p=void 0,b)}function l(){void 0!==x&&clearTimeout(x),O=0,m=g=p=x=void 0}function v(){return void 0===x?b:s(M())}function h(){var t=M(),n=c(t);if(m=arguments,p=this,g=t,n){if(void 0===x)return o(g);if($)return x=setTimeout(d,e),r(g)}return void 0===x&&(x=setTimeout(d,e)),b}var m,p,y,b,x,g,O=0,T=!1,$=!1,A=!0;if("function"!=typeof t)throw new TypeError(f);return e=u(e)||0,i(n)&&(T=!!n.leading,$="maxWait"in n,y=$?j(u(n.maxWait)||0,e):y,A="trailing"in n?!!n.trailing:A),h.cancel=l,h.flush=v,h}function r(t,e,r){var o=!0,a=!0;if("function"!=typeof t)throw new TypeError(f);return i(r)&&(o="leading"in r?!!r.leading:o,a="trailing"in r?!!r.trailing:a),n(t,e,{leading:o,maxWait:e,trailing:a})}function i(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function o(t){return!!t&&"object"==typeof t}function a(t){return"symbol"==typeof t||o(t)&&g.call(t)==d}function u(t){if("number"==typeof t)return t;if(a(t))return c;if(i(t)){var e="function"==typeof t.valueOf?t.valueOf():t;t=i(e)?e+"":e}if("string"!=typeof t)return 0===t?t:+t;t=t.replace(s,"");var n=v.test(t);return n||h.test(t)?m(t.slice(2),n?2:8):l.test(t)?c:+t}var f="Expected a function",c=NaN,d="[object Symbol]",s=/^\s+|\s+$/g,l=/^[-+]0x[0-9a-f]+$/i,v=/^0b[01]+$/i,h=/^0o[0-7]+$/i,m=parseInt,p="object"==typeof e&&e&&e.Object===Object&&e,y="object"==typeof self&&self&&self.Object===Object&&self,b=p||y||Function("return this")(),x=Object.prototype,g=x.toString,j=Math.max,w=Math.min,M=function(){return b.Date.now()};t.exports=r}).call(e,function(){return this}())}])});
+
+/***/ }),
+/* 142 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.sentinel = factory();
+  }
+}(this, function() {
+var isArray = Array.isArray,
+    selectorToAnimationMap = {},
+    animationCallbacks = {},
+    styleEl,
+    styleSheet,
+    cssRules;
+
+
+return {
+  /**
+   * Add watcher.
+   * @param {array} cssSelectors - List of CSS selector strings
+   * @param {Function} callback - The callback function
+   */
+  on: function(cssSelectors, callback) {
+    if (!callback) return;
+
+    // initialize animationstart event listener
+    if (!styleEl) {
+      var doc = document,
+          head = doc.head;
+
+      // add animationstart event listener
+      doc.addEventListener('animationstart', function(ev, callbacks, l, i) {
+        callbacks = animationCallbacks[ev.animationName];
+
+        // exit if callbacks haven't been registered
+        if (!callbacks) return;
+
+        // stop other callbacks from firing
+        ev.stopImmediatePropagation();
+
+        // iterate through callbacks
+        l = callbacks.length;
+        for (i=0; i < l; i++) callbacks[i](ev.target);
+      }, true);
+      
+      // add stylesheet to document
+      styleEl = doc.createElement('style');
+      head.insertBefore(styleEl, head.firstChild);
+      styleSheet = styleEl.sheet;
+      cssRules = styleSheet.cssRules;
+    }
+    
+    // listify argument and add css rules/ cache callbacks
+    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
+      .map(function(selector, animId, isCustomName) {
+        animId = selectorToAnimationMap[selector];
+        
+        if (!animId) {
+          isCustomName = selector[0] == '!';
+
+          // define animation name and add to map
+          selectorToAnimationMap[selector] = animId = 
+            isCustomName ? selector.slice(1) : 'sentinel-' + 
+            Math.random().toString(16).slice(2);
+          
+          // add keyframe rule
+          cssRules[styleSheet.insertRule(
+            '@keyframes ' + animId + 
+              '{from{transform:none;}to{transform:none;}}',
+            cssRules.length)]
+            ._id = selector;
+            
+          // add selector animation rule
+          if (!isCustomName) {
+            cssRules[styleSheet.insertRule(
+              selector + '{animation-duration:0.0001s;animation-name:' + 
+                animId + ';}',
+              cssRules.length)]
+              ._id = selector;
+          }
+
+          // add to map
+          selectorToAnimationMap[selector] = animId;
+        }
+        
+        // add to callbacks
+        (animationCallbacks[animId] = animationCallbacks[animId] || [])
+          .push(callback);
+      });
+  },
+  /**
+   * Remove watcher.
+   * @param {array} cssSelectors - List of CSS selector strings
+   * @param {Function} callback - The callback function (optional)
+   */
+  off: function(cssSelectors, callback) {
+    // listify argument and iterate through rules
+    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
+      .map(function(selector, animId, callbackList, i) {
+        // get animId
+        if (!(animId = selectorToAnimationMap[selector])) return;
+
+        // get callbacks
+        callbackList = animationCallbacks[animId];
+
+        // remove callback from list
+        if (callback) {
+          i = callbackList.length;
+          
+          while (i--) {
+            if (callbackList[i] === callback) callbackList.splice(i, 1);
+          }
+        } else {
+          callbackList = [];
+        }
+        
+        // exit if callbacks still exist
+        if (callbackList.length) return;
+        
+        // clear cache and remove css rules
+        i = cssRules.length;
+        
+        while (i--) {
+          if (cssRules[i]._id == selector) styleSheet.deleteRule(i);
+        }
+        
+        delete selectorToAnimationMap[selector];
+        delete animationCallbacks[animId];
+      });
+  },
+  /**
+   * Reset watchers and cache
+   */
+  reset: function() {
+    selectorToAnimationMap = {};
+    animationCallbacks = {};
+    if (styleEl) styleEl.parentNode.removeChild(styleEl);
+    styleEl = 0;
+  }
+};
+
+}));
+
 
 /***/ })
 /******/ ]);

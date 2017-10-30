@@ -60,6 +60,7 @@
         props: ['video'],
         data() {
             return {
+                initialized: false,
                 playlist: {},
                 itemCount: 0
             }
@@ -69,6 +70,12 @@
                 this.itemCount = 0;
 
                 this.getItemCount();
+            },
+            playlists() {
+                if (!this.initialized && this.playlists[0]) {
+                    this.playlist = this.playlists[0];
+                    this.initialized = true;
+                }
             }
         },
         computed: {
@@ -148,29 +155,22 @@
             },
 
             getItemCount() {
-                if (this.video.id.playlistId) {
-                    axios.get('/api/playlists/youtube/playlist', {
-                        params: {
-                            id: this.video.id.playlistId
-                        }
-                    }).then((response) => {
-                        this.itemCount = response.data.contentDetails.itemCount;
-                    }).catch((error) => {
-                        console.error(error.response);
-                        alerts.error(error.response);
-                    });
-                }
+                axios.get('/api/playlists/youtube/playlist', {
+                    params: {
+                        id: this.video.id.playlistId
+                    }
+                }).then((response) => {
+                    this.itemCount = response.data.contentDetails.itemCount;
+                }).catch((error) => {
+                    console.error(error.response);
+                    alerts.error(error.response);
+                });
             }
         },
         created() {
-            let setup = setInterval(() => {
-                if (this.playlists[0]) {
-                    this.playlist = this.playlists[0];
-                    clearInterval(setup);
-                }
-            }, 1000);
-
-            this.getItemCount();
+            if (this.video.id.playlistId) {
+                this.getItemCount();
+            }
         }
     }
 </script>

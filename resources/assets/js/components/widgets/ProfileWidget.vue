@@ -14,16 +14,13 @@
 
         <div slot="body">
             <!-- MAIN CONTAINER -->
-            <div class="row">
-                <div class="overlay">
-                    <img src="img/loading.gif" alt="loading ...">
-                </div>
+            <div class="row" v-if="initialized">
 
                 <div class="col-sm-12">
                     <div class="profile-header">
                         <div class="air air-bottom-right padding-10">
                             <button class="btn btn-default btn-sm"
-                                    v-if="channel._id != user.channel_id"
+                                    v-if="channel._id != my_channel._id"
                                     @click="getMyChannel()"
                             >
                                 <i class="fa fa-user"></i> My Profile
@@ -120,7 +117,7 @@
 
                             <p>{{channel.description}}</p>
 
-                            <ul class="profile-actions" v-if="channel._id != user.channel_id">
+                            <ul class="profile-actions" v-if="channel._id != my_channel._id">
                                 <li>
                                     <button :class="btn.following.classes"
                                             @mouseenter="btnFollowingHover"
@@ -141,7 +138,7 @@
 
                         </div>
                         <div class="col-sm-3">
-                            <h1>
+                            <h1 style="margin-left: -5px">
                                 <small>Recent Followers</small>
                             </h1>
                             <ul class="list-inline followers-list">
@@ -164,7 +161,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);">See All</a>
+                                    <a :href="`${channel.url}/followers`" target="_blank">See All</a>
                                 </li>
                             </ul>
 
@@ -190,16 +187,15 @@
 
 
     export default {
-        props: {},
         components: {
             Widget
         },
         data() {
             return {
+                initialized: false,
                 channel: {},
                 followers: {},
                 following: false,
-                my_channel: {},
                 prev_channels: [],
                 history: [],
                 btn: {
@@ -217,9 +213,23 @@
                 }
             }
         },
+        computed: {
+            recent_followers() {
+                return _.take(this.followers.follows, 18);
+            },
+            date_joined() {
+                return new Date(this.channel.created_at).toDateString();
+            },
+            my_channel() {
+                return this.$store.getters.getChannel;
+            }
+        },
         watch: {
-            followers() {
-                this.$parent.activateTooltips();
+            my_channel() {
+                if(!this.initialized && this.my_channel._id) {
+                    this.getMyChannel();
+                    this.initialized = true;
+                }
             }
         },
         methods: {
@@ -284,11 +294,6 @@
                                     channel_id: channel_id
                                 }
                             }).then((response) => {
-//                                console.log({
-//                                    msg: 'Get Channel (not following)',
-//                                    channel: response.data,
-//                                });
-
                                 this.channel = response.data;
                                 resolve(response.data);
                             }).catch((error) => {
@@ -298,12 +303,6 @@
                             });
                         } else {
                             this.isFollowing();
-
-//                            console.log({
-//                                msg: 'Get Channel (following)',
-//                                channel: response.data.channel,
-//                            });
-
                             this.channel = response.data.channel;
                             resolve(response.data.channel);
                         }
@@ -315,9 +314,6 @@
                 });
             },
             getMyChannel() {
-                this.$emit('loading', true);
-
-                this.my_channel = this.$root.channel;
                 this.channel = this.my_channel;
                 this.notFollowing();
 
@@ -328,11 +324,8 @@
                     alerts.error('getMyChannel: Unable to get followers');
                 });
 
-                this.$emit('loading', false);
             },
             setChannel(channel_id) {
-                this.$emit('loading', true);
-
                 /**
                  * Lets add the channel we are leaving to the prev_channels list for "back()" navigation
                  */
@@ -356,16 +349,6 @@
 
                     this.getChannel(channel_id).then((channel) => {
                         this.getFollowers(channel._id).then((followers) => {
-//                            console.log({
-//                                msg: 'Adding to History',
-//                                channel_id: channel._id,
-//                                data: {
-//                                    channel: channel,
-//                                    followers: followers,
-//                                    following: this.following
-//                                }
-//                            });
-
                             this.lsSet(channel, followers, this.following);
                         }).catch((error) => {
                             alerts.error(error.response);
@@ -374,8 +357,6 @@
                         alerts.error(error.response);
                     });
                 }
-
-                this.$emit('loading', false);
             },
             inHistory(channel_id) {
 
@@ -409,15 +390,6 @@
                 } else {
                     this.notFollowing();
                 }
-
-//                console.log({
-//                    msg: 'Loading from History',
-//                    channel_id: channel_id,
-//                    channel: this.channel,
-//                    followers: this.followers,
-//                    following: this.following,
-//                    ls: o
-//                });
             },
             back() {
                 this.$emit('loading', true);
@@ -454,35 +426,10 @@
                     }
                 }
             },
-        },
-        computed: {
-            recent_followers() {
-                return _.take(this.followers.follows, 18);
-            },
-            date_joined() {
-                return new Date(this.channel.created_at).toDateString();
-            },
-            user() {
-                return this.$store.getters.getUser;
-            },
-        },
-        created() {
-            this.getMyChannel();
         }
     }
 </script>
 <style type="scss">
-    .overlay {
-        background: #000000;
-        display: none;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        opacity: 0.5;
-    }
-
     .profile-pic > a > img {
         border-radius: 0;
         position: relative;

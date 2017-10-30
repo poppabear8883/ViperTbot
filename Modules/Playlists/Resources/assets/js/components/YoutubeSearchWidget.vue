@@ -129,9 +129,6 @@
             Widget,
             YoutubeMediaObject
         },
-        computed: {
-
-        },
         methods: {
             search() {
                 if (this.term.length > 2) {
