@@ -24,10 +24,16 @@ require('Modules/Playlists/Resources/assets/js/components/register');
  */
 require('./components/register');
 
-import store from './vuex/store'
+import store from './vuex/store';
+import VueLocalStorage from 'vue-localstorage';
 import {TwitchPubSub} from "./webhooks/TwitchPubSub";
 import {mapActions} from 'vuex';
 import * as alerts from './utils/alerts';
+
+Vue.use(VueLocalStorage, {
+    name: 'ls',
+    createComputed: true
+});
 
 const app = new Vue({
     el: '#app',

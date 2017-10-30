@@ -15,16 +15,16 @@ class TwitchController extends Controller
     /**
      * @var TwitchApi
      */
-    private $api;
+    private $twitch;
 
 
     /**
      * TwitchController constructor.
-     * @param TwitchApi $api
+     * @param TwitchApi $twitch
      */
-    public function __construct(TwitchApi $api)
+    public function __construct(TwitchApi $twitch)
     {
-        $this->api = $api;
+        $this->twitch = $twitch;
     }
 
     /**
@@ -34,23 +34,56 @@ class TwitchController extends Controller
      */
     public function liveChannels()
     {
-        return response($this->api->liveChannels($this->token()), 200);
+        return response($this->twitch->liveChannels($this->token()), 200);
     }
 
-    public function followers()
+    public function channel(Request $request)
     {
-        $response = $this->api->followers($this->channel_id(), []);
+        $request->validate([
+            'channel_id' => 'required'
+        ]);
+
+        return response($this->twitch->channel($request->input('channel_id')), 200);
+    }
+
+    public function followers(Request $request)
+    {
+        $channel = $this->channel_id();
+
+        if ($request->has('channel_id')) {
+            $channel = $request->input('channel_id');
+        }
+
+        $response = $this->twitch->followers($channel, []);
         return response($response, 200);
     }
 
     public function following()
     {
-        $following = $this->api->followings($this->channel_id(), []);
+        $following = $this->twitch->followings($this->channel_id(), []);
         return response([
             'total' => $following['_total'],
             'streams' => $following['follows'],
-            'online' => $this->api->liveChannels($this->token())
+            'online' => $this->twitch->liveChannels($this->token())
         ], 200);
+    }
+
+    public function isFollowing(Request $request)
+    {
+        $request->validate([
+            'channel_id' => 'required',
+            'following_id' => 'required'
+        ]);
+
+        $channel_id = $request->input('channel_id');
+        $following_id = $request->input('following_id');
+
+        $response = $this->twitch->userIsFollowing($channel_id, $following_id);
+
+        if (isset($response->error))
+            return response($response->status, 200);
+
+        return response($response, 200);
     }
 
 
@@ -61,7 +94,7 @@ class TwitchController extends Controller
      */
     public function authChannel()
     {
-        return response($this->api->authChannel($this->token()), 200);
+        return response($this->twitch->authChannel($this->token()), 200);
     }
 
 
@@ -73,8 +106,8 @@ class TwitchController extends Controller
      */
     public function updateChannel(Request $request)
     {
-        $this->api->updateChannel($this->channel_id(), $request->all(), $this->token());
-        return response($this->api->authChannel($this->token()), 200);
+        $this->twitch->updateChannel($this->channel_id(), $request->all(), $this->token());
+        return response($this->twitch->authChannel($this->token()), 200);
     }
 
 }

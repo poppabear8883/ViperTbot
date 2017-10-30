@@ -19,9 +19,10 @@
          :id="widId"
          data-widget-editbutton="false"
          role="widget"
+         @loading="loading()"
     >
 
-        <header role="heading">
+        <header role="heading" :class="[is_loading ? 'widget-body-ajax-loading' : '']">
             <div class="jarviswidget-ctrls" role="menu">
 
                 <a v-if="collapse" href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title=""
@@ -70,7 +71,7 @@
         </header>
 
         <!-- widget div-->
-        <div role="content">
+        <div role="content" :class="[is_loading ? 'widget-body-ajax-loading' : '']">
 
             <!-- widget content -->
             <div class="widget-body widget-hide-overflow no-padding">
@@ -126,7 +127,7 @@
 
         data() {
             return{
-
+                is_loading: false
             }
         },
         components:{
@@ -142,7 +143,16 @@
         methods: {
             colorChanged(color) {
                 this.$emit('colorChanged', `bg-color-${color}`)
+            },
+            loading(e) {
+                console.log({
+                    event: e,
+                });
+                this.is_loading = e;
             }
         }
     }
 </script>
+<style>
+
+</style>

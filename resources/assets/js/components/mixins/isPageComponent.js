@@ -4,8 +4,10 @@ export default {
     },
     updated() {
         this.$nextTick(() => {
-            this.activateTooltips();
-            this.activatePopovers();
+            setTimeout(() => {
+                this.activateTooltips();
+                this.activatePopovers();
+            }, 50);
         });
     },
     mounted() {
@@ -16,12 +18,12 @@ export default {
              * This will allow us not to change ready state in a page component
              * that doesn't need to wait on data ??
              */
-            if (!this.ready) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (!this.ready) {
                     this.ready = true;
-                }, 3000)
+                }
+            }, 2000);
 
-            }
         });
     },
     data() {

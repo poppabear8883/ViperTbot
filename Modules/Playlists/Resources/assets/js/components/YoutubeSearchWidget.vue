@@ -129,7 +129,9 @@
             Widget,
             YoutubeMediaObject
         },
-        computed: {},
+        computed: {
+
+        },
         methods: {
             search() {
                 if (this.term.length > 2) {
