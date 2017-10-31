@@ -1,8 +1,8 @@
 <template>
-    <widget wid-id="5438974"
-            color="purple"
-            :fullscreen="true">
+    <widget wid-id="5438974" color="purple" :fullscreen="true">
+
         <div slot="title">Profile</div>
+
         <div slot="icon">
             <i class="fa fa-user txt-color-white"></i>
         </div>

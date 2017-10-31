@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -483,7 +483,7 @@ function applyToTag (styleElement, obj) {
 
 
 var bind = __webpack_require__(11);
-var isBuffer = __webpack_require__(28);
+var isBuffer = __webpack_require__(27);
 
 /*global toString:true*/
 
@@ -888,7 +888,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/Widget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\Widget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -1890,7 +1890,7 @@ module.exports = g;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(3);
-var normalizeHeaderName = __webpack_require__(30);
+var normalizeHeaderName = __webpack_require__(29);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -2226,12 +2226,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(3);
-var settle = __webpack_require__(31);
-var buildURL = __webpack_require__(33);
-var parseHeaders = __webpack_require__(34);
-var isURLSameOrigin = __webpack_require__(35);
+var settle = __webpack_require__(30);
+var buildURL = __webpack_require__(32);
+var parseHeaders = __webpack_require__(33);
+var isURLSameOrigin = __webpack_require__(34);
 var createError = __webpack_require__(13);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(36);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(35);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -2328,7 +2328,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(37);
+      var cookies = __webpack_require__(36);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -2412,7 +2412,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(32);
+var enhanceError = __webpack_require__(31);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -2474,7 +2474,7 @@ module.exports = Cancel;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.5.1
+ * Vue.js v2.5.2
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -2941,6 +2941,92 @@ function parsePath (path) {
 
 /*  */
 
+// can we use __proto__?
+var hasProto = '__proto__' in {};
+
+// Browser environment sniffing
+var inBrowser = typeof window !== 'undefined';
+var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && /msie|trident/.test(UA);
+var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+var isEdge = UA && UA.indexOf('edge/') > 0;
+var isAndroid = UA && UA.indexOf('android') > 0;
+var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
+var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
+
+// Firefox has a "watch" function on Object.prototype...
+var nativeWatch = ({}).watch;
+
+var supportsPassive = false;
+if (inBrowser) {
+  try {
+    var opts = {};
+    Object.defineProperty(opts, 'passive', ({
+      get: function get () {
+        /* istanbul ignore next */
+        supportsPassive = true;
+      }
+    })); // https://github.com/facebook/flow/issues/285
+    window.addEventListener('test-passive', null, opts);
+  } catch (e) {}
+}
+
+// this needs to be lazy-evaled because vue may be required before
+// vue-server-renderer can set VUE_ENV
+var _isServer;
+var isServerRendering = function () {
+  if (_isServer === undefined) {
+    /* istanbul ignore if */
+    if (!inBrowser && typeof global !== 'undefined') {
+      // detect presence of vue-server-renderer and avoid
+      // Webpack shimming the process
+      _isServer = global['process'].env.VUE_ENV === 'server';
+    } else {
+      _isServer = false;
+    }
+  }
+  return _isServer
+};
+
+// detect devtools
+var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+/* istanbul ignore next */
+function isNative (Ctor) {
+  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+}
+
+var hasSymbol =
+  typeof Symbol !== 'undefined' && isNative(Symbol) &&
+  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+
+var _Set;
+/* istanbul ignore if */ // $flow-disable-line
+if (typeof Set !== 'undefined' && isNative(Set)) {
+  // use native Set when available.
+  _Set = Set;
+} else {
+  // a non-standard Set polyfill that only works with primitive keys.
+  _Set = (function () {
+    function Set () {
+      this.set = Object.create(null);
+    }
+    Set.prototype.has = function has (key) {
+      return this.set[key] === true
+    };
+    Set.prototype.add = function add (key) {
+      this.set[key] = true;
+    };
+    Set.prototype.clear = function clear () {
+      this.set = Object.create(null);
+    };
+
+    return Set;
+  }());
+}
+
+/*  */
+
 var warn = noop;
 var tip = noop;
 var generateComponentTrace = (noop); // work around flow check
@@ -3031,220 +3117,6 @@ if (true) {
       return ("\n\n(found in " + (formatComponentName(vm)) + ")")
     }
   };
-}
-
-/*  */
-
-function handleError (err, vm, info) {
-  if (vm) {
-    var cur = vm;
-    while ((cur = cur.$parent)) {
-      var hooks = cur.$options.errorCaptured;
-      if (hooks) {
-        for (var i = 0; i < hooks.length; i++) {
-          try {
-            var capture = hooks[i].call(cur, err, vm, info) === false;
-            if (capture) { return }
-          } catch (e) {
-            globalHandleError(e, cur, 'errorCaptured hook');
-          }
-        }
-      }
-    }
-  }
-  globalHandleError(err, vm, info);
-}
-
-function globalHandleError (err, vm, info) {
-  if (config.errorHandler) {
-    try {
-      return config.errorHandler.call(null, err, vm, info)
-    } catch (e) {
-      logError(e, null, 'config.errorHandler');
-    }
-  }
-  logError(err, vm, info);
-}
-
-function logError (err, vm, info) {
-  if (true) {
-    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
-  }
-  /* istanbul ignore else */
-  if (inBrowser && typeof console !== 'undefined') {
-    console.error(err);
-  } else {
-    throw err
-  }
-}
-
-/*  */
-/* globals MessageChannel */
-
-// can we use __proto__?
-var hasProto = '__proto__' in {};
-
-// Browser environment sniffing
-var inBrowser = typeof window !== 'undefined';
-var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && /msie|trident/.test(UA);
-var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
-var isEdge = UA && UA.indexOf('edge/') > 0;
-var isAndroid = UA && UA.indexOf('android') > 0;
-var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
-var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
-
-// Firefox has a "watch" function on Object.prototype...
-var nativeWatch = ({}).watch;
-
-var supportsPassive = false;
-if (inBrowser) {
-  try {
-    var opts = {};
-    Object.defineProperty(opts, 'passive', ({
-      get: function get () {
-        /* istanbul ignore next */
-        supportsPassive = true;
-      }
-    })); // https://github.com/facebook/flow/issues/285
-    window.addEventListener('test-passive', null, opts);
-  } catch (e) {}
-}
-
-// this needs to be lazy-evaled because vue may be required before
-// vue-server-renderer can set VUE_ENV
-var _isServer;
-var isServerRendering = function () {
-  if (_isServer === undefined) {
-    /* istanbul ignore if */
-    if (!inBrowser && typeof global !== 'undefined') {
-      // detect presence of vue-server-renderer and avoid
-      // Webpack shimming the process
-      _isServer = global['process'].env.VUE_ENV === 'server';
-    } else {
-      _isServer = false;
-    }
-  }
-  return _isServer
-};
-
-// detect devtools
-var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
-/* istanbul ignore next */
-function isNative (Ctor) {
-  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
-}
-
-var hasSymbol =
-  typeof Symbol !== 'undefined' && isNative(Symbol) &&
-  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
-
-/**
- * Defer a task to execute it asynchronously.
- */
-var nextTick = (function () {
-  var callbacks = [];
-  var pending = false;
-  var timerFunc;
-
-  function nextTickHandler () {
-    pending = false;
-    var copies = callbacks.slice(0);
-    callbacks.length = 0;
-    for (var i = 0; i < copies.length; i++) {
-      copies[i]();
-    }
-  }
-
-  // An asynchronous deferring mechanism.
-  // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
-  // but microtasks actually has too high a priority and fires in between
-  // supposedly sequential events (e.g. #4521, #6690) or even between
-  // bubbling of the same event (#6566). Technically setImmediate should be
-  // the ideal choice, but it's not available everywhere; and the only polyfill
-  // that consistently queues the callback after all DOM events triggered in the
-  // same loop is by using MessageChannel.
-  /* istanbul ignore if */
-  if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-    timerFunc = function () {
-      setImmediate(nextTickHandler);
-    };
-  } else if (typeof MessageChannel !== 'undefined' && (
-    isNative(MessageChannel) ||
-    // PhantomJS
-    MessageChannel.toString() === '[object MessageChannelConstructor]'
-  )) {
-    var channel = new MessageChannel();
-    var port = channel.port2;
-    channel.port1.onmessage = nextTickHandler;
-    timerFunc = function () {
-      port.postMessage(1);
-    };
-  } else
-  /* istanbul ignore next */
-  if (typeof Promise !== 'undefined' && isNative(Promise)) {
-    // use microtask in non-DOM environments, e.g. Weex
-    var p = Promise.resolve();
-    timerFunc = function () {
-      p.then(nextTickHandler);
-    };
-  } else {
-    // fallback to setTimeout
-    timerFunc = function () {
-      setTimeout(nextTickHandler, 0);
-    };
-  }
-
-  return function queueNextTick (cb, ctx) {
-    var _resolve;
-    callbacks.push(function () {
-      if (cb) {
-        try {
-          cb.call(ctx);
-        } catch (e) {
-          handleError(e, ctx, 'nextTick');
-        }
-      } else if (_resolve) {
-        _resolve(ctx);
-      }
-    });
-    if (!pending) {
-      pending = true;
-      timerFunc();
-    }
-    // $flow-disable-line
-    if (!cb && typeof Promise !== 'undefined') {
-      return new Promise(function (resolve, reject) {
-        _resolve = resolve;
-      })
-    }
-  }
-})();
-
-var _Set;
-/* istanbul ignore if */ // $flow-disable-line
-if (typeof Set !== 'undefined' && isNative(Set)) {
-  // use native Set when available.
-  _Set = Set;
-} else {
-  // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
-    function Set () {
-      this.set = Object.create(null);
-    }
-    Set.prototype.has = function has (key) {
-      return this.set[key] === true
-    };
-    Set.prototype.add = function add (key) {
-      this.set[key] = true;
-    };
-    Set.prototype.clear = function clear () {
-      this.set = Object.create(null);
-    };
-
-    return Set;
-  }());
 }
 
 /*  */
@@ -4248,6 +4120,165 @@ function isType (type, fn) {
   }
   /* istanbul ignore next */
   return false
+}
+
+/*  */
+
+function handleError (err, vm, info) {
+  if (vm) {
+    var cur = vm;
+    while ((cur = cur.$parent)) {
+      var hooks = cur.$options.errorCaptured;
+      if (hooks) {
+        for (var i = 0; i < hooks.length; i++) {
+          try {
+            var capture = hooks[i].call(cur, err, vm, info) === false;
+            if (capture) { return }
+          } catch (e) {
+            globalHandleError(e, cur, 'errorCaptured hook');
+          }
+        }
+      }
+    }
+  }
+  globalHandleError(err, vm, info);
+}
+
+function globalHandleError (err, vm, info) {
+  if (config.errorHandler) {
+    try {
+      return config.errorHandler.call(null, err, vm, info)
+    } catch (e) {
+      logError(e, null, 'config.errorHandler');
+    }
+  }
+  logError(err, vm, info);
+}
+
+function logError (err, vm, info) {
+  if (true) {
+    warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
+  }
+  /* istanbul ignore else */
+  if (inBrowser && typeof console !== 'undefined') {
+    console.error(err);
+  } else {
+    throw err
+  }
+}
+
+/*  */
+/* globals MessageChannel */
+
+var callbacks = [];
+var pending = false;
+
+function flushCallbacks () {
+  pending = false;
+  var copies = callbacks.slice(0);
+  callbacks.length = 0;
+  for (var i = 0; i < copies.length; i++) {
+    copies[i]();
+  }
+}
+
+// Here we have async deferring wrappers using both micro and macro tasks.
+// In < 2.4 we used micro tasks everywhere, but there are some scenarios where
+// micro tasks have too high a priority and fires in between supposedly
+// sequential events (e.g. #4521, #6690) or even between bubbling of the same
+// event (#6566). However, using macro tasks everywhere also has subtle problems
+// when state is changed right before repaint (e.g. #6813, out-in transitions).
+// Here we use micro task by default, but expose a way to force macro task when
+// needed (e.g. in event handlers attached by v-on).
+var microTimerFunc;
+var macroTimerFunc;
+var useMacroTask = false;
+
+// Determine (macro) Task defer implementation.
+// Technically setImmediate should be the ideal choice, but it's only available
+// in IE. The only polyfill that consistently queues the callback after all DOM
+// events triggered in the same loop is by using MessageChannel.
+/* istanbul ignore if */
+if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+  macroTimerFunc = function () {
+    setImmediate(flushCallbacks);
+  };
+} else if (typeof MessageChannel !== 'undefined' && (
+  isNative(MessageChannel) ||
+  // PhantomJS
+  MessageChannel.toString() === '[object MessageChannelConstructor]'
+)) {
+  var channel = new MessageChannel();
+  var port = channel.port2;
+  channel.port1.onmessage = flushCallbacks;
+  macroTimerFunc = function () {
+    port.postMessage(1);
+  };
+} else {
+  /* istanbul ignore next */
+  macroTimerFunc = function () {
+    setTimeout(flushCallbacks, 0);
+  };
+}
+
+// Determine MicroTask defer implementation.
+/* istanbul ignore next, $flow-disable-line */
+if (typeof Promise !== 'undefined' && isNative(Promise)) {
+  var p = Promise.resolve();
+  microTimerFunc = function () {
+    p.then(flushCallbacks);
+    // in problematic UIWebViews, Promise.then doesn't completely break, but
+    // it can get stuck in a weird state where callbacks are pushed into the
+    // microtask queue but the queue isn't being flushed, until the browser
+    // needs to do some other work, e.g. handle a timer. Therefore we can
+    // "force" the microtask queue to be flushed by adding an empty timer.
+    if (isIOS) { setTimeout(noop); }
+  };
+} else {
+  // fallback to macro
+  microTimerFunc = macroTimerFunc;
+}
+
+/**
+ * Wrap a function so that if any code inside triggers state change,
+ * the changes are queued using a Task instead of a MicroTask.
+ */
+function withMacroTask (fn) {
+  return fn._withTask || (fn._withTask = function () {
+    useMacroTask = true;
+    var res = fn.apply(null, arguments);
+    useMacroTask = false;
+    return res
+  })
+}
+
+function nextTick (cb, ctx) {
+  var _resolve;
+  callbacks.push(function () {
+    if (cb) {
+      try {
+        cb.call(ctx);
+      } catch (e) {
+        handleError(e, ctx, 'nextTick');
+      }
+    } else if (_resolve) {
+      _resolve(ctx);
+    }
+  });
+  if (!pending) {
+    pending = true;
+    if (useMacroTask) {
+      macroTimerFunc();
+    } else {
+      microTimerFunc();
+    }
+  }
+  // $flow-disable-line
+  if (!cb && typeof Promise !== 'undefined') {
+    return new Promise(function (resolve) {
+      _resolve = resolve;
+    })
+  }
 }
 
 /*  */
@@ -7374,7 +7405,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.1';
+Vue$3.version = '2.5.2';
 
 /*  */
 
@@ -9206,6 +9237,16 @@ function normalizeEvents (on) {
 
 var target$1;
 
+function createOnceHandler (handler, event, capture) {
+  var _target = target$1; // save current target element in closure
+  return function onceHandler () {
+    var res = handler.apply(null, arguments);
+    if (res !== null) {
+      remove$2(event, onceHandler, capture, _target);
+    }
+  }
+}
+
 function add$1 (
   event,
   handler,
@@ -9213,18 +9254,8 @@ function add$1 (
   capture,
   passive
 ) {
-  if (once$$1) {
-    var oldHandler = handler;
-    var _target = target$1; // save current target element in closure
-    handler = function (ev) {
-      var res = arguments.length === 1
-        ? oldHandler(ev)
-        : oldHandler.apply(null, arguments);
-      if (res !== null) {
-        remove$2(event, handler, capture, _target);
-      }
-    };
-  }
+  handler = withMacroTask(handler);
+  if (once$$1) { handler = createOnceHandler(handler, event, capture); }
   target$1.addEventListener(
     event,
     handler,
@@ -9240,7 +9271,11 @@ function remove$2 (
   capture,
   _target
 ) {
-  (_target || target$1).removeEventListener(event, handler, capture);
+  (_target || target$1).removeEventListener(
+    event,
+    handler._withTask || handler,
+    capture
+  );
 }
 
 function updateDOMListeners (oldVnode, vnode) {
@@ -13000,30 +13035,29 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(45).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(44).setImmediate))
 
 /***/ }),
-/* 17 */,
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(19);
+__webpack_require__(18);
 module.exports = __webpack_require__(142);
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_store__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__webhooks_TwitchPubSub__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_alerts__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_v_media_query__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_v_media_query__ = __webpack_require__(140);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_v_media_query___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_v_media_query__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_localstorage__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_localstorage__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_localstorage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vue_localstorage__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -13033,11 +13067,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(20);
+__webpack_require__(19);
 
 window.Vue = __webpack_require__(16);
 
-window.sentinel = __webpack_require__(156);
+window.sentinel = __webpack_require__(46);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -13170,11 +13204,11 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(21);
+window._ = __webpack_require__(20);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -13184,10 +13218,10 @@ window._ = __webpack_require__(21);
 
 try {
   //window.$ = window.jQuery = require('jquery');
-  window.$ = window.jQuery = __webpack_require__(22);
+  window.$ = window.jQuery = __webpack_require__(21);
 
+  __webpack_require__(23);
   __webpack_require__(24);
-  __webpack_require__(25);
 } catch (e) {}
 
 /**
@@ -13196,7 +13230,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(26);
+window.axios = __webpack_require__(25);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -13230,7 +13264,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -30322,7 +30356,7 @@ if (token) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(10)(module)))
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -32528,7 +32562,7 @@ if (token) {
     });
   }), n.fn.size = function () {
     return this.length;
-  }, n.fn.andSelf = n.fn.addBack, "function" == "function" && __webpack_require__(23) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+  }, n.fn.andSelf = n.fn.addBack, "function" == "function" && __webpack_require__(22) && !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
     return n;
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));var Lc = a.jQuery,
@@ -32539,7 +32573,7 @@ if (token) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module)))
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -32548,7 +32582,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -35817,7 +35851,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 }(jQuery);
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /*!
@@ -38200,13 +38234,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(27);
+module.exports = __webpack_require__(26);
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38214,7 +38248,7 @@ module.exports = __webpack_require__(27);
 
 var utils = __webpack_require__(3);
 var bind = __webpack_require__(11);
-var Axios = __webpack_require__(29);
+var Axios = __webpack_require__(28);
 var defaults = __webpack_require__(8);
 
 /**
@@ -38249,14 +38283,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(15);
-axios.CancelToken = __webpack_require__(43);
+axios.CancelToken = __webpack_require__(42);
 axios.isCancel = __webpack_require__(14);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(44);
+axios.spread = __webpack_require__(43);
 
 module.exports = axios;
 
@@ -38265,7 +38299,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /*!
@@ -38292,7 +38326,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38300,10 +38334,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(8);
 var utils = __webpack_require__(3);
-var InterceptorManager = __webpack_require__(38);
-var dispatchRequest = __webpack_require__(39);
-var isAbsoluteURL = __webpack_require__(41);
-var combineURLs = __webpack_require__(42);
+var InterceptorManager = __webpack_require__(37);
+var dispatchRequest = __webpack_require__(38);
+var isAbsoluteURL = __webpack_require__(40);
+var combineURLs = __webpack_require__(41);
 
 /**
  * Create a new instance of Axios
@@ -38385,7 +38419,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38404,7 +38438,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38437,7 +38471,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38465,7 +38499,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38540,7 +38574,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38584,7 +38618,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38659,7 +38693,7 @@ module.exports = (
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38702,7 +38736,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38762,7 +38796,7 @@ module.exports = (
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38821,14 +38855,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(3);
-var transformData = __webpack_require__(40);
+var transformData = __webpack_require__(39);
 var isCancel = __webpack_require__(14);
 var defaults = __webpack_require__(8);
 
@@ -38907,7 +38941,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38934,7 +38968,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38955,7 +38989,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38976,7 +39010,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39040,7 +39074,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39074,7 +39108,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -39127,13 +39161,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(46);
+__webpack_require__(45);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -39326,6 +39360,158 @@ exports.clearImmediate = clearImmediate;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(9)))
 
 /***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.sentinel = factory();
+  }
+}(this, function() {
+var isArray = Array.isArray,
+    selectorToAnimationMap = {},
+    animationCallbacks = {},
+    styleEl,
+    styleSheet,
+    cssRules;
+
+
+return {
+  /**
+   * Add watcher.
+   * @param {array} cssSelectors - List of CSS selector strings
+   * @param {Function} callback - The callback function
+   */
+  on: function(cssSelectors, callback) {
+    if (!callback) return;
+
+    // initialize animationstart event listener
+    if (!styleEl) {
+      var doc = document,
+          head = doc.head;
+
+      // add animationstart event listener
+      doc.addEventListener('animationstart', function(ev, callbacks, l, i) {
+        callbacks = animationCallbacks[ev.animationName];
+
+        // exit if callbacks haven't been registered
+        if (!callbacks) return;
+
+        // stop other callbacks from firing
+        ev.stopImmediatePropagation();
+
+        // iterate through callbacks
+        l = callbacks.length;
+        for (i=0; i < l; i++) callbacks[i](ev.target);
+      }, true);
+      
+      // add stylesheet to document
+      styleEl = doc.createElement('style');
+      head.insertBefore(styleEl, head.firstChild);
+      styleSheet = styleEl.sheet;
+      cssRules = styleSheet.cssRules;
+    }
+    
+    // listify argument and add css rules/ cache callbacks
+    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
+      .map(function(selector, animId, isCustomName) {
+        animId = selectorToAnimationMap[selector];
+        
+        if (!animId) {
+          isCustomName = selector[0] == '!';
+
+          // define animation name and add to map
+          selectorToAnimationMap[selector] = animId = 
+            isCustomName ? selector.slice(1) : 'sentinel-' + 
+            Math.random().toString(16).slice(2);
+          
+          // add keyframe rule
+          cssRules[styleSheet.insertRule(
+            '@keyframes ' + animId + 
+              '{from{transform:none;}to{transform:none;}}',
+            cssRules.length)]
+            ._id = selector;
+            
+          // add selector animation rule
+          if (!isCustomName) {
+            cssRules[styleSheet.insertRule(
+              selector + '{animation-duration:0.0001s;animation-name:' + 
+                animId + ';}',
+              cssRules.length)]
+              ._id = selector;
+          }
+
+          // add to map
+          selectorToAnimationMap[selector] = animId;
+        }
+        
+        // add to callbacks
+        (animationCallbacks[animId] = animationCallbacks[animId] || [])
+          .push(callback);
+      });
+  },
+  /**
+   * Remove watcher.
+   * @param {array} cssSelectors - List of CSS selector strings
+   * @param {Function} callback - The callback function (optional)
+   */
+  off: function(cssSelectors, callback) {
+    // listify argument and iterate through rules
+    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
+      .map(function(selector, animId, callbackList, i) {
+        // get animId
+        if (!(animId = selectorToAnimationMap[selector])) return;
+
+        // get callbacks
+        callbackList = animationCallbacks[animId];
+
+        // remove callback from list
+        if (callback) {
+          i = callbackList.length;
+          
+          while (i--) {
+            if (callbackList[i] === callback) callbackList.splice(i, 1);
+          }
+        } else {
+          callbackList = [];
+        }
+        
+        // exit if callbacks still exist
+        if (callbackList.length) return;
+        
+        // clear cache and remove css rules
+        i = cssRules.length;
+        
+        while (i--) {
+          if (cssRules[i]._id == selector) styleSheet.deleteRule(i);
+        }
+        
+        delete selectorToAnimationMap[selector];
+        delete animationCallbacks[animId];
+      });
+  },
+  /**
+   * Reset watchers and cache
+   */
+  reset: function() {
+    selectorToAnimationMap = {};
+    animationCallbacks = {};
+    if (styleEl) styleEl.parentNode.removeChild(styleEl);
+    styleEl = 0;
+  }
+};
+
+}));
+
+
+/***/ }),
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39357,7 +39543,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/Playlists.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\Playlists.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -39485,7 +39671,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/MediaPlayerWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\MediaPlayerWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -40384,7 +40570,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/partials/ToolbarColorPicker.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\partials\\ToolbarColorPicker.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -41003,7 +41189,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/RequestedSongWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\RequestedSongWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -41341,7 +41527,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/PlaylistWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\PlaylistWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -42868,7 +43054,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/YoutubeSearchWidget.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\YoutubeSearchWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43124,7 +43310,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "Modules/Playlists/Resources/assets/js/components/YoutubeMediaObject.vue"
+Component.options.__file = "Modules\\Playlists\\Resources\\assets\\js\\components\\YoutubeMediaObject.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43811,7 +43997,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/Dashboard.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Dashboard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -43906,7 +44092,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/StreamSetupWidget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\StreamSetupWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -44345,7 +44531,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/TwitchChatWidget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\TwitchChatWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -44563,7 +44749,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/widgets/ProfileWidget.vue"
+Component.options.__file = "resources\\assets\\js\\components\\widgets\\ProfileWidget.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -45510,7 +45696,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/Clients.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\Clients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -46517,7 +46703,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/AuthorizedClients.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\AuthorizedClients.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -46842,7 +47028,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/passport/PersonalAccessTokens.vue"
+Component.options.__file = "resources\\assets\\js\\components\\passport\\PersonalAccessTokens.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -47632,7 +47818,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/header/LiveChannels.vue"
+Component.options.__file = "resources\\assets\\js\\components\\header\\LiveChannels.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -48423,6 +48609,153 @@ function getFollowings(context, payload) {
 
 /***/ }),
 /* 139 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchPubSub; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var TwitchPubSub = function () {
+    function TwitchPubSub(topics, channel_id, access_token) {
+        _classCallCheck(this, TwitchPubSub);
+
+        this.topics = topics;
+        this.channel_id = channel_id;
+        this.access_token = access_token;
+
+        this.ws = null;
+        this.data = null;
+    }
+
+    _createClass(TwitchPubSub, [{
+        key: "nonce",
+        value: function nonce(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < length; i++) {
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            return text;
+        }
+    }, {
+        key: "heartbeat",
+        value: function heartbeat() {
+            var message = {
+                type: 'PING'
+            };
+
+            this.ws.send(JSON.stringify(message));
+        }
+    }, {
+        key: "listen",
+        value: function listen(topic) {
+            var message = {
+                type: 'LISTEN',
+                nonce: this.nonce(15),
+                data: {
+                    topics: [topic],
+                    auth_token: this.access_token
+                }
+            };
+
+            this.ws.send(JSON.stringify(message));
+            console.log("Listening on " + topic);
+        }
+    }, {
+        key: "connect",
+        value: function connect() {
+            var _this = this;
+
+            var heartbeatInterval = 1000 * 45; //ms between PING's
+            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
+            var heartbeatHandle = void 0;
+
+            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
+
+            this.ws.onopen = function (event) {
+
+                _.forEach(_this.topics, function (topic) {
+                    _this.listen(topic + "." + _this.channel_id);
+                });
+
+                _this.heartbeat();
+                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
+            };
+
+            this.ws.onmessage = function (event) {
+                _this.data = JSON.parse(event.data);
+
+                if (_this.data.type === 'RECONNECT') {
+                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
+                    setTimeout(_this.connect(), reconnectInterval);
+                }
+
+                if (_this.data.type === 'MESSAGE') {
+
+                    switch (_this.getMessageData().type) {
+                        case 'whisper_received':
+                            _this.whisperReceived();
+                            break;
+                    }
+                }
+            };
+
+            this.ws.onclose = function () {
+                clearInterval(heartbeatHandle);
+                setTimeout(_this.connect(), reconnectInterval);
+            };
+
+            this.ws.onerror = function (error) {
+                console.error(error);
+                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["c" /* error */](error);
+            };
+        }
+    }, {
+        key: "whisperReceived",
+        value: function whisperReceived() {
+            var msg = this.getDataObj().body;
+            var from = this.getDataObj().tags.display_name;
+
+            __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["e" /* whisper */](from, msg);
+        }
+    }, {
+        key: "getMessageData",
+        value: function getMessageData() {
+            return JSON.parse(this.data.data.message);
+        }
+    }, {
+        key: "getDataObj",
+        value: function getDataObj() {
+            return this.getMessageData().data_object;
+        }
+    }, {
+        key: "getWhisper",
+        value: function getWhisper() {
+            return this.getDataObj().body;
+        }
+    }, {
+        key: "getRecipient",
+        value: function getRecipient() {
+            return this.getDataObj().recipient.display_name;
+        }
+    }]);
+
+    return TwitchPubSub;
+}();
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.vMediaQuery=e():t.vMediaQuery=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var i=n[r]={exports:{},id:r,loaded:!1};return t[r].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports}var n={};return e.m=t,e.c=n,e.p="/dist/",e(0)}([function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){p=t.util.extend,y=t.util.defineReactive}function o(){var t=(0,m["default"])(function(){Object.keys(b).forEach(function(t){return++b[t][x.methods].resize})},150);window.addEventListener("resize",t)}function a(t){return t.length>0?t.reverse():t}function u(t){return(""+parseInt(t)).length===(""+t).length?t+"px":t}function f(t){return matchMedia(t).matches}function c(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(max-"+c+": "+u(o)+")").matches}function d(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(min-"+c+": "+u(o)+")").matches}function s(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(s)+") and\n    (max-"+c+": "+u(l)+")\n  ").matches}function l(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(l)+"),\n    (max-"+c+": "+u(s)+")\n  ").matches}Object.defineProperty(e,"__esModule",{value:!0});var v=function(){function t(t,e){var n=[],r=!0,i=!1,o=void 0;try{for(var a,u=t[Symbol.iterator]();!(r=(a=u.next()).done)&&(n.push(a.value),!e||n.length!==e);r=!0);}catch(f){i=!0,o=f}finally{try{!r&&u["return"]&&u["return"]()}finally{if(i)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),h=n(1),m=r(h),p=void 0,y=void 0,b={},x={methods:"$mq",variables:"$mv"},g={expr:f,below:c,above:d,beyond:l,between:s},j={created:function(){var t=this.$parent;t?y(this[x.methods],"resize",t[x.methods].resize):(b[this._uid]=this,y(this[x.methods],"resize",1))}};e["default"]={methods:g,install:function(t){var e=arguments.length<=1||void 0===arguments[1]?{}:arguments[1],n=e.methods,r=void 0===n?{}:n,a=e.variables,u=void 0===a?{}:a,f=e.nameSpace,c=void 0===f?{}:f;i(t),p(x,c),t.mixin(j),t.prototype[x.methods]=p(p({},g),r),t.prototype[x.variables]=u,o()}}},function(t,e){(function(e){function n(t,e,n){function r(e){var n=m,r=p;return m=p=void 0,O=e,b=t.apply(r,n)}function o(t){return O=t,x=setTimeout(d,e),T?r(t):b}function a(t){var n=t-g,r=t-O,i=e-n;return $?w(i,y-r):i}function c(t){var n=t-g,r=t-O;return void 0===g||n>=e||0>n||$&&r>=y}function d(){var t=M();return c(t)?s(t):void(x=setTimeout(d,a(t)))}function s(t){return x=void 0,A&&m?r(t):(m=p=void 0,b)}function l(){void 0!==x&&clearTimeout(x),O=0,m=g=p=x=void 0}function v(){return void 0===x?b:s(M())}function h(){var t=M(),n=c(t);if(m=arguments,p=this,g=t,n){if(void 0===x)return o(g);if($)return x=setTimeout(d,e),r(g)}return void 0===x&&(x=setTimeout(d,e)),b}var m,p,y,b,x,g,O=0,T=!1,$=!1,A=!0;if("function"!=typeof t)throw new TypeError(f);return e=u(e)||0,i(n)&&(T=!!n.leading,$="maxWait"in n,y=$?j(u(n.maxWait)||0,e):y,A="trailing"in n?!!n.trailing:A),h.cancel=l,h.flush=v,h}function r(t,e,r){var o=!0,a=!0;if("function"!=typeof t)throw new TypeError(f);return i(r)&&(o="leading"in r?!!r.leading:o,a="trailing"in r?!!r.trailing:a),n(t,e,{leading:o,maxWait:e,trailing:a})}function i(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function o(t){return!!t&&"object"==typeof t}function a(t){return"symbol"==typeof t||o(t)&&g.call(t)==d}function u(t){if("number"==typeof t)return t;if(a(t))return c;if(i(t)){var e="function"==typeof t.valueOf?t.valueOf():t;t=i(e)?e+"":e}if("string"!=typeof t)return 0===t?t:+t;t=t.replace(s,"");var n=v.test(t);return n||h.test(t)?m(t.slice(2),n?2:8):l.test(t)?c:+t}var f="Expected a function",c=NaN,d="[object Symbol]",s=/^\s+|\s+$/g,l=/^[-+]0x[0-9a-f]+$/i,v=/^0b[01]+$/i,h=/^0o[0-7]+$/i,m=parseInt,p="object"==typeof e&&e&&e.Object===Object&&e,y="object"==typeof self&&self&&self.Object===Object&&self,b=p||y||Function("return this")(),x=Object.prototype,g=x.toString,j=Math.max,w=Math.min,M=function(){return b.Date.now()};t.exports=r}).call(e,function(){return this}())}])});
+
+/***/ }),
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -48645,322 +48978,10 @@ return index;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 140 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TwitchPubSub; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_alerts__ = __webpack_require__(4);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var TwitchPubSub = function () {
-    function TwitchPubSub(topics, channel_id, access_token) {
-        _classCallCheck(this, TwitchPubSub);
-
-        this.topics = topics;
-        this.channel_id = channel_id;
-        this.access_token = access_token;
-
-        this.ws = null;
-        this.data = null;
-    }
-
-    _createClass(TwitchPubSub, [{
-        key: "nonce",
-        value: function nonce(length) {
-            var text = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (var i = 0; i < length; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        }
-    }, {
-        key: "heartbeat",
-        value: function heartbeat() {
-            var message = {
-                type: 'PING'
-            };
-
-            this.ws.send(JSON.stringify(message));
-        }
-    }, {
-        key: "listen",
-        value: function listen(topic) {
-            var message = {
-                type: 'LISTEN',
-                nonce: this.nonce(15),
-                data: {
-                    topics: [topic],
-                    auth_token: this.access_token
-                }
-            };
-
-            this.ws.send(JSON.stringify(message));
-            console.log("Listening on " + topic);
-        }
-    }, {
-        key: "connect",
-        value: function connect() {
-            var _this = this;
-
-            var heartbeatInterval = 1000 * 45; //ms between PING's
-            var reconnectInterval = 1000 * 3; //ms to wait before reconnect
-            var heartbeatHandle = void 0;
-
-            this.ws = new WebSocket('wss://pubsub-edge.twitch.tv');
-
-            this.ws.onopen = function (event) {
-
-                _.forEach(_this.topics, function (topic) {
-                    _this.listen(topic + "." + _this.channel_id);
-                });
-
-                _this.heartbeat();
-                heartbeatHandle = setInterval(_this.heartbeat(), heartbeatInterval);
-            };
-
-            this.ws.onmessage = function (event) {
-                _this.data = JSON.parse(event.data);
-
-                if (_this.data.type === 'RECONNECT') {
-                    console.log("Reconnecting to " + _this.topic + " with channel id " + _this.channel_id);
-                    setTimeout(_this.connect(), reconnectInterval);
-                }
-
-                if (_this.data.type === 'MESSAGE') {
-
-                    switch (_this.getMessageData().type) {
-                        case 'whisper_received':
-                            _this.whisperReceived();
-                            break;
-                    }
-                }
-            };
-
-            this.ws.onclose = function () {
-                clearInterval(heartbeatHandle);
-                setTimeout(_this.connect(), reconnectInterval);
-            };
-
-            this.ws.onerror = function (error) {
-                console.error(error);
-                __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["c" /* error */](error);
-            };
-        }
-    }, {
-        key: "whisperReceived",
-        value: function whisperReceived() {
-            var msg = this.getDataObj().body;
-            var from = this.getDataObj().tags.display_name;
-
-            __WEBPACK_IMPORTED_MODULE_0__utils_alerts__["e" /* whisper */](from, msg);
-        }
-    }, {
-        key: "getMessageData",
-        value: function getMessageData() {
-            return JSON.parse(this.data.data.message);
-        }
-    }, {
-        key: "getDataObj",
-        value: function getDataObj() {
-            return this.getMessageData().data_object;
-        }
-    }, {
-        key: "getWhisper",
-        value: function getWhisper() {
-            return this.getDataObj().body;
-        }
-    }, {
-        key: "getRecipient",
-        value: function getRecipient() {
-            return this.getDataObj().recipient.display_name;
-        }
-    }]);
-
-    return TwitchPubSub;
-}();
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.vMediaQuery=e():t.vMediaQuery=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var i=n[r]={exports:{},id:r,loaded:!1};return t[r].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports}var n={};return e.m=t,e.c=n,e.p="/dist/",e(0)}([function(t,e,n){"use strict";function r(t){return t&&t.__esModule?t:{"default":t}}function i(t){p=t.util.extend,y=t.util.defineReactive}function o(){var t=(0,m["default"])(function(){Object.keys(b).forEach(function(t){return++b[t][x.methods].resize})},150);window.addEventListener("resize",t)}function a(t){return t.length>0?t.reverse():t}function u(t){return(""+parseInt(t)).length===(""+t).length?t+"px":t}function f(t){return matchMedia(t).matches}function c(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(max-"+c+": "+u(o)+")").matches}function d(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f;return matchMedia("(min-"+c+": "+u(o)+")").matches}function s(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(s)+") and\n    (max-"+c+": "+u(l)+")\n  ").matches}function l(){for(var t=arguments.length,e=Array(t),n=0;t>n;n++)e[n]=arguments[n];var r=a(e),i=v(r,2),o=i[0],f=i[1],c=void 0===f?"width":f,d=v(o,2),s=d[0],l=d[1];return matchMedia("\n    (min-"+c+": "+u(l)+"),\n    (max-"+c+": "+u(s)+")\n  ").matches}Object.defineProperty(e,"__esModule",{value:!0});var v=function(){function t(t,e){var n=[],r=!0,i=!1,o=void 0;try{for(var a,u=t[Symbol.iterator]();!(r=(a=u.next()).done)&&(n.push(a.value),!e||n.length!==e);r=!0);}catch(f){i=!0,o=f}finally{try{!r&&u["return"]&&u["return"]()}finally{if(i)throw o}}return n}return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),h=n(1),m=r(h),p=void 0,y=void 0,b={},x={methods:"$mq",variables:"$mv"},g={expr:f,below:c,above:d,beyond:l,between:s},j={created:function(){var t=this.$parent;t?y(this[x.methods],"resize",t[x.methods].resize):(b[this._uid]=this,y(this[x.methods],"resize",1))}};e["default"]={methods:g,install:function(t){var e=arguments.length<=1||void 0===arguments[1]?{}:arguments[1],n=e.methods,r=void 0===n?{}:n,a=e.variables,u=void 0===a?{}:a,f=e.nameSpace,c=void 0===f?{}:f;i(t),p(x,c),t.mixin(j),t.prototype[x.methods]=p(p({},g),r),t.prototype[x.variables]=u,o()}}},function(t,e){(function(e){function n(t,e,n){function r(e){var n=m,r=p;return m=p=void 0,O=e,b=t.apply(r,n)}function o(t){return O=t,x=setTimeout(d,e),T?r(t):b}function a(t){var n=t-g,r=t-O,i=e-n;return $?w(i,y-r):i}function c(t){var n=t-g,r=t-O;return void 0===g||n>=e||0>n||$&&r>=y}function d(){var t=M();return c(t)?s(t):void(x=setTimeout(d,a(t)))}function s(t){return x=void 0,A&&m?r(t):(m=p=void 0,b)}function l(){void 0!==x&&clearTimeout(x),O=0,m=g=p=x=void 0}function v(){return void 0===x?b:s(M())}function h(){var t=M(),n=c(t);if(m=arguments,p=this,g=t,n){if(void 0===x)return o(g);if($)return x=setTimeout(d,e),r(g)}return void 0===x&&(x=setTimeout(d,e)),b}var m,p,y,b,x,g,O=0,T=!1,$=!1,A=!0;if("function"!=typeof t)throw new TypeError(f);return e=u(e)||0,i(n)&&(T=!!n.leading,$="maxWait"in n,y=$?j(u(n.maxWait)||0,e):y,A="trailing"in n?!!n.trailing:A),h.cancel=l,h.flush=v,h}function r(t,e,r){var o=!0,a=!0;if("function"!=typeof t)throw new TypeError(f);return i(r)&&(o="leading"in r?!!r.leading:o,a="trailing"in r?!!r.trailing:a),n(t,e,{leading:o,maxWait:e,trailing:a})}function i(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function o(t){return!!t&&"object"==typeof t}function a(t){return"symbol"==typeof t||o(t)&&g.call(t)==d}function u(t){if("number"==typeof t)return t;if(a(t))return c;if(i(t)){var e="function"==typeof t.valueOf?t.valueOf():t;t=i(e)?e+"":e}if("string"!=typeof t)return 0===t?t:+t;t=t.replace(s,"");var n=v.test(t);return n||h.test(t)?m(t.slice(2),n?2:8):l.test(t)?c:+t}var f="Expected a function",c=NaN,d="[object Symbol]",s=/^\s+|\s+$/g,l=/^[-+]0x[0-9a-f]+$/i,v=/^0b[01]+$/i,h=/^0o[0-7]+$/i,m=parseInt,p="object"==typeof e&&e&&e.Object===Object&&e,y="object"==typeof self&&self&&self.Object===Object&&self,b=p||y||Function("return this")(),x=Object.prototype,g=x.toString,j=Math.max,w=Math.min,M=function(){return b.Date.now()};t.exports=r}).call(e,function(){return this}())}])});
-
-/***/ }),
 /* 142 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 143 */,
-/* 144 */,
-/* 145 */,
-/* 146 */,
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, factory) {
-  if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.sentinel = factory();
-  }
-}(this, function() {
-var isArray = Array.isArray,
-    selectorToAnimationMap = {},
-    animationCallbacks = {},
-    styleEl,
-    styleSheet,
-    cssRules;
-
-
-return {
-  /**
-   * Add watcher.
-   * @param {array} cssSelectors - List of CSS selector strings
-   * @param {Function} callback - The callback function
-   */
-  on: function(cssSelectors, callback) {
-    if (!callback) return;
-
-    // initialize animationstart event listener
-    if (!styleEl) {
-      var doc = document,
-          head = doc.head;
-
-      // add animationstart event listener
-      doc.addEventListener('animationstart', function(ev, callbacks, l, i) {
-        callbacks = animationCallbacks[ev.animationName];
-
-        // exit if callbacks haven't been registered
-        if (!callbacks) return;
-
-        // stop other callbacks from firing
-        ev.stopImmediatePropagation();
-
-        // iterate through callbacks
-        l = callbacks.length;
-        for (i=0; i < l; i++) callbacks[i](ev.target);
-      }, true);
-      
-      // add stylesheet to document
-      styleEl = doc.createElement('style');
-      head.insertBefore(styleEl, head.firstChild);
-      styleSheet = styleEl.sheet;
-      cssRules = styleSheet.cssRules;
-    }
-    
-    // listify argument and add css rules/ cache callbacks
-    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
-      .map(function(selector, animId, isCustomName) {
-        animId = selectorToAnimationMap[selector];
-        
-        if (!animId) {
-          isCustomName = selector[0] == '!';
-
-          // define animation name and add to map
-          selectorToAnimationMap[selector] = animId = 
-            isCustomName ? selector.slice(1) : 'sentinel-' + 
-            Math.random().toString(16).slice(2);
-          
-          // add keyframe rule
-          cssRules[styleSheet.insertRule(
-            '@keyframes ' + animId + 
-              '{from{transform:none;}to{transform:none;}}',
-            cssRules.length)]
-            ._id = selector;
-            
-          // add selector animation rule
-          if (!isCustomName) {
-            cssRules[styleSheet.insertRule(
-              selector + '{animation-duration:0.0001s;animation-name:' + 
-                animId + ';}',
-              cssRules.length)]
-              ._id = selector;
-          }
-
-          // add to map
-          selectorToAnimationMap[selector] = animId;
-        }
-        
-        // add to callbacks
-        (animationCallbacks[animId] = animationCallbacks[animId] || [])
-          .push(callback);
-      });
-  },
-  /**
-   * Remove watcher.
-   * @param {array} cssSelectors - List of CSS selector strings
-   * @param {Function} callback - The callback function (optional)
-   */
-  off: function(cssSelectors, callback) {
-    // listify argument and iterate through rules
-    (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
-      .map(function(selector, animId, callbackList, i) {
-        // get animId
-        if (!(animId = selectorToAnimationMap[selector])) return;
-
-        // get callbacks
-        callbackList = animationCallbacks[animId];
-
-        // remove callback from list
-        if (callback) {
-          i = callbackList.length;
-          
-          while (i--) {
-            if (callbackList[i] === callback) callbackList.splice(i, 1);
-          }
-        } else {
-          callbackList = [];
-        }
-        
-        // exit if callbacks still exist
-        if (callbackList.length) return;
-        
-        // clear cache and remove css rules
-        i = cssRules.length;
-        
-        while (i--) {
-          if (cssRules[i]._id == selector) styleSheet.deleteRule(i);
-        }
-        
-        delete selectorToAnimationMap[selector];
-        delete animationCallbacks[animId];
-      });
-  },
-  /**
-   * Reset watchers and cache
-   */
-  reset: function() {
-    selectorToAnimationMap = {};
-    animationCallbacks = {};
-    if (styleEl) styleEl.parentNode.removeChild(styleEl);
-    styleEl = 0;
-  }
-};
-
-}));
-
 
 /***/ })
 /******/ ]);
