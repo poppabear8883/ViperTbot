@@ -4,3 +4,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'dashboard', 'namespace' => 'Mo
 {
     Route::get('/', 'DashboardController@index');
 });
+
+Route::group(['middleware' => 'web', 'prefix' => 'dashboard', 'namespace' => 'Modules\Dashboard\Http\Controllers'], function() {
+
+});

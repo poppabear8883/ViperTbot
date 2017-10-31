@@ -107,8 +107,9 @@
     </widget>
 </template>
 <script>
-    import Widget from 'Widgets/Widget.vue';
-    import * as alerts from 'Utilities/alerts';
+    import Widget from 'Core/components/widget/Widget.vue';
+    import * as alerts from 'Core/utils/alerts';
+
     import YoutubeMediaObject from './YoutubeMediaObject.vue';
 
     export default {

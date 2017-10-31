@@ -127,9 +127,10 @@
 
 <script>
 
-    import Widget from 'Widgets/Widget.vue';
-    import * as alerts from 'Utilities/alerts';
-    import {youtubeParser} from 'Utilities/youtube';
+    import Widget from 'Core/components/widget/Widget.vue';
+    import * as alerts from 'Core/utils/alerts';
+    import {youtubeParser} from 'Core/utils/youtube';
+
     import * as urlParser from 'js-video-url-parser';
     import {mapActions} from 'vuex';
 

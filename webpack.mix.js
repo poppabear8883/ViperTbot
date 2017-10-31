@@ -13,10 +13,8 @@ let mix = require('laravel-mix');
 mix.webpackConfig({
     resolve: {
         alias: {
-            Utilities: path.resolve(__dirname, 'resources/assets/js/utils'),
             Modules: path.resolve(__dirname, 'Modules'),
-            Widgets: path.resolve(__dirname, 'resources/assets/js/components/widgets'),
-            RootComponents: path.resolve(__dirname, 'resources/assets/js/components')
+            Core: path.resolve(__dirname, 'resources/assets/js'),
         }
     }
 });

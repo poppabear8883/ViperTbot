@@ -182,9 +182,8 @@
 
 </style>
 <script>
-    import Widget from './Widget.vue'
-    import * as alerts from 'Utilities/alerts';
-
+    import Widget from 'Core/components/widget/Widget.vue';
+    import * as alerts from 'Core/utils/alerts';
 
     export default {
         components: {

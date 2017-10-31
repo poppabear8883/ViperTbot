@@ -53,7 +53,7 @@
     </div>
 </template>
 <script>
-    import * as alerts from 'Utilities/alerts';
+    import * as alerts from 'Core/utils/alerts';
     import {mapActions} from 'vuex';
 
     export default {

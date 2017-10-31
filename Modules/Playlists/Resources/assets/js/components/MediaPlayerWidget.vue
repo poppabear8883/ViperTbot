@@ -90,10 +90,11 @@
 </template>
 
 <script>
+    import Widget from 'Core/components/widget/Widget.vue';
+    import * as alerts from 'Core/utils/alerts';
+
     import VueYoutubeEmbed from 'vue-youtube-embed';
     import VueSlider from 'vue-slider-component';
-    import Widget from 'Widgets/Widget.vue';
-    import * as alerts from 'Utilities/alerts';
     import {mapActions} from 'vuex';
 
     Vue.use(VueYoutubeEmbed);
