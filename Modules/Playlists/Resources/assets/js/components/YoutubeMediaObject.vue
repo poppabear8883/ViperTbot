@@ -72,8 +72,7 @@
                 this.getItemCount();
             },
             playlists() {
-                if (!this.initialized && this.playlists[0]) {
-                    this.playlist = this.playlists[0];
+                if (!this.initialized && this.playlist === this.playlists[0]) {
                     this.initialized = true;
                 }
             }
@@ -155,22 +154,23 @@
             },
 
             getItemCount() {
-                axios.get('/api/playlists/youtube/playlist', {
-                    params: {
-                        id: this.video.id.playlistId
-                    }
-                }).then((response) => {
-                    this.itemCount = response.data.contentDetails.itemCount;
-                }).catch((error) => {
-                    console.error(error.response);
-                    alerts.error(error.response);
-                });
+                if (this.video.id.playlistId) {
+                    axios.get('/api/playlists/youtube/playlist', {
+                        params: {
+                            id: this.video.id.playlistId
+                        }
+                    }).then((response) => {
+                        this.itemCount = response.data.contentDetails.itemCount;
+                    }).catch((error) => {
+                        console.error(error.response);
+                        alerts.error(error.response);
+                    });
+                }
             }
         },
         created() {
-            if (this.video.id.playlistId) {
-                this.getItemCount();
-            }
+            this.playlist = this.playlists[0];
+            this.getItemCount();
         }
     }
 </script>
