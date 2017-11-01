@@ -17,121 +17,20 @@
             <div class="row" v-if="initialized">
 
                 <div class="col-sm-12">
-                    <div class="profile-header">
-                        <div class="air air-bottom-right padding-10">
-                            <button class="btn btn-default btn-sm"
-                                    v-if="channel._id != my_channel._id"
-                                    @click="getMyChannel()"
-                            >
-                                <i class="fa fa-user"></i> My Profile
-                            </button>
-                            &nbsp;
-                            <button class="btn txt-color-white bg-color-teal btn-sm"
-                                    v-if="prev_channels.length > 0"
-                                    @click="back()"
-                            >
-                                <i class="fa fa-arrow-left"></i> Back
-                            </button>
-                        </div>
-
-                        <div class="profile-header-inner">
-                            <div>
-                                <img :src="channel.profile_banner" alt="demo user" width="100%">
-                            </div>
-                        </div>
-                    </div>
+                    <profile-widget-header></profile-widget-header>
                 </div>
 
                 <div class="col-sm-12">
 
                     <div class="row">
-
-                        <div class="col-sm-3 profile-pic">
-                            <a :href="channel.url" target="_blank">
-                                <img :src="channel.logo" alt="demo user">
-                            </a>
-                            <div class="padding-10">
-                                <h4 class="font-md"><strong>{{channel.followers}}</strong>
-                                    <br>
-                                    <small>Followers</small>
-                                </h4>
-                                <br>
-                                <h4 class="font-md"><strong>{{channel.views}}</strong>
-                                    <br>
-                                    <small>Views</small>
-                                </h4>
-                            </div>
+                        <div class="col-sm-3">
+                            <profile-widget-logo></profile-widget-logo>
                         </div>
+
                         <div class="col-sm-6">
-                            <h1>{{channel.display_name}}</h1>
+                            <profile-widget-details></profile-widget-details>
 
-                            <ul class="list-unstyled">
-                                <li>
-                                    <p class="text-muted">
-                                        <i class="fa fa-twitch"></i>&nbsp;&nbsp;
-                                        <span class="txt-color-darken">
-                                            {{channel._id}}
-                                        </span>
-                                    </p>
-                                </li>
-                                <li v-if="channel.broadcaster_type !== ''">
-                                    <p class="text-muted">
-                                        <i class="fa fa-twitch"></i>&nbsp;&nbsp;
-                                        <span class="txt-color-darken">
-                                            {{channel.broadcaster_type}}
-                                        </span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p class="text-muted">
-                                        <i class="fa fa-calendar"></i>&nbsp;&nbsp;
-                                        <span class="txt-color-darken">
-                                            {{date_joined}}
-                                        </span>
-                                    </p>
-                                </li>
-                                <li>
-                                    <p class="text-muted">
-                                        <i class="fa fa-gamepad"></i>&nbsp;&nbsp;
-                                        <span class="txt-color-darken">
-                                            {{channel.game}}
-                                        </span>
-                                    </p>
-                                </li>
-                                <li v-if="channel.email">
-                                    <p class="text-muted">
-                                        <i class="fa fa-envelope"></i>&nbsp;&nbsp;
-                                        <a :href="`mailto:${channel.email}`">
-                                            {{channel.email}}
-                                        </a>
-                                    </p>
-                                </li>
-
-                            </ul>
-
-                            <br>
-
-                            <p class="font-md">
-                                <i>A little about me...</i>
-                            </p>
-
-                            <p>{{channel.description}}</p>
-
-                            <ul class="profile-actions" v-if="channel._id != my_channel._id">
-                                <li>
-                                    <button :class="btn.following.classes"
-                                            @mouseenter="btnFollowingHover"
-                                            @mouseleave="btnFollowingHover"
-                                    >
-                                        <i :class="['fa', btn.following.icon] "></i> {{ btn.following.text }}
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-xs bg-color-blueLight txt-color-white">
-                                        <i class="fa fa-comments"></i> Send Message
-                                    </button>
-                                </li>
-                            </ul>
+                            <profile-widget-actions></profile-widget-actions>
 
                             <br>
                             <br>
@@ -182,13 +81,19 @@
 
 </style>
 <script>
-    import Widget from 'Widgets/Widget.vue'
-    import * as alerts from 'Utilities/alerts';
+    import Widget from 'Core/components/widget/Widget.vue'
+    import * as alerts from 'Core/utils/alerts';
 
+    import ProfileWidgetHeader from './components/ProfileHeader.vue';
+    import ProfileWidgetLogo from './components/ProfileLogo.vue';
+    import ProfileWidgetDetails from './components/ProfileDetails.vue';
 
     export default {
         components: {
-            Widget
+            Widget,
+            ProfileWidgetHeader,
+            ProfileWidgetLogo,
+            ProfileWidgetDetails,
         },
         data() {
             return {
@@ -197,28 +102,12 @@
                 followers: {},
                 following: false,
                 prev_channels: [],
-                history: [],
-                btn: {
-                    following: {
-                        text: 'Follow',
-                        icon: 'fa-heart',
-                        classes: [
-                            'btn',
-                            'btn-xs',
-                            'bg-color-purple',
-                            'txt-color-white',
-                            'follow-btn'
-                        ]
-                    }
-                }
+                history: []
             }
         },
         computed: {
             recent_followers() {
                 return _.take(this.followers.follows, 18);
-            },
-            date_joined() {
-                return new Date(this.channel.created_at).toDateString();
             },
             my_channel() {
                 return this.$store.getters.getChannel;
@@ -430,29 +319,7 @@
     }
 </script>
 <style type="scss">
-    .profile-pic > a > img {
-        border-radius: 0;
-        position: relative;
-        border: 5px solid #fff;
-        top: -30px;
-        left: 10px;
-        display: inline-block;
-        text-align: right;
-        z-index: 4;
-        max-width: 100px;
-        margin-bottom: -30px;
-    }
 
-    .profile-header {
-        position: relative !important
-    }
-
-    .profile-header .profile-header-inner {
-        max-height: 150px;
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-    }
 
     .followers-list li {
         margin-bottom: 5px !important;
