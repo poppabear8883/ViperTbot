@@ -87,6 +87,7 @@
     import ProfileWidgetHeader from './components/ProfileHeader.vue';
     import ProfileWidgetLogo from './components/ProfileLogo.vue';
     import ProfileWidgetDetails from './components/ProfileDetails.vue';
+    import ProfileWidgetActions from './components/ProfileActions.vue';
 
     export default {
         components: {
@@ -94,6 +95,7 @@
             ProfileWidgetHeader,
             ProfileWidgetLogo,
             ProfileWidgetDetails,
+            ProfileWidgetActions
         },
         data() {
             return {
@@ -122,34 +124,7 @@
             }
         },
         methods: {
-            isFollowing() {
-                this.following = true;
-                this.btn.following = {
-                    text: 'Following',
-                    icon: 'fa-heart',
-                    classes: [
-                        'btn',
-                        'btn-xs',
-                        'bg-color-green',
-                        'txt-color-white',
-                        'follow-btn'
-                    ]
-                };
-            },
-            notFollowing() {
-                this.following = false;
-                this.btn.following = {
-                    text: 'Follow',
-                    icon: 'fa-heart',
-                    classes: [
-                        'btn',
-                        'btn-xs',
-                        'bg-color-purple',
-                        'txt-color-white',
-                        'follow-btn'
-                    ]
-                };
-            },
+
             getFollowers(channel_id) {
                 return new Promise((resolve, reject) => {
                     axios.get('/api/twitch/followers', {
@@ -295,26 +270,7 @@
                 }
 
                 this.$emit('loading', false);
-            },
-            follow() {
-
-            },
-            unfollow() {
-
-            },
-            btnFollowingHover(e) {
-                let text = this.btn.following.text;
-
-                if (this.following) {
-                    if (text === 'Unfollow') {
-                        this.btn.following.text = 'Following';
-                        this.btn.following.icon = 'fa-heart';
-                    } else {
-                        this.btn.following.text = 'Unfollow';
-                        this.btn.following.icon = 'fa-ban';
-                    }
-                }
-            },
+            }
         }
     }
 </script>
@@ -341,13 +297,5 @@
 
     .profile-actions li {
         margin-bottom: 5px;
-    }
-
-    .follow-btn.bg-color-green:hover {
-        background-color: #8b111c !important;
-    }
-
-    .follow-btn.bg-color-purple:hover {
-        background-color: #126410 !important;
     }
 </style>
