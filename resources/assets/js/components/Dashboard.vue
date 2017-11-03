@@ -18,7 +18,7 @@
 <script>
     import StreamSetupWidget from './widget/StreamSetupWidget.vue';
     import TwitchChatWidget from './widget/TwitchChatWidget.vue';
-    import ProfileWidget from './widget/ProfileWidget.vue';
+    import ProfileWidget from 'Modules/Dashboard/Resources/assets/widgets/Profile/ProfileWidget.vue';
 
     export default {
         components: {

@@ -1,24 +1,17 @@
 <template>
     <div class="profile-pic">
-        <a :href="$parent.channel.url" target="_blank">
-            <img :src="$parant.channel.logo" alt="demo user">
+        <a :href="url" target="_blank">
+            <img :src="logo" alt="Logo" width="100%">
         </a>
-        <div class="padding-10">
-            <h4 class="font-md"><strong>{{$parent.channel.followers}}</strong>
-                <br>
-                <small>Followers</small>
-            </h4>
-            <br>
-            <h4 class="font-md"><strong>{{$parant.channel.views}}</strong>
-                <br>
-                <small>Views</small>
-            </h4>
-        </div>
+        <slot></slot>
     </div>
 </template>
 <script>
     export default {
-
+        props: {
+            logo: {type: String, required: true},
+            url: {type: String, required: true}
+        }
     }
 </script>
 <style>

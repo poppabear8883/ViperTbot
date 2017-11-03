@@ -17,53 +17,84 @@
             <div class="row" v-if="initialized">
 
                 <div class="col-sm-12">
-                    <profile-widget-header></profile-widget-header>
+                    <!-- Header -->
+                    <profile-widget-header :banner="channel.profile_banner">
+                        <!-- Navigation -->
+                        <div class="air air-bottom-right padding-10">
+                            <button class="btn btn-default btn-sm"
+                                    v-if="channel._id != my_channel._id"
+                                    @click="getMyChannel()"
+                            >
+                                <i class="fa fa-user"></i> My Profile
+                            </button>
+                            &nbsp;
+                            <button class="btn txt-color-white bg-color-teal btn-sm"
+                                    v-if="prev_channels.length > 0"
+                                    @click="back()"
+                            >
+                                <i class="fa fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+                    </profile-widget-header>
                 </div>
 
                 <div class="col-sm-12">
 
                     <div class="row">
                         <div class="col-sm-3">
-                            <profile-widget-logo></profile-widget-logo>
+                            <!-- Logo -->
+                            <profile-widget-logo
+                                    :url="channel.url"
+                                    :logo="channel.logo"
+                            >
+                                <div class="padding-10">
+                                    <h4 class="font-md"><strong>{{channel.followers}}</strong>
+                                        <br>
+                                        <small>Followers</small>
+                                    </h4>
+                                    <br>
+                                    <h4 class="font-md"><strong>{{channel.views}}</strong>
+                                        <br>
+                                        <small>Views</small>
+                                    </h4>
+                                </div>
+                            </profile-widget-logo>
                         </div>
 
                         <div class="col-sm-6">
-                            <profile-widget-details></profile-widget-details>
+                            <!-- Details -->
+                            <profile-widget-details :channel="channel">
 
-                            <profile-widget-actions></profile-widget-actions>
-
-                            <br>
-                            <br>
+                                <!-- Actions -->
+                                <ul class="profile-actions padding-bottom-10"
+                                    v-if="channel._id != my_channel._id"
+                                >
+                                    <li>
+                                        <button :class="btn.following.classes"
+                                                @mouseenter="btnFollowingHover"
+                                                @mouseleave="btnFollowingHover"
+                                        >
+                                            <i :class="['fa', btn.following.icon] "></i> {{ btn.following.text }}
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-xs bg-color-blueLight txt-color-white">
+                                            <i class="fa fa-comments"></i> Send Message
+                                        </button>
+                                    </li>
+                                </ul>
+                            </profile-widget-details>
 
                         </div>
                         <div class="col-sm-3">
-                            <h1 style="margin-left: -5px">
-                                <small>Recent Followers</small>
-                            </h1>
-                            <ul class="list-inline followers-list">
-                                <li v-for="follower in recent_followers">
-                                    <a href="#" @click.prevent="setChannel(follower.user._id)">
-                                        <img v-if="follower.user.logo != null"
-                                             :src="follower.user.logo"
-                                             :alt="follower.user.name"
-                                             rel="tooltip"
-                                             data-placement="top"
-                                             :data-original-title="follower.user.display_name"
-                                        >
-                                        <img v-if="follower.user.logo == null"
-                                             src="img/avatars/male.png"
-                                             :alt="follower.user.name"
-                                             rel="tooltip"
-                                             data-placement="top"
-                                             :data-original-title="follower.user.display_name"
-                                        >
-                                    </a>
-                                </li>
-                                <li>
-                                    <a :href="`${channel.url}/followers`" target="_blank">See All</a>
-                                </li>
-                            </ul>
-
+                            <!-- Followers -->
+                            <profile-widget-followers
+                                    title="Recent Followers"
+                                    :followers="followers"
+                                    :limit="18"
+                                    :url="channel.url"
+                                    @clicked="setChannel"
+                            ></profile-widget-followers>
                         </div>
 
                     </div>
@@ -87,7 +118,7 @@
     import ProfileWidgetHeader from './components/ProfileHeader.vue';
     import ProfileWidgetLogo from './components/ProfileLogo.vue';
     import ProfileWidgetDetails from './components/ProfileDetails.vue';
-    import ProfileWidgetActions from './components/ProfileActions.vue';
+    import ProfileWidgetFollowers from './components/ProfileFollowers.vue';
 
     export default {
         components: {
@@ -95,7 +126,7 @@
             ProfileWidgetHeader,
             ProfileWidgetLogo,
             ProfileWidgetDetails,
-            ProfileWidgetActions
+            ProfileWidgetFollowers
         },
         data() {
             return {
@@ -104,13 +135,23 @@
                 followers: {},
                 following: false,
                 prev_channels: [],
-                history: []
+                history: [],
+                btn: {
+                    following: {
+                        text: 'Follow',
+                        icon: 'fa-heart',
+                        classes: [
+                            'btn',
+                            'btn-xs',
+                            'bg-color-purple',
+                            'txt-color-white',
+                            'follow-btn'
+                        ]
+                    }
+                }
             }
         },
         computed: {
-            recent_followers() {
-                return _.take(this.followers.follows, 18);
-            },
             my_channel() {
                 return this.$store.getters.getChannel;
             }
@@ -124,7 +165,53 @@
             }
         },
         methods: {
+            isFollowing() {
+                this.following = true;
+                this.btn.following = {
+                    text: 'Following',
+                    icon: 'fa-heart',
+                    classes: [
+                        'btn',
+                        'btn-xs',
+                        'bg-color-green',
+                        'txt-color-white',
+                        'follow-btn'
+                    ]
+                };
+            },
+            notFollowing() {
+                this.following = false;
+                this.btn.following = {
+                    text: 'Follow',
+                    icon: 'fa-heart',
+                    classes: [
+                        'btn',
+                        'btn-xs',
+                        'bg-color-purple',
+                        'txt-color-white',
+                        'follow-btn'
+                    ]
+                };
+            },
+            btnFollowingHover(e) {
+                let text = this.btn.following.text;
 
+                if (this.following) {
+                    if (text === 'Unfollow') {
+                        this.btn.following.text = 'Following';
+                        this.btn.following.icon = 'fa-heart';
+                    } else {
+                        this.btn.following.text = 'Unfollow';
+                        this.btn.following.icon = 'fa-ban';
+                    }
+                }
+            },
+            follow() {
+
+            },
+            unfollow() {
+
+            },
             getFollowers(channel_id) {
                 return new Promise((resolve, reject) => {
                     axios.get('/api/twitch/followers', {
@@ -141,6 +228,7 @@
                     });
                 });
             },
+
             getChannel(channel_id) {
                 return new Promise((resolve, reject) => {
                     axios.get('/api/twitch/isfollowing', {
@@ -182,7 +270,7 @@
                 this.notFollowing();
 
                 this.getFollowers(this.channel._id).then((followers) => {
-                    this.lsSet(this.channel, followers, this.following)
+                    this.lsSet(this.channel, followers, false)
                 }).catch((error) => {
                     console.error(error);
                     alerts.error('getMyChannel: Unable to get followers');
@@ -190,27 +278,11 @@
 
             },
             setChannel(channel_id) {
-                /**
-                 * Lets add the channel we are leaving to the prev_channels list for "back()" navigation
-                 */
                 this.prev_channels.push(String(this.channel._id));
 
                 if (this.inHistory(channel_id)) {
-
-                    /**
-                     * If the channel we are going to is in our history, pull the history results
-                     */
                     this.lsLoad(channel_id);
-
                 } else {
-                    /**
-                     * Otherwise, if the channel we are going to is NOT in our history
-                     *
-                     * We need to call an API request to get that channel and followers.
-                     *
-                     * Then add the channel to our history.
-                     */
-
                     this.getChannel(channel_id).then((channel) => {
                         this.getFollowers(channel._id).then((followers) => {
                             this.lsSet(channel, followers, this.following);
@@ -274,21 +346,7 @@
         }
     }
 </script>
-<style type="scss">
-
-
-    .followers-list li {
-        margin-bottom: 5px !important;
-        margin-right: 5px !important;
-        padding: 0 !important;
-    }
-
-    .followers-list img {
-        width: 35px;
-        border: 1px solid #fff;
-        outline: 1px solid #bfbfbf;
-    }
-
+<style>
     .profile-actions {
         padding: 0;
         margin: 0;
@@ -297,5 +355,13 @@
 
     .profile-actions li {
         margin-bottom: 5px;
+    }
+
+    .follow-btn.bg-color-green:hover {
+        background-color: #8b111c !important;
+    }
+
+    .follow-btn.bg-color-purple:hover {
+        background-color: #126410 !important;
     }
 </style>
