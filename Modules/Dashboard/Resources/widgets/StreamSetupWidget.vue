@@ -74,9 +74,10 @@
 </template>
 
 <script>
-    import Widget from './Widget.vue'
+    import * as alerts from 'Core/utils/alerts'
     import Multiselect from 'vue-multiselect'
-    import * as alerts from '../../utils/alerts'
+
+    import Widget from 'Components/Widget/Widget.vue';
 
     export default{
         props: {

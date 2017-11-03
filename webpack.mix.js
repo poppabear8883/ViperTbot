@@ -15,6 +15,7 @@ mix.webpackConfig({
         alias: {
             Modules: path.resolve(__dirname, 'Modules'),
             Core: path.resolve(__dirname, 'resources/assets/js'),
+            Components: path.resolve(__dirname, 'resources/components')
         }
     }
 });

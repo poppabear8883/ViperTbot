@@ -5,5 +5,5 @@
     Playlists <span>&gt; Manage</span>
 @endsection
 @section('content')
-    <playlists v-if="user.id"></playlists>
+    <playlists-page v-if="user.id"></playlists-page>
 @stop

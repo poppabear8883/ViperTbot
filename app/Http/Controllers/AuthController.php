@@ -24,6 +24,6 @@ class AuthController extends Controller implements AuthenticateUserInterface
 
     public function userHasLoggedIn()
     {
-        return redirect('/');
+        return redirect('/dashboard');
     }
 }

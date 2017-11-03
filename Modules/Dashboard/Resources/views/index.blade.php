@@ -6,5 +6,5 @@
 @endsection
 
 @section('content')
-    <dashboard></dashboard>
+    <dashboard-page></dashboard-page>
 @stop

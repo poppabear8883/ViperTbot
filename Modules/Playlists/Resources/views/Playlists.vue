@@ -27,10 +27,10 @@
     </div><!-- end row -->
 </template>
 <script>
-    import MediaPlayerWidget from './MediaPlayerWidget.vue';
-    import RequestedSongsWidget from './RequestedSongWidget.vue';
-    import PlaylistWidget from './PlaylistWidget.vue';
-    import YoutubeSearchWidget from './YoutubeSearchWidget.vue';
+    import MediaPlayerWidget from '../widgets/MediaPlayerWidget.vue';
+    import RequestedSongsWidget from '../widgets/RequestedSongWidget.vue';
+    import PlaylistWidget from '../widgets/PlaylistWidget.vue';
+    import YoutubeSearchWidget from '../widgets/YoutubeSearchWidget.vue';
 
     import {mapActions} from 'vuex';
 
