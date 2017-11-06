@@ -1,19 +1,17 @@
 /**
- * We will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Lets require in our registered components
  */
-
-// Registering
 require('../../register');
 
-import store from './vuex/store';
-import {TwitchPubSub} from "./webhooks/TwitchPubSub";
-import {mapActions} from 'vuex';
-import * as alerts from './utils/alerts';
+/**
+ * Element UI Framework for VueJS
+ */
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI);
 
 /**
- * Vue Plugins
+ * Other Plugins
  */
 import vMediaQuery from 'v-media-query'
 import VueLocalStorage from 'vue-localstorage';
@@ -23,6 +21,23 @@ Vue.use(VueLocalStorage, {
     name: 'ls',
     createComputed: true
 });
+
+
+/**
+ * Vuex Local Data Store (State Management)
+ */
+import store from './vuex/store';
+import {mapActions} from 'vuex';
+
+/**
+ * Webhooks
+ */
+import {TwitchPubSub} from "./webhooks/TwitchPubSub";
+
+/**
+ * Utilities
+ */
+import * as alerts from './utils/alerts';
 
 const app = new Vue({
     el: '#app',

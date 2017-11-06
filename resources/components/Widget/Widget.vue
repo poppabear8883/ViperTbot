@@ -19,10 +19,9 @@
          :id="widId"
          data-widget-editbutton="false"
          role="widget"
-         @loading="loading()"
     >
 
-        <header role="heading" :class="[is_loading ? 'widget-body-ajax-loading' : '']">
+        <header role="heading">
             <div class="jarviswidget-ctrls" role="menu">
 
                 <a v-if="collapse" href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title=""
@@ -71,14 +70,20 @@
         </header>
 
         <!-- widget div-->
-        <div role="content" :class="[is_loading ? 'widget-body-ajax-loading' : '']">
+        <div role="content">
 
             <!-- widget content -->
-            <div class="widget-body widget-hide-overflow no-padding">
-                <slot name="body">
+            <div class="widget-body widget-hide-overflow no-padding"
+                 v-loading="is_loading"
+                 element-loading-text="Loading..."
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
 
+                <slot name="body">
                     <slot name="footer"></slot>
                 </slot>
+
             </div>
             <!-- end widget content -->
 
@@ -94,37 +99,20 @@
 
     export default {
         props: {
-            widId: {
-                type: String,
-                required: true
-            },
-            colorpicker: {
-                type: Boolean,
-                default: true
-            },
-            color: {
-                type: String,
-                default: 'blueDark'
-            },
-            sortable: {
-                type: Boolean,
-                default: true
-            },
-            collapse: {
-                type: Boolean,
-                default: true
-            },
-            fullscreen: {
-                type: Boolean,
-                default: false
-            },
-            deletebtn: {
-                type: Boolean,
-                default: false
-            }
-
+            widId: {type: String, required: true},
+            colorpicker: {type: Boolean, default: true},
+            color: {type: String, default: 'blueDark'},
+            sortable: {type: Boolean, default: true},
+            collapse: {type: Boolean, default: true},
+            fullscreen: {type: Boolean, default: false},
+            deletebtn: {type: Boolean, default: false},
+            loading: {type: Boolean, default: false}
         },
-
+        watch: {
+            loading(newVal, oldVal) {
+                this.is_loading = newVal;
+            }
+        },
         data() {
             return{
                 is_loading: false
@@ -133,22 +121,14 @@
         components:{
             ColorPicker
         },
-
         computed: {
             titleColor() {
                 return `jarviswidget-color-${this.color}`;
             }
         },
-
         methods: {
             colorChanged(color) {
                 this.$emit('colorChanged', `bg-color-${color}`)
-            },
-            loading(e) {
-                console.log({
-                    event: e,
-                });
-                this.is_loading = e;
             }
         }
     }

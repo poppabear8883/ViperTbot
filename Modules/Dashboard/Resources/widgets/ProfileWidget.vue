@@ -1,5 +1,5 @@
 <template>
-    <widget wid-id="5438974" color="purple" :fullscreen="true">
+    <widget wid-id="5438974" color="purple" :fullscreen="true" :loading="loading">
 
         <div slot="title">Profile</div>
 
@@ -130,6 +130,7 @@
         },
         data() {
             return {
+                loading: false,
                 initialized: false,
                 channel: {},
                 followers: {},
@@ -214,15 +215,18 @@
             },
             getFollowers(channel_id) {
                 return new Promise((resolve, reject) => {
+                    this.loading = true;
                     axios.get('/api/twitch/followers', {
                         params: {
                             channel_id: channel_id
                         }
                     }).then((response) => {
                         this.followers = response.data;
+                        this.loading = false;
                         resolve(response.data);
                     }).catch((error) => {
                         console.log(error);
+                        this.loading = false;
                         alerts.error(error.response.data);
                         reject(error);
                     });
@@ -231,6 +235,7 @@
 
             getChannel(channel_id) {
                 return new Promise((resolve, reject) => {
+                    this.loading = true;
                     axios.get('/api/twitch/isfollowing', {
                         params: {
                             channel_id: this.my_channel._id,
@@ -247,19 +252,23 @@
                                 }
                             }).then((response) => {
                                 this.channel = response.data;
+                                this.loading = false;
                                 resolve(response.data);
                             }).catch((error) => {
                                 console.log(error);
+                                this.loading = false;
                                 alerts.error(error.response.data);
                                 reject(error);
                             });
                         } else {
                             this.isFollowing();
                             this.channel = response.data.channel;
+                            this.loading = false;
                             resolve(response.data.channel);
                         }
                     }).catch((error) => {
                         console.log(error);
+                        this.loading = false;
                         alerts.error(error.response.data);
                         reject(error);
                     });
@@ -328,7 +337,6 @@
                 }
             },
             back() {
-                this.$emit('loading', true);
 
                 if (this.prev_channels.length > 0) {
                     let _id = _.last(this.prev_channels);
@@ -341,9 +349,9 @@
                     this.channel = this.my_channel;
                 }
 
-                this.$emit('loading', false);
             }
         }
+
     }
 </script>
 <style>

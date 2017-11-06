@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "dotenv": "^4.0.0",
+    "element-ui": "^2.0.3",
     "js-video-url-parser": "^0.2.4",
     "sentinel-js": "0.0.4",
     "v-media-query": "^1.0.3",
