@@ -13,7 +13,7 @@
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/', 'PagesController@dashboard');
+    //Route::get('/', 'PagesController@dashboard');
 
     Route::get('applications', 'PagesController@applications');
 

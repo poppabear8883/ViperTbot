@@ -126,11 +126,10 @@
 </template>
 
 <script>
-
-    import Widget from 'Core/components/widget/Widget.vue';
     import * as alerts from 'Core/utils/alerts';
     import {youtubeParser} from 'Core/utils/youtube';
 
+    import Widget from 'Components/Widget/Widget.vue';
     import * as urlParser from 'js-video-url-parser';
     import {mapActions} from 'vuex';
 

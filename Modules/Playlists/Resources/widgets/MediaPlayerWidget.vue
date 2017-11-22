@@ -90,9 +90,9 @@
 </template>
 
 <script>
-    import Widget from 'Core/components/widget/Widget.vue';
     import * as alerts from 'Core/utils/alerts';
 
+    import Widget from 'Components/Widget/Widget.vue';
     import VueYoutubeEmbed from 'vue-youtube-embed';
     import VueSlider from 'vue-slider-component';
     import {mapActions} from 'vuex';

@@ -1,38 +1,17 @@
 /**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
+ * Lets require in our registered components
  */
-
-require('./bootstrap');
-
-window.Vue = require('vue');
-
-window.sentinel = require('sentinel-js');
+require('../../register');
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Element UI Framework for VueJS
  */
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI);
 
 /**
- * Module Components
- */
-require('Modules/Playlists/Resources/assets/js/components/register');
-
-/**
- * App Components
- */
-require('./components/register');
-
-import store from './vuex/store';
-import {TwitchPubSub} from "./webhooks/TwitchPubSub";
-import {mapActions} from 'vuex';
-import * as alerts from './utils/alerts';
-
-/**
- * Vue Plugins
+ * Other Plugins
  */
 import vMediaQuery from 'v-media-query'
 import VueLocalStorage from 'vue-localstorage';
@@ -42,6 +21,23 @@ Vue.use(VueLocalStorage, {
     name: 'ls',
     createComputed: true
 });
+
+
+/**
+ * Vuex Local Data Store (State Management)
+ */
+import store from './vuex/store';
+import {mapActions} from 'vuex';
+
+/**
+ * Webhooks
+ */
+import {TwitchPubSub} from "./webhooks/TwitchPubSub";
+
+/**
+ * Utilities
+ */
+import * as alerts from './utils/alerts';
 
 const app = new Vue({
     el: '#app',

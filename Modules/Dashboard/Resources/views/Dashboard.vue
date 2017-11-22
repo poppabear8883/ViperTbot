@@ -16,9 +16,9 @@
     </div>
 </template>
 <script>
-    import StreamSetupWidget from './widget/StreamSetupWidget.vue';
-    import TwitchChatWidget from './widget/TwitchChatWidget.vue';
-    import ProfileWidget from './widget/ProfileWidget.vue';
+    import StreamSetupWidget from '../widgets/StreamSetupWidget.vue';
+    import TwitchChatWidget from '../widgets/TwitchChatWidget.vue';
+    import ProfileWidget from '../widgets/ProfileWidget.vue';
 
     export default {
         components: {

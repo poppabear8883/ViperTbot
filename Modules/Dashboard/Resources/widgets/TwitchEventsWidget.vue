@@ -32,8 +32,9 @@
     }
 </style>
 <script>
-    import Widget from './Widget.vue'
-    import { TwitchPubSub } from '../../webhooks/TwitchPubSub'
+    import { TwitchPubSub } from '../../webhooks/TwitchPubSub';
+
+    import Widget from 'Components/Widget/Widget.vue';
 
     export default {
         props: {
