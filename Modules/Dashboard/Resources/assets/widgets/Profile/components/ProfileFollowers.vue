@@ -3,6 +3,7 @@
         <h1 style="margin-left: -5px">
             <small>{{title}}</small>
         </h1>
+
         <ul class="list-inline followers-list">
             <li v-for="follower in recent_followers">
                 <a href="#" @click.prevent="$emit('clicked', follower.user._id)">
